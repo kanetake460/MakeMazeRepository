@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    /*クラス参照*/
+    [SerializeField] Map map;
+
+
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    // 視点スピード
@@ -40,6 +44,8 @@ public class Player : MonoBehaviour
         transform.localRotation = characterRot;         // プレイヤーに回転の値を代入
 
         UpdateCursorLock();                             // カーソルロック関数
+
+        SpreadMap();
     }
 
     private void FixedUpdate()
@@ -52,7 +58,7 @@ public class Player : MonoBehaviour
 
         //transform.position += new Vector3(x,0,z);
 
-        transform.position += mainCam.transform.forward * z + mainCam.transform.right * x;  // 移動
+       transform.position += transform.forward * z + transform.right * x;  // 移動
     }
 
     /*=====カーソルロックのON/OFF関数=====*/
@@ -96,5 +102,13 @@ public class Player : MonoBehaviour
         return q;
     }
 
+    /*=====プレイヤーのアクションによってマップを広げる関数=====*/
+    private void SpreadMap()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            map.InstanceMapBlock(transform.position,transform.rotation) ;
+        }
+    }
 
 }
