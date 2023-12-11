@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     /*クラス参照*/
     [SerializeField] Map map;
-
+    [SerializeField] WorldGurid worldGurid;
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
 
         //transform.position += new Vector3(x,0,z);
 
-       transform.position += transform.forward * z + transform.right * x;  // 移動
+        transform.position += transform.forward * z + transform.right * x;  // 移動
     }
 
     /*=====カーソルロックのON/OFF関数=====*/
@@ -105,9 +105,16 @@ public class Player : MonoBehaviour
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/
     private void SpreadMap()
     {
-        if(Input.GetMouseButtonDown(0))
+        //if(transform.position == worldGurid.grid[2,2])
+
+
+        if (Input.GetMouseButtonDown(0))
         {
-            map.InstanceMapBlock(transform.position,transform.rotation) ;
+            Vector3 blockInstancePos = worldGurid.Grid(transform);
+            if (blockInstancePos != Vector3.zero)
+            {
+                map.InstanceMapBlock(blockInstancePos, transform.rotation);
+            }
         }
     }
 
