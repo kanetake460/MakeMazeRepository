@@ -1,17 +1,20 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TakeshiClass;
 using UnityEngine;
+using UnityEngine.iOS;
 
 public class Player : MonoBehaviour
 {
     /*クラス参照*/
     [SerializeField] Map map;
-    [SerializeField] WorldGurid worldGurid;
+    [SerializeField] GridField worldGurid;
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    // 視点スピード
+    [SerializeField] GridField m_playerGrid;                         // プレイヤーのグリッド座標
 
     /*オブジェクト*/
     [SerializeField] GameObject mainCam;            // プレイヤーの視点カメラ
@@ -27,6 +30,7 @@ public class Player : MonoBehaviour
     {
         cameraRot = mainCam.transform.localRotation;    // メインカメラの回転を代入
         characterRot = transform.localRotation;         // キャラクターの回転を代入
+        m_playerGrid = GridField.AssignValue(0.001f);
     }
 
     void Update()
@@ -46,6 +50,7 @@ public class Player : MonoBehaviour
         UpdateCursorLock();                             // カーソルロック関数
 
         SpreadMap();
+        Debug.Log(CalculationFourDirection(transform.eulerAngles));
     }
 
     private void FixedUpdate()
@@ -102,6 +107,31 @@ public class Player : MonoBehaviour
         return q;
     }
 
+    /*=====プレイヤーの方向から4方向を計算する=====*/
+    private Quaternion CalculationFourDirection(Vector3 rot)
+    {
+        if(rot.y > 225f && rot.y <= 315)
+        {
+            return Quaternion.Euler(0, 270, 0);
+
+        }
+        else if (rot.y > 45f && rot.y <= 135f)
+        {
+            return Quaternion.Euler(0, 90, 0);
+        }
+        else if (rot.y > 135f && rot.y <= 225f)
+        {
+            return Quaternion.Euler(0, 180, 0);
+        }
+        else 
+        {
+            return Quaternion.Euler(0, 0, 0);
+        }
+    }
+
+
+
+
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/
     private void SpreadMap()
     {
@@ -110,10 +140,10 @@ public class Player : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 blockInstancePos = worldGurid.Grid(transform);
+            Vector3Int blockInstancePos = GridField.GetGrid(transform);
             if (blockInstancePos != Vector3.zero)
             {
-                map.InstanceMapBlock(blockInstancePos, transform.rotation);
+                map.InstanceMapBlock(m_playerGrid.m_grid[blockInstancePos.x,blockInstancePos.z], CalculationFourDirection(transform.eulerAngles));
             }
         }
     }
