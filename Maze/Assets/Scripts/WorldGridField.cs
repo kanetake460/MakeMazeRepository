@@ -15,7 +15,7 @@ public class WorldGridField : MonoBehaviour
     public GridField gridField;                           // グリッドクラスのワールドグリッドフィールド
     void Start()
     {
-        gridField = new GridField(10,5,5,-1);
+        gridField = new GridField(100,100,5,5,-1);
         InstanceGridField(gridField);
     }
 
@@ -29,9 +29,9 @@ public class WorldGridField : MonoBehaviour
         // グリッドフィールドの中心のオブジェクトをフィールドの真ん中に親のオブジェクト
         //gridParent.transform.position = new Vector3((gridField.gridBreadth - 1) / 2 * gridField.cellWidth, 0, (gridField.gridBreadth - 1) / 2 * gridField.cellDepth);
         gridParent.transform.position = gridField.gridMiddle;
-        for (int x = 0; x < gridField.gridBreadth; x++)
+        for (int x = 0; x < gridField.gridWidth; x++)
         {
-            for (int z = 0; z < gridField.gridBreadth; z++)
+            for (int z = 0; z < gridField.gridDepth; z++)
             {
                 if ((x + z) % 2 == 0)       // xとzの和が偶数なら
                 {

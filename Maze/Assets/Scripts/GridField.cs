@@ -8,7 +8,9 @@ namespace TakeshiClass
     {
 
         /*パブリック変数*/
-        public int gridBreadth;            // グリッドの広さ
+        public int gridWidth;               // グリッドの広さ
+        public int gridDepth;               //
+        public int gridHeight;
         public float cellWidth;
         public float cellDepth;
         public float y;
@@ -33,7 +35,7 @@ namespace TakeshiClass
         {
             get
             {
-                return new Vector3(((float)gridBreadth - 1) / 2 * cellDepth, y, ((float)gridBreadth - 1) / 2 * cellWidth);
+                return new Vector3(((float)gridWidth - 1) / 2 * cellWidth, y, ((float)gridDepth - 1) / 2 * cellDepth);
             }
         }
 
@@ -46,10 +48,14 @@ namespace TakeshiClass
         /// /// <param name="cellDepth">セルの奥行</param>
         /// <param name="y">グリッドのy座標</param>
         /// <returns>GridFieldの初期化</returns>
-        public GridField(int gridBreadth = 10, float cellWidth = 10, float cellDepth = 10, float y = 0)
+        public GridField(int gridWidth = 10, int gridDepth = 10, float cellWidth = 10, float cellDepth = 10, float y = 0)
         {
-            // グリッドの広さ代入
-            this.gridBreadth = gridBreadth;
+
+            // グリッドの横幅代入
+            this.gridWidth = gridWidth;
+
+            // グリッドの奥行代入
+            this.gridDepth = gridDepth;
 
             // セルの横幅代入
             this.cellWidth = cellWidth;
@@ -59,11 +65,15 @@ namespace TakeshiClass
 
             // グリッドの高さを代入
             this.y = y;
-
-            /*===二重ループでgrid配列のそれぞれにVector3の座標値を代入===*/
-            for (int x = 0; x < gridBreadth; x++)
+            if(gridWidth > 100 || gridDepth > 100)
             {
-                for (int z = 0; z < gridBreadth; z++)
+                Debug.LogError("安全のため広すぎるグリッドは生成できません");
+                Debug.Break();
+            }
+            /*===二重ループでgrid配列のそれぞれにVector3の座標値を代入===*/
+            for (int x = 0; x < gridWidth; x++)
+            {
+                for (int z = 0; z < gridDepth; z++)
                 {
                     grid[x, z] = new Vector3(x * cellWidth, y, z * cellDepth);    // xとzに10をかけた値を代入
                 }
@@ -71,8 +81,6 @@ namespace TakeshiClass
         }
 
         /*=====引数に与えた Transform がどこのグリッド座標にいるのかを返す=====*/
-        // 引数:Transform
-        // 戻り値:引数のtransformのいるセルのグリッド座標
         /// <summary>
         /// グリッド座標のどこなのかを調べます
         /// </summary>
@@ -83,9 +91,9 @@ namespace TakeshiClass
         public static Vector3Int GetGridCoordinate(GridField grid, Transform pos)
         {
             /*===二重ループで現在のセルを調べる===*/
-            for (grid.gridCoordinate.x = 0; grid.gridCoordinate.x < grid.gridBreadth; grid.gridCoordinate.x++)
+            for (grid.gridCoordinate.x = 0; grid.gridCoordinate.x < grid.gridWidth; grid.gridCoordinate.x++)
             {
-                for (grid.gridCoordinate.z = 0; grid.gridCoordinate.z < grid.gridBreadth; grid.gridCoordinate.z++)
+                for (grid.gridCoordinate.z = 0; grid.gridCoordinate.z < grid.gridDepth; grid.gridCoordinate.z++)
                 {
                     if (pos.position.x <= grid.grid[grid.gridCoordinate.x, grid.gridCoordinate.z].x + grid.cellWidth / 2 &&
                         pos.position.x >= grid.grid[grid.gridCoordinate.x, grid.gridCoordinate.z].x - grid.cellWidth / 2 &&
@@ -102,7 +110,8 @@ namespace TakeshiClass
 
         void Update()
         {
-
+            Debug.DrawLine(Vector3.zero,new Vector3(100,0,0),Color.red);
+            //Debug.DrawRay();
         }
     }
 }
