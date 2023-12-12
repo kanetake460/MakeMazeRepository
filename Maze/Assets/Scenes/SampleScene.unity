@@ -313,7 +313,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72e87a2ad2b62349b1a5f93c794545d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_gridCoordinate: {x: 0, y: 0, z: 0}
+  gridBreadth: 0
+  cellWidth: 0
+  cellDepth: 0
+  y: 0
+  gridCoordinate: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,11 +516,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 470737182}
-  worldGurid: {fileID: 0}
+  worldGuridField: {fileID: 1669062121}
   speed: 0.1
   Xsensityvity: 3
   Ysensityvity: 3
-  m_playerGrid: {fileID: 0}
   mainCam: {fileID: 963194225}
 --- !u!54 &1553538970
 Rigidbody:
@@ -647,3 +650,4 @@ MonoBehaviour:
   whiteCellPrefab: {fileID: 2101052755643756735, guid: 798de9e1e0d5bea4d8348dc35b8de6be, type: 3}
   grayCellPrefab: {fileID: 4603985113720739168, guid: bd831b1acc28aa24088fb51c32dfb9c5, type: 3}
   gridParent: {fileID: 1669062116}
+  gridField: {fileID: 0}
