@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     /*クラス参照*/
     [SerializeField] Map map;
-    [SerializeField] WorldGridField worldGuridField;
+    [SerializeField] GridField gridField;
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        gridField = new GridField(20, 20, 10, 10, 0, GridField.eGridAnchor.center);
         cameraRot = mainCam.transform.localRotation;    // メインカメラの回転を代入
         characterRot = transform.localRotation;         // キャラクターの回転を代入
     }
@@ -47,7 +48,11 @@ public class Player : MonoBehaviour
         UpdateCursorLock();                             // カーソルロック関数
 
         SpreadMap();
-        //Debug.Log(CalculationFourDirection(transform.eulerAngles));
+        GridField.DrowGrid(gridField);
+        ////Debug.Log(CalculationFourDirection(transform.eulerAngles));
+        //Vector3 a = Vector3.zero;
+        //Vector3.Dot(Vector3.zero,Vector3.zero);
+        //transform.position = worldGuridField.gridField.bottomLeft;
     }
 
     private void FixedUpdate()
@@ -107,7 +112,7 @@ public class Player : MonoBehaviour
     /*=====プレイヤーの方向から4方向を計算する=====*/
     private Quaternion CalculationFourDirection(Vector3 rot)
     {
-        if(rot.y > 225f && rot.y <= 315)
+        if (rot.y > 225f && rot.y <= 315)
         {
             return Quaternion.Euler(0, 270, 0);
 
@@ -120,7 +125,7 @@ public class Player : MonoBehaviour
         {
             return Quaternion.Euler(0, 180, 0);
         }
-        else 
+        else
         {
             return Quaternion.Euler(0, 0, 0);
         }
@@ -132,16 +137,15 @@ public class Player : MonoBehaviour
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/
     private void SpreadMap()
     {
-         Debug.Log(GridField.GetGridCoordinate(worldGuridField.gridField, transform));
+        Debug.Log(GridField.GetGridCoordinate(gridField, transform));
         // Debug.Log(worldGuridField.gridField.totalCell);
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3Int blockInstancePos = GridField.GetGridCoordinate(worldGuridField.gridField,transform);
+            Vector3Int blockInstancePos = GridField.GetGridCoordinate(gridField, transform);
             if (blockInstancePos != Vector3.zero)
             {
-                map.InstanceMapBlock(worldGuridField.gridField.grid[blockInstancePos.x,blockInstancePos.z], CalculationFourDirection(transform.eulerAngles));
+                map.InstanceMapBlock(gridField.grid[blockInstancePos.x, blockInstancePos.z], CalculationFourDirection(transform.eulerAngles));
             }
         }
     }
-
 }
