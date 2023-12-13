@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 namespace TakeshiClass
 {
@@ -175,7 +177,7 @@ namespace TakeshiClass
         }
 
         ///<summary>
-        ///ゲームウィンドウにグリッドを表示します
+        ///シーンウィンドウにグリッドを表示します
         ///</summary>
         ///<param name="gridField">表示したいグリッド</param>
         public static void DrowGrid(GridField gridField)
@@ -240,6 +242,21 @@ namespace TakeshiClass
             Debug.LogError("与えられたポジションはグリッドフィールドの上にいません。");
             return Vector3Int.zero;
         }
+
+
+        /// <summary>
+        /// グリッドのどこのpositionなのかを調べます
+        /// </summary>
+        /// <param name="gridField">調べたいグリッド</param>
+        /// <returns></returns>
+        /// <param name="pos">調べたいグリッドのどこのセルにいるのか調べたいTransform</param>
+        /// <returns>Transformのいるセルのposition</returns>
+        public static Vector3 GetGridPosition(GridField gridField, Transform pos)
+        {
+            return gridField.grid[GetGridCoordinate(gridField,pos).x, GetGridCoordinate(gridField, pos).z];
+        }
+
+        public static Vector3Int MeasureToOtherCell
 
         void Update()
         {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TakeshiClass;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.iOS;
 
@@ -53,6 +54,7 @@ public class Player : MonoBehaviour
         //Vector3 a = Vector3.zero;
         //Vector3.Dot(Vector3.zero,Vector3.zero);
         //transform.position = worldGuridField.gridField.bottomLeft;
+
     }
 
     private void FixedUpdate()
@@ -141,11 +143,7 @@ public class Player : MonoBehaviour
         // Debug.Log(worldGuridField.gridField.totalCell);
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3Int blockInstancePos = GridField.GetGridCoordinate(gridField, transform);
-            if (blockInstancePos != Vector3.zero)
-            {
-                map.InstanceMapBlock(gridField.grid[blockInstancePos.x, blockInstancePos.z], CalculationFourDirection(transform.eulerAngles));
-            }
+                map.InstanceMapBlock(GridField.GetGridPosition(gridField,transform), CalculationFourDirection(transform.eulerAngles));
         }
     }
 }

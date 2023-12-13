@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TakeshiClass;
+using UnityEditor;
 
+[InitializeOnLoad]
 public class WorldGridField : MonoBehaviour
 {
 
@@ -17,14 +19,13 @@ public class WorldGridField : MonoBehaviour
     {
         gridField = new GridField(5,8,10,10,0);
         InstanceGridField(gridField);
-        //gridField.Test();
     }
 
 
-/// <summary>
-/// グリッドフィールドに合わせてセルオブジェクトを配置する
-/// </summary>
-/// <param name="gridField">グリッドフィールド</param>
+    /// <summary>
+    /// グリッドフィールドに合わせてセルオブジェクトを配置する
+    /// </summary>
+    /// <param name="gridField">グリッドフィールド</param>
     public void InstanceGridField(GridField gridField)
     {
         // グリッドフィールドの中心のオブジェクトをフィールドの真ん中に親のオブジェクト
