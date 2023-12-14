@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
         FPS.PlayerViewport(gameObject, Ysensityvity);
         FPS.Locomotion(transform, speed);
         FPS.UpdateCursorLock(cursorLock);
-
+        
         SpreadMap();
         GridField.DrowGrid(gridField);
     }
