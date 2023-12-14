@@ -1,0 +1,139 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+namespace TakeshiClass
+{
+    /*=====FPSの移動関連のスクリプトです=====*/
+    // 参考サイト
+    //https://www.popii33.com/unity-first-person-camera/
+    // 
+    public class FPS : MonoBehaviour
+    {
+
+        /// <summary>
+        /// カメラの角度制限をします(上下)
+        /// </summary>
+        /// <param name="q">制限したいquoternion</param>
+        /// <param name="minX">下の角度制限</param>
+        /// <param name="maxX">上の角度制限</param>
+        /// <returns></returns>
+        public static Quaternion ClampRotation(Quaternion q, float minX, float maxX)
+        {
+            //q = x,y,z,w (x,y,zはベクトル（量と向き）：wはスカラー（座標とは無関係の量）)
+
+            q.x /= q.w;
+            q.y /= q.w;
+            q.z /= q.w;
+            q.w = 1f;
+
+            float angleX = Mathf.Atan(q.x) * Mathf.Rad2Deg * 2f;
+
+            angleX = Mathf.Clamp(angleX, minX, maxX);
+
+            q.x = Mathf.Tan(angleX * Mathf.Deg2Rad * 0.5f);
+
+            return q;
+        }
+
+        ///<summary>カメラの視点移動関数(上下の視点移動)</summary>>
+        ///<param name="camera"<pragma>カメラの初期向き設定</pragma>
+        ///<param name="Xsensityvity"<pragma>視点移動スピード</pragma>
+        ///<param name="minX"<pragma>下の角度制限</pragma>
+        ///<param name="maxX"<pragma>上の角度制限</pragma>
+        public static void CameraViewport(GameObject camera, float Xsensityvity, float minX, float maxX)
+        {
+            float yRot = Input.GetAxis("Mouse Y") * Xsensityvity;       // マウスの座標代入
+            camera.transform.localRotation *= Quaternion.Euler(-yRot, 0, 0);     // 角度代入
+
+            //Updateの中で作成した関数を呼ぶ
+            camera.transform.localRotation = ClampRotation(camera.transform.localRotation, minX, maxX);           // 角度制限
+
+            //return cameraRot;
+        }
+
+        /// <summary>
+        /// プレイヤーの視点移動関数(左右視点移動)
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="Xsensityvity"></param>
+        /// <returns></returns>
+        public static void PlayerViewport(GameObject player, float Ysensityvity)
+        {
+            float xRot = Input.GetAxis("Mouse X") * Ysensityvity;       // マウスの座標代入
+            player.transform.localRotation *= Quaternion.Euler(0, xRot, 0);   // 角度代入
+
+            //return characterRot;
+        }
+
+        /// <summary>
+        /// プレイヤーをキー入力によって移動させます
+        /// </summary>
+        /// <param name="player">動かすプレイヤー</param>
+        /// <param name="speed">移動スピード</param>
+        public static void Locomotion(Transform player, float speed)
+        {
+            float x = 0;
+            float z = 0;
+
+            x = Input.GetAxisRaw("Horizontal") * speed;     // 移動入力
+            z = Input.GetAxisRaw("Vertical") * speed;       // 移動入力
+
+            //transform.position += new Vector3(x,0,z);
+
+            player.position += player.forward * z * 0.01f + player.right * x * 0.01f;  // 移動
+
+        }
+
+        /// <summary>
+        /// カーソルをロックします
+        /// </summary>
+        /// <param name="cursorLock">カーソルロックフラグ</param>
+        public static void UpdateCursorLock(bool cursorLock)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))   // エスケープキーを押したら
+            {
+                cursorLock = false;
+            }
+            else if (Input.GetMouseButton(0))       // 右クリック
+            {
+                cursorLock = true;
+            }
+            if (cursorLock)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else if (!cursorLock)
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
+
+        /// <summary>
+        /// プレイヤーの向きから四方向の向きを調べます
+        /// </summary>
+        /// <param name="rot">プレイヤーの向き(eulerAngles)</param>
+        /// <returns>四方向の角度を返します</returns>
+        public static Quaternion InvestigateFourDirection(Vector3 rot)
+        {
+            if (rot.y > 225f && rot.y <= 315)
+            {
+                return Quaternion.Euler(0, 270, 0);
+
+            }
+            else if (rot.y > 45f && rot.y <= 135f)
+            {
+                return Quaternion.Euler(0, 90, 0);
+            }
+            else if (rot.y > 135f && rot.y <= 225f)
+            {
+                return Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                return Quaternion.Euler(0, 0, 0);
+            }
+        }
+    }
+}

@@ -347,7 +347,13 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
+"Assets/Scripts/EnumIndexAttribute.cs"
+"Assets/Scripts/FPS.cs"
+"Assets/Scripts/GridField.cs"
+"Assets/Scripts/Map.cs"
 "Assets/Scripts/Player.cs"
+"Assets/Scripts/Test1.cs"
+"Assets/Scripts/WorldGridField.cs"
 -langversion:9.0
 
 /deterministic

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 public class Map : MonoBehaviour
 {
@@ -25,7 +26,25 @@ public class Map : MonoBehaviour
         mapBlock = 0;
     }
 
-    /*=====マップのブロックを引数のTransformで配置する関数=====*/
+    /// <summary>
+    /// ランダムでeMapBlockの値を返します
+    /// 参考サイト
+    /// https://marumaro7.hatenablog.com/entry/enumrandom
+    /// </summary>
+    /// <returns>マップブロック</returns>
+    public eMapBlocks RandomBlocks()
+    {
+        int maxCount = Enum.GetNames(typeof(eMapBlocks)).Length;
+        int number = UnityEngine.Random.Range(0,maxCount);
+        mapBlock = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks),number);
+        return 
+    }
+
+    /// <summary>
+    /// ブロックをインスタンスします
+    /// </summary>
+    /// <param name="instancePoint">インスタンスする場所</param>
+    /// <param name="instanceRot">インスタンスする向き</param>
     public void InstanceMapBlock(Vector3 instancePoint,Quaternion instanceRot)
     {
         Instantiate(blocks[(int)mapBlock], instancePoint,instanceRot);

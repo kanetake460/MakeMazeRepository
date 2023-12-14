@@ -10,7 +10,9 @@ namespace TakeshiClass
     public class GridField : MonoBehaviour
     {
 
-        /*パブリック変数*/
+
+//======変数===========================================================================================================================
+ 
         public int gridWidth;               // グリッドの広さ
         public int gridDepth;               //
         public int gridHeight;
@@ -19,8 +21,7 @@ namespace TakeshiClass
         public float y;
         public eGridAnchor gridAnchor;
         public Vector3[,] grid = new Vector3[100, 100];      // グリッドのセルの配置Vector3の二次元配列
-        public Vector3Int gridCoordinate;// = Vector3Int.zero;                                         // グリッド座標
-
+        public Vector3Int gridCoordinate;// = Vector3Int.zero;         // グリッド座標
 
         public enum eGridAnchor
         {
@@ -29,6 +30,10 @@ namespace TakeshiClass
         }
 
 
+
+//======読み取り専用変数===============================================================================================================
+        
+        /*==========グリッドフィールドの角のセルのVector3座標==========*/
         /// <summary>
         /// グリッドのセルの数を返します(読み取り専用)
         /// </summary>
@@ -36,47 +41,57 @@ namespace TakeshiClass
         {
             get
             {
-                return gridCoordinate.x * gridCoordinate.z;
+                return gridWidth * gridDepth;
             }
         }
 
-
         /// <summary>
-        /// グリッドの真ん中の localPosition を返します(読み取り専用)
+        ///グリッドの左下のセルの座標を返します。(読み取り専用)
         /// </summary>
-        public Vector3 middle
+        public Vector3 bottomLeftCell
         {
             get
             {
-                // 横幅奥行がどちらとも偶数
-                if (gridWidth % 2 == 0 && gridDepth % 2 == 0)
-                {
-                    // グリッド座標からセルの半分の数減らした値を返す
-                    return grid[gridWidth / 2, gridDepth / 2] - new Vector3(cellWidth / 2, 0, cellDepth / 2);
+                return grid[0, 0];
+            }
+        }
 
-                }
-                // 横幅が偶数
-                else if (gridWidth % 2 == 0)
-                {
-                    // グリッド座標からからセルの半分の数を減らした値を返す(横幅のみ)
-                    return grid[gridWidth / 2, gridDepth / 2] - new Vector3(cellWidth / 2, 0, 0);
-                }
-                // 奥行が偶数
-                else if (gridDepth % 2 == 0)
-                {
-                    // グリッド座標からセルの半分の数を減らした値を返す(奥行のみ)
-                    return grid[gridWidth / 2, gridDepth / 2] - new Vector3(0, 0, cellDepth / 2);
-                }
-                // どちらとも奇数
-                else
-                {
-                    // グリッド座標を返す
-                    return grid[gridWidth / 2, gridDepth / 2];
-                }
+        /// <summary>
+        ///グリッドの右下のセルの座標を返します。(読み取り専用)
+        /// </summary>
+        public Vector3 bottomRightCell
+        {
+            get
+            {
+                return grid[gridWidth - 1,0];
+            }
+        }
+
+        /// <summary>
+        ///グリッドの左上のセルの座標を返します。(読み取り専用)
+        /// </summary>
+        public Vector3 topLeftCell
+        {
+            get
+            {
+                return grid[0, gridDepth - 1];
+            }
+        }
+
+        /// <summary>
+        ///グリッドの右上のセルの座標を返します。(読み取り専用)
+        /// </summary>
+        public Vector3 topRightCell
+        {
+            get
+            {
+                return grid[gridWidth - 1, gridDepth - 1];
             }
         }
 
 
+
+        /*==========グリッドフィールドの角のVector3座標==========*/
         /// <summary>
         /// グリッドの左下の位置座標を返します(読み取り専用)
         /// </summary>
@@ -123,7 +138,46 @@ namespace TakeshiClass
 
 
 
-        /*=====コンストラクタ=====*/
+        /*=========グリッドフィールドの中心Vector3座標===========*/
+        /// <summary>
+        /// グリッドの真ん中の localPosition を返します(読み取り専用)
+        /// </summary>
+        public Vector3 middle
+        {
+            get
+            {
+                // 横幅奥行がどちらとも偶数
+                if (gridWidth % 2 == 0 && gridDepth % 2 == 0)
+                {
+                    // グリッド座標からセルの半分の数減らした値を返す
+                    return grid[gridWidth / 2, gridDepth / 2] - new Vector3(cellWidth / 2, 0, cellDepth / 2);
+
+                }
+                // 横幅が偶数
+                else if (gridWidth % 2 == 0)
+                {
+                    // グリッド座標からからセルの半分の数を減らした値を返す(横幅のみ)
+                    return grid[gridWidth / 2, gridDepth / 2] - new Vector3(cellWidth / 2, 0, 0);
+                }
+                // 奥行が偶数
+                else if (gridDepth % 2 == 0)
+                {
+                    // グリッド座標からセルの半分の数を減らした値を返す(奥行のみ)
+                    return grid[gridWidth / 2, gridDepth / 2] - new Vector3(0, 0, cellDepth / 2);
+                }
+                // どちらとも奇数
+                else
+                {
+                    // グリッド座標を返す
+                    return grid[gridWidth / 2, gridDepth / 2];
+                }
+            }
+        }
+
+
+
+//======コンストラクタ=================================================================================================================
+       
         /// <summary>
         /// GridFieldを初期化します
         /// </summary>
@@ -176,6 +230,10 @@ namespace TakeshiClass
             }
         }
 
+
+
+//======関数===========================================================================================================================
+       
         ///<summary>
         ///シーンウィンドウにグリッドを表示します
         ///</summary>
@@ -215,25 +273,25 @@ namespace TakeshiClass
             Debug.DrawLine(gridField.topLeft, gridField.topRight, Color.green);
         }
 
-        /*=====引数に与えた Transform がどこのグリッド座標にいるのかを返す=====*/
+
         /// <summary>
-        /// グリッド座標のどこなのかを調べます
+        /// 引数に与えた Transform がどこのグリッド座標にいるのかを返す
         /// </summary>
         /// <param name="gridField">調べたいグリッド</param>
         /// <returns></returns>
         /// <param name="pos">調べたいグリッドのどこのセルにいるのか調べたいTransform</param>
         /// <returns>Transformのいるセルのグリッド座標</returns>
-        public static Vector3Int GetGridCoordinate(GridField gridField, Transform pos)
+        public static Vector3Int GetGridCoordinate(GridField gridField, Vector3 pos)
         {
             /*===二重ループで現在のセルを調べる===*/
             for (gridField.gridCoordinate.x = 0; gridField.gridCoordinate.x < gridField.gridWidth; gridField.gridCoordinate.x++)
             {
                 for (gridField.gridCoordinate.z = 0; gridField.gridCoordinate.z < gridField.gridDepth; gridField.gridCoordinate.z++)
                 {
-                    if (pos.position.x <= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].x + gridField.cellWidth / 2 &&
-                        pos.position.x >= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].x - gridField.cellWidth / 2 &&
-                        pos.position.z <= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].z + gridField.cellDepth / 2 &&
-                        pos.position.z >= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].z - gridField.cellDepth / 2)     // もしあるセルの上にいるなら
+                    if (pos.x <= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].x + gridField.cellWidth / 2 &&
+                        pos.x >= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].x - gridField.cellWidth / 2 &&
+                        pos.z <= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].z + gridField.cellDepth / 2 &&
+                        pos.z >= gridField.grid[gridField.gridCoordinate.x, gridField.gridCoordinate.z].z - gridField.cellDepth / 2)     // もしあるセルの上にいるなら
                     {
                         return gridField.gridCoordinate;                      // セルの Vector3を返す
                     }
@@ -245,18 +303,48 @@ namespace TakeshiClass
 
 
         /// <summary>
-        /// グリッドのどこのpositionなのかを調べます
+        /// 引数に与えた Transform がどこの position なのかを調べます
         /// </summary>
         /// <param name="gridField">調べたいグリッド</param>
         /// <returns></returns>
         /// <param name="pos">調べたいグリッドのどこのセルにいるのか調べたいTransform</param>
         /// <returns>Transformのいるセルのposition</returns>
-        public static Vector3 GetGridPosition(GridField gridField, Transform pos)
+        public static Vector3 GetGridPosition(GridField gridField, Vector3 pos)
         {
             return gridField.grid[GetGridCoordinate(gridField,pos).x, GetGridCoordinate(gridField, pos).z];
         }
 
-        public static Vector3Int MeasureToOtherCell
+
+        /// <summary>
+        /// 与えたpositionから任意の距離のほかのpositionのグリッド座標を調べます
+        /// </summary>
+        /// <param name="gridField">調べたいグリッド</param>
+        /// <param name="pos">調べたい距離の始点のVector3座標</param>
+        /// <param name="difference">始点から終点までの差分</param>
+        /// <returns>調べたい終点のグリッド座標</returns>
+        public static Vector3Int GetOtherGridCoordinate(GridField gridField, Vector3 pos, Vector3Int difference)
+        {
+            int x = GetGridCoordinate(gridField, pos).x;
+            int z = GetGridCoordinate(gridField, pos).z;
+
+            return new Vector3Int(x + difference.x, 0, z + difference.z);
+        }
+        
+
+        /// <summary>
+        /// 与えたpositionから任意の距離のほかのpositionのVector3座標を調べます
+        /// </summary>
+        /// <param name="gridField">調べたいグリッド</param>
+        /// <param name="pos">調べたい距離の始点のVecgtor3座標</param>
+        /// <param name="difference">始点から終点までの差分</param>
+        /// <returns>調べたい終点のVector3座標</returns>
+        public static Vector3 GetOtherGridPosition(GridField gridField, Vector3 pos, Vector3Int difference)
+        {
+            int x = GetGridCoordinate(gridField, pos).x;
+            int z = GetGridCoordinate(gridField, pos).z;
+
+            return gridField.grid[x + difference.x, z + difference.z];
+        }
 
         void Update()
         {
