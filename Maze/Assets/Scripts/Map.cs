@@ -8,56 +8,44 @@ using TakeshiClass;
 public class Map : MonoBehaviour
 {
     [EnumIndex(typeof(eMapBlocks)),SerializeField] GameObject[] blocks;
+    int a = 0;
 
-    Que blockQue;
     enum eMapBlocks
     {
         T_Block = 0,
-        I_Block,
-        O_Block,
-        L_Block,
-        J_Block,
-        S_Block,
-        Z_Block
+        I_Block = 1,
+        O_Block = 2,
+        L_Block = 3,
+        J_Block = 4,
+        S_Block = 5,
+        Z_Block = 6
     }
 
-    private eMapBlocks mapBlock;
+    private eMapBlocks[] mapBlock = new eMapBlocks[7];
 
     void Start()
     {
-        blockQue = new Que();
+
+        for (int i = 0; i < blocks.Length; i++)
+        {
+            mapBlock[i] = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), i); 
+
+        }
+        mapBlock = Algorithm.Shuffle(mapBlock);
+
     }
 
     /// <summary>
     /// ランダムでeMapBlockの値を返します
     /// 参考サイト
-    /// https://marumaro7.hatenablog.com/entry/enumrandom
+    /// 
     /// </summary>
     /// <returns>マップブロック</returns>
     public int GetRandomBlocks()
     {
-        int maxCount = Enum.GetNames(typeof(eMapBlocks)).Length;
-        //eMapBlocks randBlock;
-        if (blockQue.size == 0)
-        {
-            while (true)
-            {
-                int number = UnityEngine.Random.Range(0, maxCount);
-                for (int i = 0; i < blockQue.size; i++)
-                {
-                    if (number != blockQue.data[i])
-                    {
-                        blockQue.Enque(number);
-                    }
-                }
-                if (blockQue.size >= maxCount)
-                {
-                    break;
-                }
-            }
-        }
-        //randBlock = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), blockQue.Deque());
-        return blockQue.Deque();
+
+       
+        return 0;
     }
 
     /// <summary>
@@ -67,11 +55,19 @@ public class Map : MonoBehaviour
     /// <param name="instanceRot">インスタンスする向き</param>
     public void InstanceMapBlock(Vector3 instancePoint,Quaternion instanceRot)
     {
-        Instantiate(blocks[GetRandomBlocks()], instancePoint,instanceRot);
+        //Debug.Log((int)mapBlock[a]);
+        Instantiate(blocks[(int)mapBlock[a]], instancePoint,instanceRot);
+        a++;
+        if(a == blocks.Length)
+        {
+            mapBlock = Algorithm.Shuffle(mapBlock);
+            a = 0;
+        }
     }
 
     void Update()
     {
+        
         Debug.Log(GetRandomBlocks());
     }
 }

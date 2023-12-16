@@ -26,7 +26,14 @@ public class Player : MonoBehaviour
     void Start()
     {
         gridField = new GridField(20, 15, 10, 10, 0, GridField.eGridAnchor.bottomLeft);
+        a[0] = 10;
+        a[1] = 0;
     }
+
+    int[] a = new int[2];
+
+
+
 
     void Update()
     {
@@ -34,7 +41,11 @@ public class Player : MonoBehaviour
         FPS.PlayerViewport(gameObject, Ysensityvity);
         FPS.Locomotion(transform, speed);
         FPS.UpdateCursorLock(cursorLock);
-        
+
+
+        Algorithm.Swap(a[0], a[1]);
+        Debug.Log(a[0]);
+
         SpreadMap();
         GridField.DrowGrid(gridField);
     }
@@ -42,7 +53,6 @@ public class Player : MonoBehaviour
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/
     private void SpreadMap()
     {
-        Debug.Log(gridField.totalCell);
         if (Input.GetMouseButtonDown(0))
         {
                 map.InstanceMapBlock(GridField.GetGridPosition(gridField,transform.position), FPS.InvestigateFourDirection(transform.eulerAngles));

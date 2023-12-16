@@ -347,6 +347,7 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
+"Assets/Scripts/Algorithm.cs"
 "Assets/Scripts/EnumIndexAttribute.cs"
 "Assets/Scripts/FPS.cs"
 "Assets/Scripts/GridField.cs"
