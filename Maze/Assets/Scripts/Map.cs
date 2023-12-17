@@ -8,7 +8,7 @@ using TakeshiClass;
 public class Map : MonoBehaviour
 {
     [EnumIndex(typeof(eMapBlocks)),SerializeField] GameObject[] blocks;
-    int a = 0;
+    int instanceCount = 0;
 
     enum eMapBlocks
     {
@@ -21,16 +21,21 @@ public class Map : MonoBehaviour
         Z_Block = 6
     }
 
-    private eMapBlocks[] mapBlock = new eMapBlocks[7];
+    private eMapBlocks[] mapBlocks1 = new eMapBlocks[7];
+    private eMapBlocks[] mapBlocks2 = new eMapBlocks[7];
+
+    [SerializeField]Player player;
 
     void Start()
     {
 
         for (int i = 0; i < blocks.Length; i++)
         {
-            mapBlock[i] = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), i); 
+            mapBlocks1[i] = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), i);
+            mapBlocks2[i] = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), i);
         }
-        Algorithm.Shuffle(mapBlock);
+        Algorithm.Shuffle(mapBlocks1);
+        Algorithm.Shuffle(mapBlocks2);
 
     }
 
@@ -50,19 +55,52 @@ public class Map : MonoBehaviour
     /// <summary>
     /// ブロックをインスタンスします
     /// </summary>
-    /// <param name="instancePoint">インスタンスする場所</param>
+    /// <param name="playerPosition">インスタンスする場所</param>
     /// <param name="instanceRot">インスタンスする向き</param>
-    public void InstanceMapBlock(Vector3 instancePoint,Quaternion instanceRot)
+    public void InstanceMapBlock(Vector3 playerPosition,Quaternion instanceRot)
     {
-        Debug.Log((int)mapBlock[a]);
-        Instantiate(blocks[(int)mapBlock[a]], instancePoint,instanceRot);
-        a++;
-        if(a == blocks.Length)
+        Debug.Log(mapBlocks1[instanceCount]);
+        Debug.Log(mapBlocks2[instanceCount]);
+        
+        Instantiate(blocks[(int)mapBlocks1[instanceCount]],                             // インスタンスするシャッフルされたブロック配列ブロック
+                    GridField.GetOtherGridPosition(player.gridField,playerPosition,GetPreviousCoordinate(instanceRot.eulerAngles)),
+                    instanceRot);
+
+        instanceCount++;
+
+        if(instanceCount == blocks.Length)
         {
-            Algorithm.Shuffle(mapBlock);
-            a = 0;
+            Algorithm.Shuffle(mapBlocks1);
+            Algorithm.Shuffle(mapBlocks2);
+            instanceCount = 0;
         }
     }
+
+    /// <summary>
+    /// 向きに対応するグリッド座標を返します
+    /// </summary>
+    /// <param name="eulerAngles">向き</param>
+    /// <returns>向いている方向の一つ前のグリッド座標</returns>
+    public Vector3Int GetPreviousCoordinate(Vector3 eulerAngles)
+    {
+        FPS.eFourDirection fourDirection = FPS.GetFourDirection(eulerAngles);   // 向きを調べて代入
+        switch (fourDirection)
+        {
+            case FPS.eFourDirection.top:
+                return new Vector3Int(0, 0, 1);
+
+            case FPS.eFourDirection.bottom:
+                return new Vector3Int(0, 0, -1);
+
+            case FPS.eFourDirection.left:
+                return new Vector3Int(-1, 0, 0);
+
+            case FPS.eFourDirection.right:
+                return new Vector3Int(1, 0, 0);
+        }
+        return new Vector3Int(0, 0, 0);
+    }
+
 
     void Update()
     {

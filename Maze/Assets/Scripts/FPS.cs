@@ -12,6 +12,14 @@ namespace TakeshiClass
     public class FPS : MonoBehaviour
     {
 
+        public enum eFourDirection
+        {
+            top = 0,
+            bottom = 180,
+            left = 270,
+            right = 90,
+        }
+
         /// <summary>
         /// カメラの角度制限をします(上下)
         /// </summary>
@@ -111,29 +119,40 @@ namespace TakeshiClass
         }
 
         /// <summary>
-        /// プレイヤーの向きから四方向の向きを調べます
+        /// プレイヤーの向きから四方向の列挙子を返します
         /// </summary>
-        /// <param name="rot">プレイヤーの向き(eulerAngles)</param>
-        /// <returns>四方向の角度を返します</returns>
-        public static Quaternion InvestigateFourDirection(Vector3 rot)
+        /// <param name="rot">プレイヤーの向き</param>
+        /// <returns>向きの列挙子</returns>
+        public static eFourDirection GetFourDirection(Vector3 rot)
         {
             if (rot.y > 225f && rot.y <= 315)
             {
-                return Quaternion.Euler(0, 270, 0);
-
+                return eFourDirection.left;
             }
             else if (rot.y > 45f && rot.y <= 135f)
             {
-                return Quaternion.Euler(0, 90, 0);
+                return eFourDirection.right;
             }
             else if (rot.y > 135f && rot.y <= 225f)
             {
-                return Quaternion.Euler(0, 180, 0);
+                return eFourDirection.bottom;
             }
             else
             {
-                return Quaternion.Euler(0, 0, 0);
+                return eFourDirection.top;
             }
+        }
+
+        /// <summary>
+        /// プレイヤーの向きから四方向の向きの Quaternion を返します
+        /// </summary>
+        /// <param name="rot">プレイヤーの向き(eulerAngles)</param>
+        /// <returns>四方向の角度を返します</returns>
+        public static Quaternion GetFourDirectionEulerAngles(Vector3 rot)
+        {
+            float direction = (int)GetFourDirection(rot);
+
+                return Quaternion.Euler(0, direction, 0);
         }
     }
 }

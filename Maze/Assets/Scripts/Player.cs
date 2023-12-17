@@ -6,12 +6,13 @@ using TakeshiClass;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.iOS;
+using static UnityEditor.PlayerSettings;
 
 public class Player : MonoBehaviour
 {
     /*クラス参照*/
     [SerializeField] Map map;
-    [SerializeField] GridField gridField;
+    public GridField gridField;
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
@@ -48,7 +49,8 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-                map.InstanceMapBlock(GridField.GetGridPosition(gridField,transform.position), FPS.InvestigateFourDirection(transform.eulerAngles));
+            map.InstanceMapBlock(transform.position, FPS.GetFourDirectionEulerAngles(transform.eulerAngles));
+                //map.InstanceMapBlock(GridField.GetGridPosition(gridField,transform.position), FPS.InvestigateFourDirection(transform.eulerAngles));
         }
     }
 }
