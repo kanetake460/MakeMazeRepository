@@ -29,9 +29,8 @@ public class Map : MonoBehaviour
         for (int i = 0; i < blocks.Length; i++)
         {
             mapBlock[i] = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), i); 
-
         }
-        mapBlock = Algorithm.Shuffle(mapBlock);
+        Algorithm.Shuffle(mapBlock);
 
     }
 
@@ -55,12 +54,12 @@ public class Map : MonoBehaviour
     /// <param name="instanceRot">インスタンスする向き</param>
     public void InstanceMapBlock(Vector3 instancePoint,Quaternion instanceRot)
     {
-        //Debug.Log((int)mapBlock[a]);
+        Debug.Log((int)mapBlock[a]);
         Instantiate(blocks[(int)mapBlock[a]], instancePoint,instanceRot);
         a++;
         if(a == blocks.Length)
         {
-            mapBlock = Algorithm.Shuffle(mapBlock);
+            Algorithm.Shuffle(mapBlock);
             a = 0;
         }
     }
@@ -68,6 +67,6 @@ public class Map : MonoBehaviour
     void Update()
     {
         
-        Debug.Log(GetRandomBlocks());
+        //Debug.Log(GetRandomBlocks());
     }
 }
