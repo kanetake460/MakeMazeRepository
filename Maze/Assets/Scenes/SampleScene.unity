@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54344076f53f7704db14ea94c2b4bddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 20
-  gridDepth: 20
+  gridWidth: 100
+  gridDepth: 100
   cellWidth: 10
   cellDepth: 10
   y: 0
@@ -201,8 +201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d81c9bc4c616ca4b9684b1ef6228687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 10
-  gridDepth: 10
+  gridWidth: 100
+  gridDepth: 100
   cellWidth: 10
   cellDepth: 10
   y: 0

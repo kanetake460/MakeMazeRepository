@@ -18,6 +18,7 @@ namespace TakeshiClass
             bottom = 180,
             left = 270,
             right = 90,
+            No = 0,
         }
 
         /// <summary>

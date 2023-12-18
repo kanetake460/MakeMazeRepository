@@ -19,12 +19,13 @@ public class Map : MapGridField
 
     enum eElementType
     {
-        Seed_Element,
-        Branch_Element,
-        None_Element,
-        OutRange_Element,
+        Seed_Element,       // 種エレメント
+        Branch_Element,     // 枝エレメント
+        None_Element,       // エレメントなし
+        OutRange_Element,   // 範囲外
     }
 
+    // グリッドのセルの情報を格納する配列
     eElementType[,] mapElements;
 
 
@@ -42,6 +43,7 @@ public class Map : MapGridField
 
             for (int z = 0; z < gridDepth; z++)
             {
+                // 端は範囲外
                 if (x == 0  ||
                     z == 0  ||
                     x == gridWidth - 1 ||
@@ -65,34 +67,41 @@ public class Map : MapGridField
     public void InstanceMapBlock(Vector3 playerPosition,Quaternion instanceRot)
     {
 
-        if (CheckCell(gridField.GetOtherGridCoordinate(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles))) == true)    // もし、プレイヤーの前のセルが置けるセルなら
+        if (CheckCell(gridField.GetOtherGridCoordinate(playerPosition,
+            GetPreviousCoordinate(instanceRot.eulerAngles))) == true)    // もし、プレイヤーの前のセルが置けるセルなら
         {
         Debug.Log(section.mapSection1[instanceCount]);
         Debug.Log(section.mapSection2[instanceCount]);
 
-
+            // おいたとき、プレイヤーの目の前のセルは種エレメント
             Vector3Int seedElementCoord = gridField.GetOtherGridCoordinate(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles));
             mapElements[seedElementCoord.x, seedElementCoord.z] = eElementType.Seed_Element;
 
-            //for (int i = 0; i < 2; i++)
-            {
+            // おいたブロックの種以外の部分は枝エレメント
+            FPS.eFourDirection fourDirection = FPS.GetFourDirection(instanceRot.eulerAngles);
                 Vector3Int[] branchElementCoord = new Vector3Int[3];
-                branchElementCoord[0] = new Vector3Int(-1, 0, 1) + seedElementCoord;//section.BranchElement(Section.eMapSections.T_Section, seedElementCoord, 0);
-                mapElements[branchElementCoord[0].x,branchElementCoord[0].z] = eElementType.Branch_Element;
+            for (int i = 0; i < 3; i++)
+            {
+                branchElementCoord[i] = section.GetBranchElement(section.mapSection1[instanceCount],fourDirection, seedElementCoord, i);
+                mapElements[branchElementCoord[i].x,branchElementCoord[i].z] = eElementType.Branch_Element;
             }
-             
-            Instantiate(section.sections[(int)section.mapSection1[instanceCount]],                             // インスタンスするシャッフルされたブロック配列ブロック
+
+            // セクション1をインスタンスする
+            Instantiate(section.sections[(int)section.mapSection1[instanceCount]],
                         gridField.GetOtherGridPosition(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles)),
                         instanceRot);
 
             instanceCount++;
 
+            // カウントが回ったらシャッフル
             if (instanceCount == section.sections.Length)
             {
                 Algorithm.Shuffle(section.mapSection1);
                 Algorithm.Shuffle(section.mapSection2);
                 instanceCount = 0;
             }
+
+// =========デバッグ====================================================================================================
 
             for (int x = 0; x < gridWidth; x++)
             {

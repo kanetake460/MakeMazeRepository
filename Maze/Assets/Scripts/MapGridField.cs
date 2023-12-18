@@ -18,10 +18,4 @@ public class MapGridField : MonoBehaviour
         gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
