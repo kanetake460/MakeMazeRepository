@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
         FPS.UpdateCursorLock(cursorLock);
 
         SpreadMap();
-        GridField.DrowGrid(gridField);
+        gridField.DrowGrid();
     }
 
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/

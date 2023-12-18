@@ -10,6 +10,14 @@ public class Map : MonoBehaviour
     [EnumIndex(typeof(eMapBlocks)),SerializeField] GameObject[] blocks;
     int instanceCount = 0;
 
+    enum eCellType
+    {
+        Seed_Cell,
+        Branch_Cell,
+        Empty_Cell
+        
+    }
+
     enum eMapBlocks
     {
         T_Block = 0,
@@ -40,19 +48,6 @@ public class Map : MonoBehaviour
     }
 
     /// <summary>
-    /// ランダムでeMapBlockの値を返します
-    /// 参考サイト
-    /// 
-    /// </summary>
-    /// <returns>マップブロック</returns>
-    public int GetRandomBlocks()
-    {
-
-       
-        return 0;
-    }
-
-    /// <summary>
     /// ブロックをインスタンスします
     /// </summary>
     /// <param name="playerPosition">インスタンスする場所</param>
@@ -61,23 +56,42 @@ public class Map : MonoBehaviour
     {
         Debug.Log(mapBlocks1[instanceCount]);
         Debug.Log(mapBlocks2[instanceCount]);
-        
-        Instantiate(blocks[(int)mapBlocks1[instanceCount]],                             // インスタンスするシャッフルされたブロック配列ブロック
-                    GridField.GetOtherGridPosition(player.gridField,playerPosition,GetPreviousCoordinate(instanceRot.eulerAngles)),
-                    instanceRot);
 
-        instanceCount++;
-
-        if(instanceCount == blocks.Length)
+        if (player.gridField.CheckOnGrid(GetPreviousCoordinate(instanceRot.eulerAngles)) == true)
         {
-            Algorithm.Shuffle(mapBlocks1);
-            Algorithm.Shuffle(mapBlocks2);
-            instanceCount = 0;
+            Instantiate(blocks[(int)mapBlocks1[instanceCount]],                             // インスタンスするシャッフルされたブロック配列ブロック
+                        player.gridField.GetOtherGridPosition(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles)),
+                        instanceRot);
+
+            instanceCount++;
+
+            if (instanceCount == blocks.Length)
+            {
+                Algorithm.Shuffle(mapBlocks1);
+                Algorithm.Shuffle(mapBlocks2);
+                instanceCount = 0;
+            }
         }
     }
 
+    public bool CheckOnGrid(Vector3 pos)
+    {
+        for (int x = 0; x < player.gridField.gridWidth; x++)
+        {
+            for (int z = 0; z < player.gridField.gridDepth; z++)
+            {
+                if (player.gridField.GetGridCoordinate(pos) == player.gridField.GetGridCoordinate(player.gridField.grid[x, z]))
+                {
+                    return true;
+                }
+            }
+        }
+        Debug.Log("そこでは道を開けません");
+        return false;
+    }
+
     /// <summary>
-    /// 向きに対応するグリッド座標を返します
+    /// 向きに対応するひとつ前のグリッド座標を返します
     /// </summary>
     /// <param name="eulerAngles">向き</param>
     /// <returns>向いている方向の一つ前のグリッド座標</returns>
