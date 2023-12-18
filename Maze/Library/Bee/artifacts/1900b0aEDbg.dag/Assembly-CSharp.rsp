@@ -352,8 +352,10 @@
 "Assets/Scripts/FPS.cs"
 "Assets/Scripts/GridField.cs"
 "Assets/Scripts/Map.cs"
+"Assets/Scripts/MapGridField.cs"
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/Que.cs"
+"Assets/Scripts/Section.cs"
 "Assets/Scripts/Test1.cs"
 "Assets/Scripts/WorldGridField.cs"
 -langversion:9.0

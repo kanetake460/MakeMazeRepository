@@ -4,47 +4,57 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 using TakeshiClass;
+using Palmmedia.ReportGenerator.Core.Parser.Analysis;
 
-public class Map : MonoBehaviour
+public class Map : MapGridField
 {
-    [EnumIndex(typeof(eMapBlocks)),SerializeField] GameObject[] blocks;
+
+    [SerializeField] GameObject red;
+    [SerializeField] GameObject blue;
+
+    /*ブロック*/
+    [SerializeField] Section section;
+
     int instanceCount = 0;
 
-    enum eCellType
+    enum eElementType
     {
-        Seed_Cell,
-        Branch_Cell,
-        Empty_Cell
-        
+        Seed_Element,
+        Branch_Element,
+        None_Element,
+        OutRange_Element,
     }
 
-    enum eMapBlocks
-    {
-        T_Block = 0,
-        I_Block = 1,
-        O_Block = 2,
-        L_Block = 3,
-        J_Block = 4,
-        S_Block = 5,
-        Z_Block = 6
-    }
+    eElementType[,] mapElements;
 
-    private eMapBlocks[] mapBlocks1 = new eMapBlocks[7];
-    private eMapBlocks[] mapBlocks2 = new eMapBlocks[7];
+
 
     [SerializeField]Player player;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
 
-        for (int i = 0; i < blocks.Length; i++)
+        // mapCells の初期化
+        mapElements = new eElementType[gridWidth, gridDepth];
+        for(int x = 0; x < gridWidth; x++) 
         {
-            mapBlocks1[i] = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), i);
-            mapBlocks2[i] = (eMapBlocks)Enum.ToObject(typeof(eMapBlocks), i);
-        }
-        Algorithm.Shuffle(mapBlocks1);
-        Algorithm.Shuffle(mapBlocks2);
 
+            for (int z = 0; z < gridDepth; z++)
+            {
+                if (x == 0  ||
+                    z == 0  ||
+                    x == gridWidth - 1 ||
+                    z == gridDepth - 1)
+                {
+                    mapElements[x, z] = eElementType.OutRange_Element;
+                }
+                else
+                {
+                    mapElements[x, z] = eElementType.None_Element;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -54,37 +64,60 @@ public class Map : MonoBehaviour
     /// <param name="instanceRot">インスタンスする向き</param>
     public void InstanceMapBlock(Vector3 playerPosition,Quaternion instanceRot)
     {
-        Debug.Log(mapBlocks1[instanceCount]);
-        Debug.Log(mapBlocks2[instanceCount]);
 
-        if (player.gridField.CheckOnGrid(GetPreviousCoordinate(instanceRot.eulerAngles)) == true)
+        if (CheckCell(gridField.GetOtherGridCoordinate(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles))) == true)    // もし、プレイヤーの前のセルが置けるセルなら
         {
-            Instantiate(blocks[(int)mapBlocks1[instanceCount]],                             // インスタンスするシャッフルされたブロック配列ブロック
-                        player.gridField.GetOtherGridPosition(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles)),
+        Debug.Log(section.mapSection1[instanceCount]);
+        Debug.Log(section.mapSection2[instanceCount]);
+
+
+            Vector3Int seedElementCoord = gridField.GetOtherGridCoordinate(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles));
+            mapElements[seedElementCoord.x, seedElementCoord.z] = eElementType.Seed_Element;
+
+            //for (int i = 0; i < 2; i++)
+            {
+                Vector3Int[] branchElementCoord = new Vector3Int[3];
+                branchElementCoord[0] = new Vector3Int(-1, 0, 1) + seedElementCoord;//section.BranchElement(Section.eMapSections.T_Section, seedElementCoord, 0);
+                mapElements[branchElementCoord[0].x,branchElementCoord[0].z] = eElementType.Branch_Element;
+            }
+             
+            Instantiate(section.sections[(int)section.mapSection1[instanceCount]],                             // インスタンスするシャッフルされたブロック配列ブロック
+                        gridField.GetOtherGridPosition(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles)),
                         instanceRot);
 
             instanceCount++;
 
-            if (instanceCount == blocks.Length)
+            if (instanceCount == section.sections.Length)
             {
-                Algorithm.Shuffle(mapBlocks1);
-                Algorithm.Shuffle(mapBlocks2);
+                Algorithm.Shuffle(section.mapSection1);
+                Algorithm.Shuffle(section.mapSection2);
                 instanceCount = 0;
+            }
+
+            for (int x = 0; x < gridWidth; x++)
+            {
+
+                for (int z = 0; z < gridDepth; z++)
+                {
+                    if (mapElements[x, z] == eElementType.Seed_Element)
+                    {
+                        Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+                    }
+                    else if (mapElements[x,z] == eElementType.Branch_Element)
+                    {
+                        Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
+                    }
+                }
             }
         }
     }
 
-    public bool CheckOnGrid(Vector3 pos)
+
+    private bool CheckCell(Vector3Int coord)
     {
-        for (int x = 0; x < player.gridField.gridWidth; x++)
+        if (mapElements[coord.x, coord.z] == eElementType.None_Element)
         {
-            for (int z = 0; z < player.gridField.gridDepth; z++)
-            {
-                if (player.gridField.GetGridCoordinate(pos) == player.gridField.GetGridCoordinate(player.gridField.grid[x, z]))
-                {
-                    return true;
-                }
-            }
+            return true;
         }
         Debug.Log("そこでは道を開けません");
         return false;
@@ -118,7 +151,7 @@ public class Map : MonoBehaviour
 
     void Update()
     {
-        
-        //Debug.Log(GetRandomBlocks());
+        gridField.DrowGrid();
+
     }
 }

@@ -12,7 +12,6 @@ public class Player : MonoBehaviour
 {
     /*クラス参照*/
     [SerializeField] Map map;
-    public GridField gridField;
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
@@ -27,7 +26,6 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        gridField = new GridField(20, 15, 10, 10, 0, GridField.eGridAnchor.bottomLeft);
 
     }
 
@@ -41,7 +39,6 @@ public class Player : MonoBehaviour
         FPS.UpdateCursorLock(cursorLock);
 
         SpreadMap();
-        gridField.DrowGrid();
     }
 
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/

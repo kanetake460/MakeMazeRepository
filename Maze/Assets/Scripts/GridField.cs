@@ -179,12 +179,13 @@ namespace TakeshiClass
 
 
 
-//======コンストラクタ=================================================================================================================
-       
+        //======コンストラクタ=================================================================================================================
+
         /// <summary>
         /// GridFieldを初期化します
         /// </summary>
-        /// <param name="gridBreadth">グリッドの広さ</param>
+        /// <param name="gridWidth">グリッドの横幅</param>
+        /// <param name="gridDepth">グリッドの奥行</param>
         /// <param name="cellWidth">セルの横幅</param>
         /// <param name="cellDepth">セルの奥行</param>
         /// <param name="y">グリッドのy座標</param>
@@ -353,7 +354,7 @@ namespace TakeshiClass
             {
                 for (int z = 0; z < gridDepth; z++)
                 {
-                    if (GetGridPosition(pos) == grid[x, z])
+                    if (GetGridCoordinate(pos) == grid[x, z])
                     { 
                         return true; 
                     }
