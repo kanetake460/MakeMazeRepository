@@ -14,157 +14,213 @@ public class Section : MapGridField
     // ç∂â∫Ç©ÇÁê›íËÇµÇƒÇ¢Ç‹Ç∑
 
     // === T ======================================
-    Vector3Int[] T_Top_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0, 1),
-                             new Vector3Int( 0,0, 1),
-                             new Vector3Int( 1,0, 1)};
+    private static readonly Vector3Int[] T_Top_Branch =
+    {
+        new Vector3Int(-1,0, 1),
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 1,0, 1)
+    };
 
-    Vector3Int[] T_Bottom_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0,-1),
-                             new Vector3Int( 0,0,-1),
-                             new Vector3Int(-1,0,-1)};
+    private static readonly Vector3Int[] T_Bottom_Branch =
+    {
+        new Vector3Int( 1,0,-1),
+        new Vector3Int( 0,0,-1),
+        new Vector3Int(-1,0,-1)
+    };
 
-    Vector3Int[] T_Left_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0,-1),
-                             new Vector3Int(-1,0, 0),
-                             new Vector3Int(-1,0, 1)};
+    private static readonly Vector3Int[] T_Left_Branch = 
+    {
+        new Vector3Int(-1,0,-1),
+        new Vector3Int(-1,0, 0),
+        new Vector3Int(-1,0, 1)
+    };
 
-    Vector3Int[] T_Right_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0, 1),
-                             new Vector3Int( 1,0, 0),
-                             new Vector3Int( 1,0,-1)};
+    private static readonly Vector3Int[] T_Right_Branch = new Vector3Int[3]
+    {                    
+        new Vector3Int( 1,0, 1),
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 1,0,-1)
+    };
 
 
     // === I ======================================
-    Vector3Int[] I_Top_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0,1),
-                             new Vector3Int( 0,0,2),
-                             new Vector3Int( 0,0,3)};
+    private static readonly Vector3Int[] I_Top_Branch =
+    {
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 0,0, 2),
+        new Vector3Int( 0,0, 3)
+    };
 
-    Vector3Int[] I_Bottom_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0,-1),
-                             new Vector3Int( 0,0,-2),
-                             new Vector3Int( 0,0,-3)};
+    private static readonly Vector3Int[] I_Bottom_Branch = 
+    {
+        new Vector3Int( 0,0,-1),
+        new Vector3Int( 0,0,-2),
+        new Vector3Int( 0,0,-3)
+    };
 
-    Vector3Int[] I_Left_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0,0),
-                             new Vector3Int(-2,0,0),
-                             new Vector3Int(-3,0,0)};
+    private static readonly Vector3Int[] I_Left_Branch = 
+    {
+        new Vector3Int(-1,0, 0),
+        new Vector3Int(-2,0, 0),
+        new Vector3Int(-3,0, 0)
+    };
 
-    Vector3Int[] I_Right_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0,0),
-                             new Vector3Int( 2,0,0),
-                             new Vector3Int( 3,0,0)};
+    private static readonly Vector3Int[] I_Right_Branch = 
+    {
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 2,0, 0),
+        new Vector3Int( 3,0, 0)
+    };
 
 
     // === O ======================================
-    Vector3Int[] O_Top_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0,0),
-                             new Vector3Int(-1,0,1),
-                             new Vector3Int( 0,0,1)};
+    private static readonly Vector3Int[] O_Top_Branch = 
+    {
+        new Vector3Int(-1,0, 0),
+        new Vector3Int(-1,0, 1),
+        new Vector3Int( 0,0, 1)
+    };
 
-    Vector3Int[] O_Bottom_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0, 0),
-                             new Vector3Int( 1,0,-1),
-                             new Vector3Int( 0,0,-1)};
+    private static readonly Vector3Int[] O_Bottom_Branch =
+    {
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 1,0,-1),
+        new Vector3Int( 0,0,-1)
+    };
 
-    Vector3Int[] O_Left_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0,-1),
-                             new Vector3Int(-1,0,-1),
-                             new Vector3Int(-1,0, 0)};
+    private static readonly Vector3Int[] O_Left_Branch = 
+    {
+        new Vector3Int( 0,0,-1),
+        new Vector3Int(-1,0,-1),
+        new Vector3Int(-1,0, 0)
+    };
 
-    Vector3Int[] O_Right_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0, 1),
-                             new Vector3Int( 1,0, 1),
-                             new Vector3Int( 1,0, 0)};
+    private static readonly Vector3Int[] O_Right_Branch = 
+    {
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 1,0, 1),
+        new Vector3Int( 1,0, 0)
+    };
 
 
     // === L ======================================
-    Vector3Int[] L_Top_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0,1),
-                             new Vector3Int( 0,0,2),
-                             new Vector3Int( 1,0,0)};
+    private static readonly Vector3Int[] L_Top_Branch =
+    {
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 0,0, 2),
+        new Vector3Int( 1,0, 0)
+    };
 
-    Vector3Int[] L_Bottom_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0,-1),
-                             new Vector3Int( 0,0,-2),
-                             new Vector3Int(-1,0, 0)};
+    private static readonly Vector3Int[] L_Bottom_Branch =
+    {
+        new Vector3Int( 0,0,-1),
+        new Vector3Int( 0,0,-2),
+        new Vector3Int(-1,0, 0)
+    };
 
-    Vector3Int[] L_Left_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0, 0),
-                             new Vector3Int(-2,0, 0),
-                             new Vector3Int( 0,0, 1)};
+    private static readonly Vector3Int[] L_Left_Branch =
+    {
+        new Vector3Int(-1,0, 0),
+        new Vector3Int(-2,0, 0),
+        new Vector3Int( 0,0, 1)
+    };
 
-    Vector3Int[] L_Right_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0, 0),
-                             new Vector3Int( 2,0, 0),
-                             new Vector3Int( 0,0,-1)};
+    private static readonly Vector3Int[] L_Right_Branch =
+    {
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 2,0, 0),
+        new Vector3Int( 0,0,-1)
+    };
 
 
     // === J ======================================
-    Vector3Int[] J_Top_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0,0),
-                             new Vector3Int( 0,0,1),
-                             new Vector3Int( 0,0,2)};
+    private static readonly Vector3Int[] J_Top_Branch =
+    {
+        new Vector3Int(-1,0, 0),
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 0,0, 2)
+    };
 
-    Vector3Int[] J_Bottom_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0, 0),
-                             new Vector3Int( 0,0,-1),
-                             new Vector3Int( 0,0,-2)};
+    private static readonly Vector3Int[] J_Bottom_Branch =
+    {
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 0,0,-1),
+        new Vector3Int( 0,0,-2)
+    };
 
-    Vector3Int[] J_Left_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0,-1),
-                             new Vector3Int(-1,0, 0),
-                             new Vector3Int(-2,0, 0)};
+    private static readonly Vector3Int[] J_Left_Branch =
+    {
+        new Vector3Int( 0,0,-1),
+        new Vector3Int(-1,0, 0),
+        new Vector3Int(-2,0, 0)
+    };
 
-    Vector3Int[] J_Right_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0, 1),
-                             new Vector3Int( 1,0, 0),
-                             new Vector3Int( 2,0, 0)};
+    private static readonly Vector3Int[] J_Right_Branch =
+    {
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 2,0, 0)
+    };
 
 
     // === S ======================================
-    Vector3Int[] S_Top_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0,0),
-                             new Vector3Int( 0,0,1),
-                             new Vector3Int( 1,0,1)};
+    private static readonly Vector3Int[] S_Top_Branch =
+    {
+        new Vector3Int(-1,0, 0),
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 1,0, 1)
+    };
 
-    Vector3Int[] S_Bottom_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0, 0),
-                             new Vector3Int( 0,0,-1),
-                             new Vector3Int(-1,0,-1)};
+    private static readonly Vector3Int[] S_Bottom_Branch =
+    {
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 0,0,-1),
+        new Vector3Int(-1,0,-1)
+    };
 
-    Vector3Int[] S_Left_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0,-1),
-                             new Vector3Int(-1,0,0),
-                             new Vector3Int(-1,0,1)};
+    private static readonly Vector3Int[] S_Left_Branch =
+    {
+        new Vector3Int( 0,0,-1),
+        new Vector3Int(-1,0, 0),
+        new Vector3Int(-1,0, 1)
+    };
 
-    Vector3Int[] S_Right_Branch = new Vector3Int[3]
-                            {new Vector3Int( 0,0, 1),
-                             new Vector3Int( 1,0, 0),
-                             new Vector3Int( 1,0,-1)};
+    private static readonly Vector3Int[] S_Right_Branch =
+    {
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 1,0,-1)
+    };
 
 
     // === Z ======================================
-    Vector3Int[] Z_Top_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0,1),
-                             new Vector3Int( 0,0,1),
-                             new Vector3Int( 1,0,0)};
+    private static readonly Vector3Int[] Z_Top_Branch =
+    {
+        new Vector3Int(-1,0, 1),
+        new Vector3Int( 0,0, 1),
+        new Vector3Int( 1,0, 0)
+    };
 
-    Vector3Int[] Z_Bottom_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0,-1),
-                             new Vector3Int( 0,0,-1),
-                             new Vector3Int(-1,0, 0)};
+    private static readonly Vector3Int[] Z_Bottom_Branch =
+    {
+        new Vector3Int( 1,0,-1),
+        new Vector3Int( 0,0,-1),
+        new Vector3Int(-1,0, 0)
+    };
 
-    Vector3Int[] Z_Left_Branch = new Vector3Int[3]
-                            {new Vector3Int(-1,0,-1),
-                             new Vector3Int(-1,0, 0),
-                             new Vector3Int( 0,0, 1)};
+    private static readonly Vector3Int[] Z_Left_Branch =
+    {
+        new Vector3Int(-1,0,-1),
+        new Vector3Int(-1,0, 0),
+        new Vector3Int( 0,0, 1)
+    };
 
-    Vector3Int[] Z_Right_Branch = new Vector3Int[3]
-                            {new Vector3Int( 1,0, 1),
-                             new Vector3Int( 1,0, 0),
-                             new Vector3Int( 0,0,-1)};
+    private static readonly Vector3Int[] Z_Right_Branch =
+    {
+        new Vector3Int( 1,0, 1),
+        new Vector3Int( 1,0, 0),
+        new Vector3Int( 0,0,-1)
+    };
 
 
     /*ÉZÉNÉVÉáÉìÇÃóÒãì*/
