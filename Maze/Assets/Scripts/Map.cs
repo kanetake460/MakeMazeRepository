@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using System;
+using System.Linq;
 using TakeshiClass;
 using Palmmedia.ReportGenerator.Core.Parser.Analysis;
+using static TakeshiClass.FPS;
+using static System.Collections.Specialized.BitVector32;
+using System;
 
 public class Map : MapGridField
 {
@@ -14,6 +17,9 @@ public class Map : MapGridField
 
     /*ブロック*/
     [SerializeField] Section section;
+    [SerializeField] Elements elements1;
+    // グリッドのセルの情報を格納する配列
+    eElementType[,] mapElements;
 
     int instanceCount = 0;
 
@@ -25,8 +31,7 @@ public class Map : MapGridField
         OutRange_Element,   // 範囲外
     }
 
-    // グリッドのセルの情報を格納する配列
-    eElementType[,] mapElements;
+
 
 
 
@@ -64,44 +69,56 @@ public class Map : MapGridField
     /// </summary>
     /// <param name="playerPosition">インスタンスする場所</param>
     /// <param name="instanceRot">インスタンスする向き</param>
-    public void InstanceMapBlock(Vector3 playerPosition,Quaternion instanceRot)
+    public void InstanceMapBlock(Vector3 playerPosition, Quaternion instanceRot)
     {
+        eFourDirection direction = FPS.GetFourDirection(instanceRot.eulerAngles);
+        elements1 = new Elements(gridField.GetGridCoordinate(playerPosition), direction, section.mapSection[instanceCount]);
 
-        if (CheckCell(gridField.GetOtherGridCoordinate(playerPosition,
-            GetPreviousCoordinate(instanceRot.eulerAngles))) == true)    // もし、プレイヤーの前のセルが置けるセルなら
+
+        for (int i = 0; i < 3; i++)
         {
-        Debug.Log(section.mapSection1[instanceCount]);
-        Debug.Log(section.mapSection2[instanceCount]);
+            for (int j = 0; j < section.sections.Length; j++)
+            {
+            }
+        }
+        Debug.Log(section.mapSection[0]);
 
-            // おいたとき、プレイヤーの目の前のセルは種エレメント
-            Vector3Int seedElementCoord = gridField.GetOtherGridCoordinate(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles));
-            mapElements[seedElementCoord.x, seedElementCoord.z] = eElementType.Seed_Element;
 
-            // おいたブロックの種以外の部分は枝エレメント
-            FPS.eFourDirection fourDirection = FPS.GetFourDirection(instanceRot.eulerAngles);
-                Vector3Int[] branchElementCoord = new Vector3Int[3];
+
+        // セクションがインスタンス可能なら
+        if (CheckInstanceSection(elements1.seedElementCoord, elements1.branchElementCoord))
+        {
+            // プレイヤーの前の座標を種エレメントに
+            mapElements[elements1.seedElementCoord.x, elements1.seedElementCoord.z] = eElementType.Seed_Element;
+
+            // セクションのそのほかのエレメントを枝エレメントに
             for (int i = 0; i < 3; i++)
             {
-                branchElementCoord[i] = section.GetBranchElement(section.mapSection1[instanceCount],fourDirection, seedElementCoord, i);
-                mapElements[branchElementCoord[i].x,branchElementCoord[i].z] = eElementType.Branch_Element;
+                mapElements[elements1.branchElementCoord[i].x, elements1.branchElementCoord[i].z] = eElementType.Branch_Element;
             }
 
+
             // セクション1をインスタンスする
-            Instantiate(section.sections[(int)section.mapSection1[instanceCount]],
-                        gridField.GetOtherGridPosition(playerPosition, GetPreviousCoordinate(instanceRot.eulerAngles)),
-                        instanceRot);
+            Instantiate(section.sections[(int)section.mapSection[instanceCount]],
+                            gridField.grid[elements1.seedElementCoord.x,elements1.seedElementCoord.z],
+                            instanceRot);
+
+
+            //// セクション2をインスタンスする
+            //Instantiate(section.sections[(int)section.mapSection[instanceCount]],
+            //                gridField.GetOtherGridPosition(gridField.grid[branchElementCoord[0].x, branchElementCoord[0].z], GetPreviousCoordinate(UnityEngine.Random.rotation.eulerAngles)),
+            //                instanceRot);
 
             instanceCount++;
 
             // カウントが回ったらシャッフル
             if (instanceCount == section.sections.Length)
             {
-                Algorithm.Shuffle(section.mapSection1);
-                Algorithm.Shuffle(section.mapSection2);
+                Algorithm.Shuffle(section.mapSection);
                 instanceCount = 0;
             }
 
-// =========デバッグ====================================================================================================
+            // =========デバッグ====================================================================================================
 
             for (int x = 0; x < gridWidth; x++)
             {
@@ -112,7 +129,7 @@ public class Map : MapGridField
                     {
                         Instantiate(red, gridField.grid[x, z], Quaternion.identity);
                     }
-                    else if (mapElements[x,z] == eElementType.Branch_Element)
+                    else if (mapElements[x, z] == eElementType.Branch_Element)
                     {
                         Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
                     }
@@ -121,10 +138,18 @@ public class Map : MapGridField
         }
     }
 
-
-    private bool CheckCell(Vector3Int coord)
+    /// <summary>
+    /// 与えた種エレメントと枝エレメントの位置からインスタンス可能か調べます
+    /// </summary>
+    /// <param name="seed">種エレメント座標</param>
+    /// <param name="branch">枝エレメント座標</param>
+    /// <returns>インスタンス可能かどうか</returns>
+    private bool CheckInstanceSection(Vector3Int seed,Vector3Int[] branch)
     {
-        if (mapElements[coord.x, coord.z] == eElementType.None_Element)
+        if (CheckCell(branch[0]) == true &&
+            CheckCell(branch[1]) == true &&
+            CheckCell(branch[2]) == true &&
+            CheckCell(seed) == true )
         {
             return true;
         }
@@ -133,29 +158,20 @@ public class Map : MapGridField
     }
 
     /// <summary>
-    /// 向きに対応するひとつ前のグリッド座標を返します
+    /// 与えた座標のエレメント座標が None_Element なら true を返します
     /// </summary>
-    /// <param name="eulerAngles">向き</param>
-    /// <returns>向いている方向の一つ前のグリッド座標</returns>
-    public Vector3Int GetPreviousCoordinate(Vector3 eulerAngles)
+    /// <param name="coord">座標</param>
+    /// <returns>座標が None_Element かどうか</returns>
+    private bool CheckCell(Vector3Int coord)
     {
-        FPS.eFourDirection fourDirection = FPS.GetFourDirection(eulerAngles);   // 向きを調べて代入
-        switch (fourDirection)
+        if (mapElements[coord.x, coord.z] == eElementType.None_Element)
         {
-            case FPS.eFourDirection.top:
-                return new Vector3Int(0, 0, 1);
-
-            case FPS.eFourDirection.bottom:
-                return new Vector3Int(0, 0, -1);
-
-            case FPS.eFourDirection.left:
-                return new Vector3Int(-1, 0, 0);
-
-            case FPS.eFourDirection.right:
-                return new Vector3Int(1, 0, 0);
+            return true;
         }
-        return new Vector3Int(0, 0, 0);
+        return false;
     }
+
+
 
 
     void Update()

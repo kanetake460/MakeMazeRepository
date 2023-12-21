@@ -361,6 +361,6 @@ namespace TakeshiClass
                 }
             }
             return false;
-        }ƒŠƒtƒŒƒNƒVƒ‡ƒ“
+        }
     }
 }
