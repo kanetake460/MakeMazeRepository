@@ -119,6 +119,7 @@ namespace TakeshiClass
             }
         }
 
+
         /// <summary>
         /// プレイヤーの向きから四方向の列挙子を返します
         /// </summary>
@@ -143,6 +144,13 @@ namespace TakeshiClass
                 return eFourDirection.top;
             }
         }
+
+        public static eFourDirection RandomFourDirection()
+        {
+            int rand = Random.Range()
+        }
+
+
 
         /// <summary>
         /// プレイヤーの向きから四方向の向きの Quaternion を返します

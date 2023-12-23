@@ -19,21 +19,9 @@ public class Map : MapGridField
     [SerializeField] Section section;
     [SerializeField] Elements elements1;
     // グリッドのセルの情報を格納する配列
-    eElementType[,] mapElements;
+    Elements.eElementType[,] mapElements;
 
     int instanceCount = 0;
-
-    enum eElementType
-    {
-        Seed_Element,       // 種エレメント
-        Branch_Element,     // 枝エレメント
-        None_Element,       // エレメントなし
-        OutRange_Element,   // 範囲外
-    }
-
-
-
-
 
     [SerializeField]Player player;
 
@@ -42,7 +30,7 @@ public class Map : MapGridField
         base.Start();
 
         // mapCells の初期化
-        mapElements = new eElementType[gridWidth, gridDepth];
+        mapElements = new Elements.eElementType[gridWidth, gridDepth];
         for(int x = 0; x < gridWidth; x++) 
         {
 
@@ -54,11 +42,11 @@ public class Map : MapGridField
                     x == gridWidth - 1 ||
                     z == gridDepth - 1)
                 {
-                    mapElements[x, z] = eElementType.OutRange_Element;
+                    mapElements[x, z] = Elements.eElementType.OutRange_Element;
                 }
                 else
                 {
-                    mapElements[x, z] = eElementType.None_Element;
+                    mapElements[x, z] = Elements.eElementType.None_Element;
                 }
             }
         }
@@ -89,12 +77,12 @@ public class Map : MapGridField
         if (CheckInstanceSection(elements1.seedElementCoord, elements1.branchElementCoord))
         {
             // プレイヤーの前の座標を種エレメントに
-            mapElements[elements1.seedElementCoord.x, elements1.seedElementCoord.z] = eElementType.Seed_Element;
+            mapElements[elements1.seedElementCoord.x, elements1.seedElementCoord.z] = Elements.eElementType.Seed_Element;
 
             // セクションのそのほかのエレメントを枝エレメントに
             for (int i = 0; i < 3; i++)
             {
-                mapElements[elements1.branchElementCoord[i].x, elements1.branchElementCoord[i].z] = eElementType.Branch_Element;
+                mapElements[elements1.branchElementCoord[i].x, elements1.branchElementCoord[i].z] = Elements.eElementType.Branch_Element;
             }
 
 
@@ -103,11 +91,17 @@ public class Map : MapGridField
                             gridField.grid[elements1.seedElementCoord.x,elements1.seedElementCoord.z],
                             instanceRot);
 
+            // セクション1をインスタンスする
+            Instantiate(section.sections[(int)section.mapSection[instanceCount]],
+                            gridField.grid[elements1.seedElementCoord.x, elements1.seedElementCoord.z],
+                            instanceRot);
 
-            //// セクション2をインスタンスする
-            //Instantiate(section.sections[(int)section.mapSection[instanceCount]],
-            //                gridField.GetOtherGridPosition(gridField.grid[branchElementCoord[0].x, branchElementCoord[0].z], GetPreviousCoordinate(UnityEngine.Random.rotation.eulerAngles)),
-            //                instanceRot);
+            Vector3 branchPos1 = gridField.GetOtherGridPosition(gridField.grid[elements1.branchElementCoord[0].x, elements1.branchElementCoord[0].z], Elements.GetPreviousCoordinate(GetFourDirection(UnityEngine.Random.)));
+
+            // セクション2をインスタンスする
+            Instantiate(section.sections[(int)section.mapSection[instanceCount]],
+                            gridField.GetOtherGridPosition(gridField.grid[elements1.branchElementCoord[0].x, elements1.branchElementCoord[0].z], Elements.GetPreviousCoordinate(UnityEngine.Random.rotation.eulerAngles)),
+                            instanceRot);
 
             instanceCount++;
 
@@ -125,11 +119,11 @@ public class Map : MapGridField
 
                 for (int z = 0; z < gridDepth; z++)
                 {
-                    if (mapElements[x, z] == eElementType.Seed_Element)
+                    if (mapElements[x, z] == Elements.eElementType.Seed_Element)
                     {
                         Instantiate(red, gridField.grid[x, z], Quaternion.identity);
                     }
-                    else if (mapElements[x, z] == eElementType.Branch_Element)
+                    else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
                     {
                         Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
                     }
@@ -164,7 +158,7 @@ public class Map : MapGridField
     /// <returns>座標が None_Element かどうか</returns>
     private bool CheckCell(Vector3Int coord)
     {
-        if (mapElements[coord.x, coord.z] == eElementType.None_Element)
+        if (mapElements[coord.x, coord.z] == Elements.eElementType.None_Element)
         {
             return true;
         }

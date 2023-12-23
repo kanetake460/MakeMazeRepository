@@ -18,8 +18,6 @@ public class Elements : Section
         OutRange_Element,   // 範囲外
     }
 
-    // グリッドのセルの情報を格納する配列
-    eElementType[,] mapElements;
 
     public Elements(Vector3Int coord, FPS.eFourDirection fourDirection,eMapSections mapSection)
     {
@@ -29,7 +27,6 @@ public class Elements : Section
         for (int i = 0; i < 3; i++)
         {
             branchElementCoord[i] = GetBranchElement(mapSection, fourDirection, seedElementCoord, i);
-            Debug.Log(mapSection);
         }
     }
 
