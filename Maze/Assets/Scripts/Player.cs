@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    // 視点スピード
+    private Vector3 latestPos;
 
     /*オブジェクト*/
     [SerializeField] GameObject mainCam;            // プレイヤーの視点カメラ
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        latestPos = transform.position;
 
     }
 
@@ -35,8 +37,18 @@ public class Player : MonoBehaviour
     {
         FPS.CameraViewport(mainCam, Xsensityvity, minX, maxX);
         FPS.PlayerViewport(gameObject, Ysensityvity);
-        FPS.Locomotion(transform, speed);
         FPS.UpdateCursorLock(cursorLock);
+        Vector3Int playerGridPos = map.gridField.GetGridCoordinate(transform.position);
+        
+        // もし、プレイヤーのポジションがセクションの上でなければ
+        if (map.mapElements[playerGridPos.x, playerGridPos.z] != Elements.eElementType.Seed_Element &&
+            map.mapElements[playerGridPos.x, playerGridPos.z] != Elements.eElementType.Branch_Element)
+        {
+            transform.position = latestPos;     // ポジションを一フレーム前の位置に固定
+        }
+        latestPos = transform.position;         // ポジションを格納
+
+            FPS.Locomotion(transform, speed);
 
         SpreadMap();
     }

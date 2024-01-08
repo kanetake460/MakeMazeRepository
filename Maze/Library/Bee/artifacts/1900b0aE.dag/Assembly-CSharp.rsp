@@ -354,6 +354,7 @@
 "Assets/Scripts/MapGridField.cs"
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/Que.cs"
+"Assets/Scripts/SceneManager.cs"
 "Assets/Scripts/Section.cs"
 "Assets/Scripts/Test1.cs"
 "Assets/Scripts/WorldGridField.cs"

@@ -145,9 +145,16 @@ namespace TakeshiClass
             }
         }
 
+        /// <summary>
+        /// ƒ‰ƒ“ƒ_ƒ€‚È4•ûŒü‚Ì—ñ‹“Žq‚ð•Ô‚µ‚Ü‚·
+        /// </summary>
+        /// <returns>ƒ‰ƒ“ƒ_ƒ€‚È‚S•ûŒü</returns>
         public static eFourDirection RandomFourDirection()
         {
-            int rand = Random.Range()
+            Vector3 rand = Vector3.zero;
+               rand.y = Random.Range(0.0f,360f);
+
+            return GetFourDirection(rand);
         }
 
 

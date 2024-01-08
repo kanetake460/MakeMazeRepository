@@ -17,11 +17,17 @@ public class Map : MapGridField
 
     /*ブロック*/
     [SerializeField] Section section;
+    [SerializeField] Elements startElements;
     [SerializeField] Elements elements1;
-    // グリッドのセルの情報を格納する配列
-    Elements.eElementType[,] mapElements;
+    [SerializeField] Elements elements2;
+    [SerializeField] Elements elements3;
 
-    int instanceCount = 0;
+    // グリッドのセルの情報を格納する配列
+    public Elements.eElementType[,] mapElements;
+
+    int instanceCount1 = 0;
+    int instanceCount2 = 1;
+    int instanceCount3 = 2;
 
     [SerializeField]Player player;
 
@@ -29,7 +35,7 @@ public class Map : MapGridField
     {
         base.Start();
 
-        // mapCells の初期化
+        // mapElements の初期化
         mapElements = new Elements.eElementType[gridWidth, gridDepth];
         for(int x = 0; x < gridWidth; x++) 
         {
@@ -50,6 +56,24 @@ public class Map : MapGridField
                 }
             }
         }
+
+        startElements = new Elements(gridField.GetGridCoordinate(gridField.grid[50,48]),eFourDirection.top,Section.eMapSections.O_Section);
+        mapElements = startElements.SetElementType(mapElements, startElements.seedElementCoord, startElements.branchElementCoord); 
+        //for (int x = 0; x < gridWidth; x++)
+        //{
+
+        //    for (int z = 0; z < gridDepth; z++)
+        //    {
+        //        if (mapElements[x, z] == Elements.eElementType.Seed_Element)
+        //        {
+        //            Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+        //        }
+        //        else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
+        //        {
+        //            Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
+        //        }
+        //    }
+        //}
     }
 
     /// <summary>
@@ -59,74 +83,103 @@ public class Map : MapGridField
     /// <param name="instanceRot">インスタンスする向き</param>
     public void InstanceMapBlock(Vector3 playerPosition, Quaternion instanceRot)
     {
+        Debug.Log(section.mapSection[instanceCount1]);
         eFourDirection direction = FPS.GetFourDirection(instanceRot.eulerAngles);
-        elements1 = new Elements(gridField.GetGridCoordinate(playerPosition), direction, section.mapSection[instanceCount]);
-
-
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < section.sections.Length; j++)
-            {
-            }
-        }
-        Debug.Log(section.mapSection[0]);
-
+        elements1 = new Elements(gridField.GetGridCoordinate(playerPosition), direction, section.mapSection[instanceCount1]);
 
 
         // セクションがインスタンス可能なら
         if (CheckInstanceSection(elements1.seedElementCoord, elements1.branchElementCoord))
         {
-            // プレイヤーの前の座標を種エレメントに
-            mapElements[elements1.seedElementCoord.x, elements1.seedElementCoord.z] = Elements.eElementType.Seed_Element;
 
-            // セクションのそのほかのエレメントを枝エレメントに
-            for (int i = 0; i < 3; i++)
+            mapElements = elements1.SetElementType(mapElements, elements1.seedElementCoord, elements1.branchElementCoord);
+
+            while (true)
             {
-                mapElements[elements1.branchElementCoord[i].x, elements1.branchElementCoord[i].z] = Elements.eElementType.Branch_Element;
-            }
+                int randBranch1 = UnityEngine.Random.Range(0, 3);
+                Vector3 branchPos1 = gridField.GetGridPosition(gridField.grid[elements1.branchElementCoord[randBranch1].x, elements1.branchElementCoord[randBranch1].z]);
+                eFourDirection randDir1 = FPS.RandomFourDirection();
 
+                Debug.Log(randBranch1);
 
-            // セクション1をインスタンスする
-            Instantiate(section.sections[(int)section.mapSection[instanceCount]],
-                            gridField.grid[elements1.seedElementCoord.x,elements1.seedElementCoord.z],
-                            instanceRot);
-
-            // セクション1をインスタンスする
-            Instantiate(section.sections[(int)section.mapSection[instanceCount]],
-                            gridField.grid[elements1.seedElementCoord.x, elements1.seedElementCoord.z],
-                            instanceRot);
-
-            Vector3 branchPos1 = gridField.GetOtherGridPosition(gridField.grid[elements1.branchElementCoord[0].x, elements1.branchElementCoord[0].z], Elements.GetPreviousCoordinate(GetFourDirection(UnityEngine.Random.)));
-
-            // セクション2をインスタンスする
-            Instantiate(section.sections[(int)section.mapSection[instanceCount]],
-                            gridField.GetOtherGridPosition(gridField.grid[elements1.branchElementCoord[0].x, elements1.branchElementCoord[0].z], Elements.GetPreviousCoordinate(UnityEngine.Random.rotation.eulerAngles)),
-                            instanceRot);
-
-            instanceCount++;
-
-            // カウントが回ったらシャッフル
-            if (instanceCount == section.sections.Length)
-            {
-                Algorithm.Shuffle(section.mapSection);
-                instanceCount = 0;
-            }
-
-            // =========デバッグ====================================================================================================
-
-            for (int x = 0; x < gridWidth; x++)
-            {
-
-                for (int z = 0; z < gridDepth; z++)
+                elements2 = new Elements(gridField.GetGridCoordinate(branchPos1), randDir1, section.mapSection[instanceCount2]);
+                if (CheckInstanceSection(elements2.seedElementCoord, elements2.branchElementCoord))
                 {
-                    if (mapElements[x, z] == Elements.eElementType.Seed_Element)
+                    int count = 0; 
+                            mapElements = elements2.SetElementType(mapElements, elements2.seedElementCoord, elements2.branchElementCoord);
+                    while (true)
                     {
-                        Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+                        int randBranch2 = UnityEngine.Random.Range(0, 3);
+                        Vector3 branchPos2 = gridField.GetGridPosition(gridField.grid[elements1.branchElementCoord[randBranch2].x, elements1.branchElementCoord[randBranch2].z]);
+                        eFourDirection randDir2 = FPS.RandomFourDirection();
+                        
+                        count++;
+                        if(count >= 100)
+                        {
+                            Debug.Log("そこには置けない");
+                            break;
+                        }
+
+                        elements3 = new Elements(gridField.GetGridCoordinate(branchPos2), randDir2, section.mapSection[instanceCount3]);
+
+                        if (CheckInstanceSection(elements3.seedElementCoord, elements3.branchElementCoord))
+                        {
+                            mapElements = elements3.SetElementType(mapElements, elements3.seedElementCoord, elements3.branchElementCoord);
+                            // セクション1をインスタンスする
+                            Instantiate(section.sections[(int)section.mapSection[instanceCount1]],
+                                            gridField.grid[elements1.seedElementCoord.x, elements1.seedElementCoord.z],
+                                            instanceRot);
+
+                            // セクション2をインスタンスする
+                            Instantiate(section.sections[(int)section.mapSection[instanceCount2]],
+                                            gridField.grid[elements2.seedElementCoord.x, elements2.seedElementCoord.z],
+                                            FPS.GetFourDirectionEulerAngles(new Vector3(0, (int)randDir1, 0)));
+
+                            // セクション3をインスタンスする
+                            Instantiate(section.sections[(int)section.mapSection[instanceCount3]],
+                                            gridField.grid[elements3.seedElementCoord.x, elements3.seedElementCoord.z],
+                                            FPS.GetFourDirectionEulerAngles(new Vector3(0, (int)randDir2, 0)));
+
+                            instanceCount1++;
+                            instanceCount2++;
+                            instanceCount3++;
+
+                            // カウントが回ったらシャッフル
+                            if (instanceCount1 == section.sections.Length)
+                            {
+                                Algorithm.Shuffle(section.mapSection);
+                                instanceCount1 = 0;
+                            }
+                            if (instanceCount2 == section.sections.Length)
+                            {
+                                instanceCount2 = 0;
+                            }
+                            if (instanceCount3 == section.sections.Length)
+                            {
+                                instanceCount3 = 0;
+                            }
+
+                            // =========デバッグ====================================================================================================
+
+                            //for (int x = 0; x < gridWidth; x++)
+                            //{
+
+                            //    for (int z = 0; z < gridDepth; z++)
+                            //    {
+                            //        if (mapElements[x, z] == Elements.eElementType.Seed_Element)
+                            //        {
+                            //            Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+                            //        }
+                            //        else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
+                            //        {
+                            //            Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
+                            //        }
+                            //    }
+                            //}
+                            break;
+                        }
                     }
-                    else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
-                    {
-                        Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
-                    }
+                    break;
                 }
             }
         }

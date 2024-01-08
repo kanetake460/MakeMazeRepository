@@ -7,8 +7,8 @@ using static System.Collections.Specialized.BitVector32;
 
 public class Elements : Section
 {
-    public Vector3Int[] branchElementCoord = new Vector3Int[3];
     public Vector3Int seedElementCoord;
+    public Vector3Int[] branchElementCoord = new Vector3Int[3];
 
     public enum eElementType
     {
@@ -30,13 +30,26 @@ public class Elements : Section
         }
     }
 
+    public eElementType[,] SetElementType(eElementType[,] elements, Vector3Int seed, Vector3Int[] branch)
+    {
+        // プレイヤーの前の座標を種エレメントに
+        elements[seed.x, seed.z] = eElementType.Seed_Element;
+
+        // セクションのそのほかのエレメントを枝エレメントに
+        for (int i = 0; i < 3; i++)
+        {
+            elements[branch[i].x, branch[i].z] = eElementType.Branch_Element;
+        }
+        return elements;
+    }
+
 
     /// <summary>
     /// 向きに対応するひとつ前のグリッド座標を返します
     /// </summary>
     /// <param name="eulerAngles">向き</param>
     /// <returns>向いている方向の一つ前のグリッド座標</returns>
-    public Vector3Int GetPreviousCoordinate(FPS.eFourDirection fourDirection)
+    public static Vector3Int GetPreviousCoordinate(FPS.eFourDirection fourDirection)
     {
         switch (fourDirection)
         {

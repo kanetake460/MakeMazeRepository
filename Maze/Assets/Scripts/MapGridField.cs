@@ -6,7 +6,7 @@ using UnityEngine;
 public class MapGridField : MonoBehaviour
 {
     /*ÉOÉäÉbÉhê›íË*/
-    protected GridField gridField;
+    public GridField gridField;
     [SerializeField] protected int gridWidth = 20;
     [SerializeField] protected int gridDepth = 10;
     [SerializeField] protected float cellWidth = 10;
