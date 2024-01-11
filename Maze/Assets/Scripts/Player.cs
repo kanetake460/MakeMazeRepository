@@ -2,11 +2,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TakeshiClass;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.iOS;
 using static UnityEditor.PlayerSettings;
+using static UnityEngine.UI.Image;
 
 public class Player : MonoBehaviour
 {
@@ -25,10 +28,11 @@ public class Player : MonoBehaviour
     private bool cursorLock = true;                 // カーソルロックのON/OFF
     float minX = -90f, maxX = 90f;                  // 角度の制限
 
+    Ray ray;
+
     void Start()
     {
         latestPos = transform.position;
-
     }
 
 
@@ -47,8 +51,8 @@ public class Player : MonoBehaviour
             transform.position = latestPos;     // ポジションを一フレーム前の位置に固定
         }
         latestPos = transform.position;         // ポジションを格納
-
-            FPS.Locomotion(transform, speed);
+        
+        FPS.Locomotion(transform, speed);
 
         SpreadMap();
     }

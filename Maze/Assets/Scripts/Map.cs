@@ -129,16 +129,24 @@ public class Map : MapGridField
                             Instantiate(section.sections[(int)section.mapSection[instanceCount1]],
                                             gridField.grid[elements1.seedElementCoord.x, elements1.seedElementCoord.z],
                                             instanceRot);
+                            // セクション1のプレイヤーの目の前の壁をなくす
+                            breakWall(playerPosition,direction);
+
 
                             // セクション2をインスタンスする
                             Instantiate(section.sections[(int)section.mapSection[instanceCount2]],
                                             gridField.grid[elements2.seedElementCoord.x, elements2.seedElementCoord.z],
                                             FPS.GetFourDirectionEulerAngles(new Vector3(0, (int)randDir1, 0)));
+                            // セクション2の壁をなくす
+                            breakWall(branchPos1, randDir1);
+
 
                             // セクション3をインスタンスする
                             Instantiate(section.sections[(int)section.mapSection[instanceCount3]],
                                             gridField.grid[elements3.seedElementCoord.x, elements3.seedElementCoord.z],
                                             FPS.GetFourDirectionEulerAngles(new Vector3(0, (int)randDir2, 0)));
+                            // セクション3の壁をなくす
+                            breakWall(branchPos2, randDir2);
 
                             instanceCount1++;
                             instanceCount2++;
@@ -218,6 +226,29 @@ public class Map : MapGridField
         return false;
     }
 
+
+    /// <summary>
+    /// 分岐点にレイキャストを出して当たった壁を壊します
+    /// </summary>
+    /// <param name="branchPos">分岐点</param>
+    /// <param name="dir">分岐向き</param>
+    private void breakWall(Vector3 branchPos,eFourDirection dir)
+    {
+        // 向きをオイラー角に変換
+        Vector3 rot = new Vector3(0,(int)dir,0);
+
+        // 分岐点から分岐向きのレイ作成
+        Ray breakRay = new(branchPos,FPS.GetVector3FourDirection(rot)); 
+        // デバッグ
+        Debug.DrawRay(breakRay.origin, breakRay.direction * 100, UnityEngine.Color.blue,5);
+
+        // レイキャストに当たった壁を非アクティブ化
+        RaycastHit hit;
+        if (Physics.Raycast(breakRay, out hit, 10))
+        {
+            hit.collider.gameObject.SetActive(false);
+        }
+    }
 
 
 

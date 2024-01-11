@@ -146,6 +146,33 @@ namespace TakeshiClass
         }
 
         /// <summary>
+        /// プレイヤーの向きからVector3の四方向を返します
+        /// </summary>
+        /// <param name="rot">プレイヤーの向き</param>
+        /// <returns>Vector3の向き</returns>
+        public static Vector3 GetVector3FourDirection(Vector3 rot)
+        {
+            eFourDirection fourDirection = GetFourDirection(rot);
+
+            if (fourDirection == eFourDirection.left)
+            {
+                return Vector3.left;
+            }
+            else if (fourDirection == eFourDirection.right)
+            {
+                return Vector3.right;
+            }
+            else if (fourDirection == eFourDirection.bottom)
+            {
+                return Vector3.back;
+            }
+            else
+            {
+                return Vector3.forward;
+            }
+        }
+
+        /// <summary>
         /// ランダムな4方向の列挙子を返します
         /// </summary>
         /// <returns>ランダムな４方向</returns>
