@@ -15,6 +15,7 @@ public class Elements : Section
         Seed_Element,       // 種エレメント
         Branch_Element,     // 枝エレメント
         None_Element,       // エレメントなし
+        Room_Element,       // フラグがある部屋エレメント
         OutRange_Element,   // 範囲外
     }
 

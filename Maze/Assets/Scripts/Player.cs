@@ -44,24 +44,15 @@ public class Player : MonoBehaviour
         Vector3Int playerGridPos = map.gridField.GetGridCoordinate(transform.position);
         
         // もし、プレイヤーのポジションがセクションの上でなければ
-        if (map.mapElements[playerGridPos.x, playerGridPos.z] != Elements.eElementType.Seed_Element &&
-            map.mapElements[playerGridPos.x, playerGridPos.z] != Elements.eElementType.Branch_Element)
+        if (map.mapElements[playerGridPos.x, playerGridPos.z] == Elements.eElementType.None_Element ||
+            map.mapElements[playerGridPos.x, playerGridPos.z] == Elements.eElementType.OutRange_Element)
         {
             transform.position = latestPos;     // ポジションを一フレーム前の位置に固定
         }
         latestPos = transform.position;         // ポジションを格納
         
         if(canLocomotion)FPS.Locomotion(transform, speed);
-        //Ray breakRay = new(transform.position, FPS.GetVector3FourDirection(transform.rotation.eulerAngles));
-        //// デバッグ
-        //Debug.DrawRay(breakRay.origin, breakRay.direction * 100, UnityEngine.Color.blue);
 
-        //// レイキャストに当たった壁を非アクティブ化
-        //RaycastHit hit;
-        //if (Physics.Raycast(breakRay, out hit,10))
-        //{
-        //    hit.collider.gameObject.SetActive(false);
-        //}
         SpreadMap();
     }
 

@@ -177,7 +177,31 @@ namespace TakeshiClass
             }
         }
 
+        /// <summary>
+        /// グリッド座標のランダムな位置を返します(読み取り専用)
+        /// </summary>
+        public Vector3 randomGrid
+        {
+            get
+            {
+                int randX = Random.Range(0, gridWidth);
+                int randZ = Random.Range(0, gridDepth);
+                return grid[randX, randZ];
+            }
+        }
 
+        /// <summary>
+        /// ランダムなグリッド座標を返します(読み取り専用)
+        /// </summary>
+        public Vector3Int randomGridCoord
+        {
+            get
+            {
+                int randX = Random.Range(0, gridWidth);
+                int randZ = Random.Range(0, gridDepth);
+                return new Vector3Int(randX, 0, randZ);
+            }
+        }
 
         //======コンストラクタ=================================================================================================================
 

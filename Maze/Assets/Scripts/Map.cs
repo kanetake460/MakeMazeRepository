@@ -65,7 +65,7 @@ public class Map : MapGridField
 
         //    for (int z = 0; z < gridDepth; z++)
         //    {
-        //        if (mapElements[x, z] == Elements.eElementType.Seed_Element)
+        //        if (mapElements[x, z] == Elements.eElementType.Room_Element)
         //        {
         //            Instantiate(red, gridField.grid[x, z], Quaternion.identity);
         //        }
@@ -73,6 +73,7 @@ public class Map : MapGridField
         //        {
         //            Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
         //        }
+                
         //    }
         //}
     }
@@ -94,9 +95,11 @@ public class Map : MapGridField
         {
 
             mapElements = elements1.SetElementType(mapElements, elements1.seedElementCoord, elements1.branchElementCoord);
-
-            while (true)
+            int breakCount = 0;
+            while (breakCount <= 100)
             {
+                breakCount++;
+
                 int randBranch1 = UnityEngine.Random.Range(0, 3);
                 Vector3 branchPos1 = gridField.GetGridPosition(gridField.grid[elements1.branchElementCoord[randBranch1].x, elements1.branchElementCoord[randBranch1].z]);
                 eFourDirection randDir1 = FPS.RandomFourDirection();
@@ -106,20 +109,15 @@ public class Map : MapGridField
                 elements2 = new Elements(gridField.GetGridCoordinate(branchPos1), randDir1, section.mapSection[instanceCount2]);
                 if (CheckInstanceSection(elements2.seedElementCoord, elements2.branchElementCoord))
                 {
-                    int count = 0; 
-                            mapElements = elements2.SetElementType(mapElements, elements2.seedElementCoord, elements2.branchElementCoord);
-                    while (true)
+                    mapElements = elements2.SetElementType(mapElements, elements2.seedElementCoord, elements2.branchElementCoord);
+                    int breakCount2 = 0;
+                    while (breakCount2 <= 100)
                     {
+                        breakCount2++;
+
                         int randBranch2 = UnityEngine.Random.Range(0, 3);
                         Vector3 branchPos2 = gridField.GetGridPosition(gridField.grid[elements1.branchElementCoord[randBranch2].x, elements1.branchElementCoord[randBranch2].z]);
                         eFourDirection randDir2 = FPS.RandomFourDirection();
-                        
-                        count++;
-                        if(count >= 100)
-                        {
-                            Debug.Log("そこには置けない");
-                            break;
-                        }
 
                         elements3 = new Elements(gridField.GetGridCoordinate(branchPos2), randDir2, section.mapSection[instanceCount3]);
 
@@ -131,7 +129,7 @@ public class Map : MapGridField
                                             gridField.grid[elements1.seedElementCoord.x, elements1.seedElementCoord.z],
                                             instanceRot);
                             // セクション1のプレイヤーの目の前の壁をなくす
-                            breakWall(playerPosition,direction);
+                            BreakWall(playerPosition, direction);
 
 
                             // セクション2をインスタンスする
@@ -139,7 +137,7 @@ public class Map : MapGridField
                                             gridField.grid[elements2.seedElementCoord.x, elements2.seedElementCoord.z],
                                             FPS.GetFourDirectionEulerAngles(new Vector3(0, (int)randDir1, 0)));
                             // セクション2の壁をなくす
-                            breakWall(branchPos1, randDir1);
+                            BreakWall(branchPos1, randDir1);
 
 
                             // セクション3をインスタンスする
@@ -147,7 +145,7 @@ public class Map : MapGridField
                                             gridField.grid[elements3.seedElementCoord.x, elements3.seedElementCoord.z],
                                             FPS.GetFourDirectionEulerAngles(new Vector3(0, (int)randDir2, 0)));
                             // セクション3の壁をなくす
-                            breakWall(branchPos2, randDir2);
+                            BreakWall(branchPos2, randDir2);
 
                             instanceCount1++;
                             instanceCount2++;
@@ -168,23 +166,26 @@ public class Map : MapGridField
                                 instanceCount3 = 0;
                             }
 
+                            BreakRoomWall();
+
                             // =========デバッグ====================================================================================================
 
-                            //for (int x = 0; x < gridWidth; x++)
-                            //{
+                            for (int x = 0; x < gridWidth; x++)
+                            {
 
-                            //    for (int z = 0; z < gridDepth; z++)
-                            //    {
-                            //        if (mapElements[x, z] == Elements.eElementType.Seed_Element)
-                            //        {
-                            //            Instantiate(red, gridField.grid[x, z], Quaternion.identity);
-                            //        }
-                            //        else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
-                            //        {
-                            //            Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
-                            //        }
-                            //    }
-                            //}
+                                for (int z = 0; z < gridDepth; z++)
+                                {
+                                    if (mapElements[x, z] == Elements.eElementType.Room_Element ||
+                                        mapElements[x, z] == Elements.eElementType.Seed_Element)
+                                    {
+                                        Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+                                    }
+                                    else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
+                                    {
+                                        Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
+                                    }
+                                }
+                            }
                             break;
                         }
                     }
@@ -227,13 +228,46 @@ public class Map : MapGridField
         return false;
     }
 
+    /// <summary>
+    /// 部屋の隣の壁を壊します。
+    /// </summary>
+    private void BreakRoomWall()
+    {
+        for (int x = 0; x < gridWidth; x++)
+        {
+
+            for (int z = 0; z < gridDepth; z++)
+            {
+                if (mapElements[x,z] == Elements.eElementType.Branch_Element) 
+                {
+                    if (mapElements[x + 1,z] == Elements.eElementType.Room_Element)
+                    {
+                        BreakWall(gridField.grid[x, z], eFourDirection.right);
+                    }
+                    else if (mapElements[x - 1, z] == Elements.eElementType.Room_Element)
+                    {
+                        BreakWall(gridField.grid[x, z], eFourDirection.left);
+                    }
+                    else if (mapElements[x, z + 1] == Elements.eElementType.Room_Element)
+                    {
+                        BreakWall(gridField.grid[x, z], eFourDirection.top);
+                    }
+                    else if (mapElements[x, z - 1] == Elements.eElementType.Room_Element)
+                    {
+                        BreakWall(gridField.grid[x, z], eFourDirection.bottom);
+                    }
+                }
+            }
+        }
+    }
+
 
     /// <summary>
     /// 分岐点にレイキャストを出して当たった壁を壊します
     /// </summary>
     /// <param name="branchPos">分岐点</param>
     /// <param name="dir">分岐向き</param>
-    private void breakWall(Vector3 branchPos, eFourDirection dir)
+    private void BreakWall(Vector3 branchPos, eFourDirection dir)
     {
         // 向きをオイラー角に変換
         Vector3 rot = new Vector3(0, (int)dir, 0);
@@ -248,7 +282,10 @@ public class Map : MapGridField
 
         for (int i = 0; i < hit.Length; i++)
         {
-            hit[i].collider.gameObject.SetActive(false);
+            if (hit[i].collider.gameObject.tag == "wall")
+            {
+                hit[i].collider.gameObject.SetActive(false);
+            }
         }
 
     }
@@ -257,6 +294,6 @@ public class Map : MapGridField
 
     void Update()
     {
-        //gridField.DrowGrid();
+        gridField.DrowGrid();
     }
 }

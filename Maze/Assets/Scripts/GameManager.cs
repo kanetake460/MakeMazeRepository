@@ -6,14 +6,14 @@ using TakeshiClass;
 public class GameManager : MonoBehaviour
 {
     /*コンポーネント*/
-    [SerializeField]GridField gf;
+    public Map map;
 
     /*ゲームオブジェクト*/
     [SerializeField]GameObject playerObj;
 
     /*パラメータ*/
-    [SerializeField] int flags;
-    public int clearFlagCount;
+    [SerializeField] int flags;     // 現在の集めたフラグの数
+    public int clearFlagNum = 1;   // クリアに必要なフラグの数
 
     void Start()
     {
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void isGameClear()
     {
-        if (clearFlagCount >= flags)
+        if (flags >= clearFlagNum)
         {
 
         }

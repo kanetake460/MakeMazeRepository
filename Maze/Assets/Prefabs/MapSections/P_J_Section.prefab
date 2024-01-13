@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7762312826638074744}
   m_Layer: 0
   m_Name: J (11)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3283874390777442677
 MeshFilter:
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 5922455732835953044}
   m_Layer: 0
   m_Name: J (4)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -129,7 +129,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6310274323602985909
 MeshFilter:
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 5912058146620084224}
   m_Layer: 0
   m_Name: J (5)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -226,7 +226,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5946091314840382706
 MeshFilter:
@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 714133513171490508}
   m_Layer: 0
   m_Name: J (12)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -323,7 +323,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3997503708015031456
 MeshFilter:
@@ -421,6 +421,8 @@ Transform:
   m_Children:
   - {fileID: 3628475895067330133}
   - {fileID: 1175312837227859900}
+  - {fileID: 5997645804396405033}
+  - {fileID: 1725437812854806535}
   - {fileID: 4670212014444819230}
   - {fileID: 707756730512995646}
   - {fileID: 1560071189709598112}
@@ -431,8 +433,6 @@ Transform:
   - {fileID: 2611495869019632661}
   - {fileID: 443769814464441562}
   - {fileID: 3064443471201666383}
-  - {fileID: 5997645804396405033}
-  - {fileID: 1725437812854806535}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -514,7 +514,7 @@ GameObject:
   - component: {fileID: 8113349013261930402}
   m_Layer: 0
   m_Name: J (8)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -532,7 +532,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &6570483958603455043
 MeshFilter:
@@ -611,7 +611,7 @@ GameObject:
   - component: {fileID: 4990707664611978235}
   m_Layer: 0
   m_Name: J (3)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -629,7 +629,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &9137372656060354967
 MeshFilter:
@@ -726,7 +726,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 12
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!33 &2957654280515637155
 MeshFilter:
@@ -922,7 +922,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 13
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!33 &2743616198293643481
 MeshFilter:
@@ -1100,7 +1100,7 @@ GameObject:
   - component: {fileID: 1702465112803393330}
   m_Layer: 0
   m_Name: J (10)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1118,7 +1118,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &7955474537410286132
 MeshFilter:
@@ -1197,7 +1197,7 @@ GameObject:
   - component: {fileID: 6383911885982536523}
   m_Layer: 0
   m_Name: J (7)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1215,7 +1215,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &818089760436948284
 MeshFilter:
@@ -1294,7 +1294,7 @@ GameObject:
   - component: {fileID: 5405652536216899024}
   m_Layer: 0
   m_Name: J (6)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1312,7 +1312,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5937481751182744277
 MeshFilter:
@@ -1391,7 +1391,7 @@ GameObject:
   - component: {fileID: 5783846783224866848}
   m_Layer: 0
   m_Name: J (9)
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1409,7 +1409,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7745384630535835295}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &4084380199252633143
 MeshFilter:
