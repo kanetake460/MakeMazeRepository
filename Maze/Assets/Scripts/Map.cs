@@ -9,6 +9,7 @@ using static TakeshiClass.FPS;
 using static System.Collections.Specialized.BitVector32;
 using System;
 
+
 public class Map : MapGridField
 {
 
@@ -232,29 +233,30 @@ public class Map : MapGridField
     /// </summary>
     /// <param name="branchPos">分岐点</param>
     /// <param name="dir">分岐向き</param>
-    private void breakWall(Vector3 branchPos,eFourDirection dir)
+    private void breakWall(Vector3 branchPos, eFourDirection dir)
     {
         // 向きをオイラー角に変換
-        Vector3 rot = new Vector3(0,(int)dir,0);
+        Vector3 rot = new Vector3(0, (int)dir, 0);
 
         // 分岐点から分岐向きのレイ作成
-        Ray breakRay = new(branchPos,FPS.GetVector3FourDirection(rot)); 
+        Ray breakRay = new(branchPos, FPS.GetVector3FourDirection(rot));
         // デバッグ
-        Debug.DrawRay(breakRay.origin, breakRay.direction * 100, UnityEngine.Color.blue,5);
+        Debug.DrawRay(breakRay.origin, breakRay.direction * 100, UnityEngine.Color.blue, 5);
 
         // レイキャストに当たった壁を非アクティブ化
-        RaycastHit hit;
-        if (Physics.Raycast(breakRay, out hit, 10))
+        RaycastHit[] hit = Physics.RaycastAll(breakRay.origin, breakRay.direction,11);
+
+        for (int i = 0; i < hit.Length; i++)
         {
-            hit.collider.gameObject.SetActive(false);
+            hit[i].collider.gameObject.SetActive(false);
         }
+
     }
 
 
 
     void Update()
     {
-        gridField.DrowGrid();
-
+        //gridField.DrowGrid();
     }
 }

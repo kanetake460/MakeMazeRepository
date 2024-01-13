@@ -29,13 +29,12 @@ public class Player : MonoBehaviour
     float minX = -90f, maxX = 90f;                  // 角度の制限
 
     Ray ray;
-
+    bool canLocomotion;
     void Start()
     {
         latestPos = transform.position;
+        canLocomotion = true;
     }
-
-
 
     void Update()
     {
@@ -52,8 +51,17 @@ public class Player : MonoBehaviour
         }
         latestPos = transform.position;         // ポジションを格納
         
-        FPS.Locomotion(transform, speed);
+        if(canLocomotion)FPS.Locomotion(transform, speed);
+        //Ray breakRay = new(transform.position, FPS.GetVector3FourDirection(transform.rotation.eulerAngles));
+        //// デバッグ
+        //Debug.DrawRay(breakRay.origin, breakRay.direction * 100, UnityEngine.Color.blue);
 
+        //// レイキャストに当たった壁を非アクティブ化
+        //RaycastHit hit;
+        //if (Physics.Raycast(breakRay, out hit,10))
+        //{
+        //    hit.collider.gameObject.SetActive(false);
+        //}
         SpreadMap();
     }
 

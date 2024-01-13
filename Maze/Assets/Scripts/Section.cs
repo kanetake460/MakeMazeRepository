@@ -244,7 +244,8 @@ public class Section : MapGridField
         // mapSection の初期化、シャッフル
             for (int j = 0; j < sections.Length; j++)
             {
-                mapSection[j] = (eMapSections)Enum.ToObject(typeof(eMapSections), j);
+            mapSection[j] = (eMapSections)Enum.ToObject(typeof(eMapSections), j);
+            //mapSection[j] = eMapSections.J_Section;
             }
         Algorithm.Shuffle(mapSection);
     }

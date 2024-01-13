@@ -11,6 +11,7 @@ namespace TakeshiClass
     // 
     public class FPS : MonoBehaviour
     {
+        Rigidbody rb;
 
         public enum eFourDirection
         {
@@ -86,12 +87,13 @@ namespace TakeshiClass
             float x = 0;
             float z = 0;
 
+
             x = Input.GetAxisRaw("Horizontal") * speed;     // ˆÚ“®“ü—Í
             z = Input.GetAxisRaw("Vertical") * speed;       // ˆÚ“®“ü—Í
 
             //transform.position += new Vector3(x,0,z);
 
-            player.position += player.forward * z * 0.01f + player.right * x * 0.01f;  // ˆÚ“®
+            player.position += player.forward * z * Time.deltaTime + player.right * x * Time.deltaTime;  // ˆÚ“®
 
         }
 
