@@ -170,22 +170,22 @@ public class Map : MapGridField
 
                             // =========デバッグ====================================================================================================
 
-                            for (int x = 0; x < gridWidth; x++)
-                            {
+                            //for (int x = 0; x < gridWidth; x++)
+                            //{
 
-                                for (int z = 0; z < gridDepth; z++)
-                                {
-                                    if (mapElements[x, z] == Elements.eElementType.Room_Element ||
-                                        mapElements[x, z] == Elements.eElementType.Seed_Element)
-                                    {
-                                        Instantiate(red, gridField.grid[x, z], Quaternion.identity);
-                                    }
-                                    else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
-                                    {
-                                        Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
-                                    }
-                                }
-                            }
+                            //    for (int z = 0; z < gridDepth; z++)
+                            //    {
+                            //        if (mapElements[x, z] == Elements.eElementType.Room_Element ||
+                            //            mapElements[x, z] == Elements.eElementType.Seed_Element)
+                            //        {
+                            //            Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+                            //        }
+                            //        else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
+                            //        {
+                            //            Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
+                            //        }
+                            //    }
+                            //}
                             break;
                         }
                     }

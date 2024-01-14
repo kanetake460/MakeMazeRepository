@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
 {
     /*クラス参照*/
     [SerializeField] Map map;
+    [SerializeField] GameManager gameManager;
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
@@ -56,6 +57,14 @@ public class Player : MonoBehaviour
         SpreadMap();
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "flag")
+        {
+            CheckInFlag(other.gameObject);
+        }
+    }
+
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/
     private void SpreadMap()
     {
@@ -63,6 +72,19 @@ public class Player : MonoBehaviour
         {
             map.InstanceMapBlock(transform.position, FPS.GetFourDirectionEulerAngles(transform.eulerAngles));
                 //map.InstanceMapBlock(GridField.GetGridPosition(gridField,transform.position), FPS.InvestigateFourDirection(transform.eulerAngles));
+        }
+    }
+
+    /// <summary>
+    /// マウスの右クリックでフラグを回収します
+    /// </summary>
+    /// <param name="flag">回収するフラグ</param>
+    private void CheckInFlag(GameObject flag)
+    {
+        if(Input.GetMouseButton(1))
+        { 
+            flag.SetActive(false);
+            gameManager.flags++;
         }
     }
 }

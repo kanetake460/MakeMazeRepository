@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]GameObject playerObj;
 
     /*パラメータ*/
-    [SerializeField] int flags;     // 現在の集めたフラグの数
-    public int clearFlagNum = 1;   // クリアに必要なフラグの数
+    public int flags = 0;     // 現在の集めたフラグの数
+    public int clearFlagNum = 10;   // クリアに必要なフラグの数
 
     void Start()
     {
