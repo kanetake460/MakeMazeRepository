@@ -348,9 +348,11 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/Algorithm.cs"
+"Assets/Scripts/AudioManager.cs"
 "Assets/Scripts/Compass.cs"
 "Assets/Scripts/Elements.cs"
 "Assets/Scripts/EnumIndexAttribute.cs"
+"Assets/Scripts/Flag.cs"
 "Assets/Scripts/FPS.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/GridField.cs"
@@ -358,9 +360,11 @@
 "Assets/Scripts/MapGridField.cs"
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/Que.cs"
+"Assets/Scripts/RoomGenerator.cs"
 "Assets/Scripts/SceneManager.cs"
 "Assets/Scripts/Section.cs"
 "Assets/Scripts/Test1.cs"
+"Assets/Scripts/UIManager.cs"
 "Assets/Scripts/WorldGridField.cs"
 -langversion:9.0
 
