@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     /*パラメータ*/
     public int flags = 0;     // 現在の集めたフラグの数
     public int clearFlagNum = 10;   // クリアに必要なフラグの数
+    public int hamburgerCount;      // 現在のハンバーガーの数
+    public int hamburgerNum;        // ハンバーガーの最大値
 
     void Start()
     {
@@ -28,9 +30,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void HamburgerClamp()
+    {
+        if(hamburgerCount > hamburgerNum)
+        {
+            hamburgerCount = hamburgerNum;
+        }
+    }
+
 
     void Update()
     {
-        
+        HamburgerClamp();
     }
 }

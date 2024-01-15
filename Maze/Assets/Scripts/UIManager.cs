@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
 
     public Image CompussSensorLv1;
     public Image CompussSensorLv2;
+    [SerializeField] Image[] HamburgerUI;
+
     public TextMeshProUGUI flagCountText;
 
 
@@ -25,9 +27,24 @@ public class UIManager : MonoBehaviour
         flagCountText.text = gameManager.flags + " / " + gameManager.clearFlagNum;
     }
 
+    public void HamburgerManager()
+    {
+        for(int i = 0; i < gameManager.hamburgerNum; i++) 
+        {
+            HamburgerUI[i].enabled = false;
+        }
+        for(int i = 0;i < gameManager.hamburgerCount; i++)
+        {
+        HamburgerUI[i].enabled = true;
+        }
+    }
+
+
+
     void Update()
     {
         anim.SetFloat("CompassRotation",roomCompass.distance);
         CountText();
+        HamburgerManager();
     }
 }

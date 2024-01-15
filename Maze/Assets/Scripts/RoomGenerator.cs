@@ -8,6 +8,8 @@ public class RoomGenerator : GameManager
 {
 
     [SerializeField] GameObject roomPrefab;
+    [SerializeField] Vector3Int roomSizeMin = new Vector3Int();
+    [SerializeField] Vector3Int roomSizeMax = new Vector3Int();
     private int flagCount = 0;     // 生成のためのカウント
 
     /// <summary>
@@ -31,9 +33,9 @@ public class RoomGenerator : GameManager
                 Instantiate(roomPrefab, map.gridField.grid[randomCoord.x, randomCoord.z], Quaternion.identity);
                 
                 // 中心から±2のグリッド座標を部屋エレメントにする
-                for (int x = -1; x <= 1; x++)
+                for (int x = roomSizeMin.x; x <= roomSizeMax.x; x++)
                 {
-                    for (int z = -1; z <= 1; z++)
+                    for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
                     {
                         map.mapElements[randomCoord.x + x, randomCoord.z + z] = Elements.eElementType.Room_Element;
                     }
