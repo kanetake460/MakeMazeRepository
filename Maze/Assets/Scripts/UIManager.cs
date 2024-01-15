@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
 
     public Image CompussSensorLv1;
     public Image CompussSensorLv2;
-    [SerializeField] Image[] HamburgerUI;
+    [SerializeField] GameObject[] HamburgerUI;
 
     public TextMeshProUGUI flagCountText;
 
@@ -31,11 +31,11 @@ public class UIManager : MonoBehaviour
     {
         for(int i = 0; i < gameManager.hamburgerNum; i++) 
         {
-            HamburgerUI[i].enabled = false;
+            HamburgerUI[i].SetActive(false);
         }
         for(int i = 0;i < gameManager.hamburgerCount; i++)
         {
-        HamburgerUI[i].enabled = true;
+            HamburgerUI[i].SetActive(true);
         }
     }
 

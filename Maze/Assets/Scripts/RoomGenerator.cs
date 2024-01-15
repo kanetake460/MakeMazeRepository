@@ -4,13 +4,15 @@ using TakeshiClass;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RoomGenerator : GameManager
+public class RoomGenerator : MonoBehaviour
 {
-
+    [SerializeField] Map map;
+    [SerializeField] GameManager gameManager;
     [SerializeField] GameObject roomPrefab;
     [SerializeField] Vector3Int roomSizeMin = new Vector3Int();
     [SerializeField] Vector3Int roomSizeMax = new Vector3Int();
-    private int flagCount = 0;     // 生成のためのカウント
+    private int roomCount = 0;     // 生成のためのカウント
+    [SerializeField] int roomNum = 10;  // 生成する部屋の数
 
     /// <summary>
     /// フラグを生成する部屋を生成します
@@ -31,13 +33,16 @@ public class RoomGenerator : GameManager
             {
                 // ランダムな位置に部屋の中心を生成
                 Instantiate(roomPrefab, map.gridField.grid[randomCoord.x, randomCoord.z], Quaternion.identity);
-                
+
                 // 中心から±2のグリッド座標を部屋エレメントにする
                 for (int x = roomSizeMin.x; x <= roomSizeMax.x; x++)
                 {
                     for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
                     {
-                        map.mapElements[randomCoord.x + x, randomCoord.z + z] = Elements.eElementType.Room_Element;
+                        if (map.mapElements[randomCoord.x + x, randomCoord.z + z] == Elements.eElementType.None_Element)
+                        {
+                            map.mapElements[randomCoord.x + x, randomCoord.z + z] = Elements.eElementType.Room_Element;
+                        }
                     }
                 }
 
@@ -67,10 +72,10 @@ public class RoomGenerator : GameManager
     void Update()
     {
         // フラグのカウントがクリアに必要なフラグの数になるまでループ
-        if (flagCount < clearFlagNum)
+        if (roomCount < roomNum)
         {
             InstanceFlagRoom();
-            flagCount++;
+            roomCount++;
         }
     }
 }
