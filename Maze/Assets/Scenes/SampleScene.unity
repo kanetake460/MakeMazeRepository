@@ -1561,8 +1561,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   needleImage: {fileID: 1321522080}
-  flag: {fileID: 0}
+  target: {fileID: 0}
   playerObj: {fileID: 29439746}
+  targetTag: flag
   distance: 0
 --- !u!1 &1374276990
 GameObject:
