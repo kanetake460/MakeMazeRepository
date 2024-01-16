@@ -25,11 +25,7 @@ public class RoomGenerator : MonoBehaviour
             // ランダムなグリッド座標
             Vector3Int randomCoord = map.gridField.randomGridCoord;
 
-            // もし、グリッドの端じゃなければ(部屋の生成で配列外になる可能性があるため)
-            if (randomCoord.x >= 3 &&
-                randomCoord.z >= 3 &&
-                randomCoord.x <= map.gridField.gridDepth - 4 &&
-                randomCoord.z <= map.gridField.gridWidth - 4)
+            if(CheckInstanceRoom(randomCoord,roomSizeMin,roomSizeMax))
             {
                 // ランダムな位置に部屋の中心を生成
                 Instantiate(roomPrefab, map.gridField.grid[randomCoord.x, randomCoord.z], Quaternion.identity);
@@ -60,6 +56,32 @@ public class RoomGenerator : MonoBehaviour
                 return;
             }
         }
+    }
+
+    private bool CheckInstanceRoom(Vector3Int instanceCoord,Vector3Int roomSizeMin,Vector3Int roomSizeMax)
+    {
+        // もし、グリッドの端じゃなければ(部屋の生成で配列外になる可能性があるため)
+        if (instanceCoord.x <= 3 ||
+            instanceCoord.z <= 3 ||
+            instanceCoord.x >= map.gridField.gridDepth - 4 ||
+            instanceCoord.z >= map.gridField.gridWidth - 4)
+        {
+            Debug.Log("範囲外です");
+            return false;
+        }
+
+            int trueCount = 0;
+        for (int x = roomSizeMin.x; x <= roomSizeMax.x; x++)
+        {
+            for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
+            {
+                if (map.mapElements[instanceCoord.x + x, instanceCoord.z + z] == Elements.eElementType.None_Element)
+                {
+                    trueCount++;
+                }
+            }
+        }
+        return trueCount == (roomSizeMax.x - roomSizeMin.x + 1) * (roomSizeMax.z - roomSizeMin.z + 1);
     }
     void Start()
     {
