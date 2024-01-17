@@ -35,9 +35,9 @@ public class RoomGenerator : MonoBehaviour
                 {
                     for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
                     {
-                        if (map.mapElements[randomCoord.x + x, randomCoord.z + z] == Elements.eElementType.None_Element)
+                        if (map.mapElements[randomCoord.x + x, randomCoord.z + z] == SetElements.eElementType.None_Element)
                         {
-                            map.mapElements[randomCoord.x + x, randomCoord.z + z] = Elements.eElementType.Room_Element;
+                            map.mapElements[randomCoord.x + x, randomCoord.z + z] = SetElements.eElementType.Room_Element;
                         }
                     }
                 }
@@ -75,7 +75,7 @@ public class RoomGenerator : MonoBehaviour
         {
             for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
             {
-                if (map.mapElements[instanceCoord.x + x, instanceCoord.z + z] == Elements.eElementType.None_Element)
+                if (map.mapElements[instanceCoord.x + x, instanceCoord.z + z] == SetElements.eElementType.None_Element)
                 {
                     trueCount++;
                 }

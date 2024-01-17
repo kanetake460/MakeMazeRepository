@@ -633,6 +633,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hamburger
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 54b107e50acd7e24b96d7de887c68833, type: 3}
+      propertyPath: m_TagString
+      value: hamberger
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 54b107e50acd7e24b96d7de887c68833, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -691,6 +695,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54b107e50acd7e24b96d7de887c68833, type: 3}
+--- !u!1 &2374038804330338186 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 54b107e50acd7e24b96d7de887c68833, type: 3}
+  m_PrefabInstance: {fileID: 2374038804330434858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &7184888907029109244
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2374038804330338186}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.26129133
+  m_Height: 0.28791663
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.14395829, z: -0.000000014901161}
 --- !u!4 &2374038804330564522 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 54b107e50acd7e24b96d7de887c68833, type: 3}

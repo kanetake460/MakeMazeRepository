@@ -548,10 +548,10 @@ MonoBehaviour:
   red: {fileID: 5854722369810532737, guid: bfb3e02557ea983409236ef841168a4d, type: 3}
   blue: {fileID: 5854722369810532737, guid: abfe6dff4c437334480f5f2b3b968f6c, type: 3}
   section: {fileID: 1374276991}
-  startElements: {fileID: 0}
+  startElements: {fileID: 1186603678}
   elements1: {fileID: 1186603678}
-  elements2: {fileID: 0}
-  elements3: {fileID: 0}
+  elements2: {fileID: 1186603678}
+  elements3: {fileID: 1186603678}
   player: {fileID: 1553538969}
 --- !u!4 &470737183
 Transform:

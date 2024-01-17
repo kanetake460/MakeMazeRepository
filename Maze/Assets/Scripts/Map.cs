@@ -18,13 +18,13 @@ public class Map : MapGridField
 
     /*ブロック*/
     [SerializeField] Section section;
-    [SerializeField] Elements startElements;
-    [SerializeField] Elements elements1;
-    [SerializeField] Elements elements2;
-    [SerializeField] Elements elements3;
+    [SerializeField] SetElements startElements;
+    [SerializeField] SetElements elements1;
+    [SerializeField] SetElements elements2;
+    [SerializeField] SetElements elements3;
 
     // グリッドのセルの情報を格納する配列
-    public Elements.eElementType[,] mapElements;
+    public SetElements.eElementType[,] mapElements;
 
     int instanceCount1 = 0;
     int instanceCount2 = 1;
@@ -37,7 +37,7 @@ public class Map : MapGridField
         base.Start();
 
         // mapElements の初期化
-        mapElements = new Elements.eElementType[gridWidth, gridDepth];
+        mapElements = new SetElements.eElementType[gridWidth, gridDepth];
         for(int x = 0; x < gridWidth; x++) 
         {
 
@@ -49,16 +49,16 @@ public class Map : MapGridField
                     x == gridWidth - 1 ||
                     z == gridDepth - 1)
                 {
-                    mapElements[x, z] = Elements.eElementType.OutRange_Element;
+                    mapElements[x, z] = SetElements.eElementType.OutRange_Element;
                 }
                 else
                 {
-                    mapElements[x, z] = Elements.eElementType.None_Element;
+                    mapElements[x, z] = SetElements.eElementType.None_Element;
                 }
             }
         }
 
-        startElements = new Elements(gridField.GetGridCoordinate(gridField.grid[50,48]),eFourDirection.top,Section.eMapSections.O_Section);
+        startElements = new SetElements(gridField.GetGridCoordinate(gridField.grid[50,48]),eFourDirection.top,Section.eMapSections.O_Section);
         mapElements = startElements.SetElementType(mapElements, startElements.seedElementCoord, startElements.branchElementCoord); 
         //for (int x = 0; x < gridWidth; x++)
         //{
@@ -87,16 +87,16 @@ public class Map : MapGridField
     {
         Debug.Log(section.mapSection[instanceCount1]);
         eFourDirection direction = FPS.GetFourDirection(instanceRot.eulerAngles);
-        elements1 = new Elements(gridField.GetGridCoordinate(playerPosition), direction, section.mapSection[instanceCount1]);
+        elements1 = new SetElements(gridField.GetGridCoordinate(playerPosition), direction, section.mapSection[instanceCount1]);
 
 
         // セクションがインスタンス可能なら
         if (CheckInstanceSection(elements1.seedElementCoord, elements1.branchElementCoord))
         {
-
             mapElements = elements1.SetElementType(mapElements, elements1.seedElementCoord, elements1.branchElementCoord);
+
             int breakCount = 0;
-            while (breakCount <= 100)
+            while (breakCount <= 1000)
             {
                 breakCount++;
 
@@ -104,14 +104,13 @@ public class Map : MapGridField
                 Vector3 branchPos1 = gridField.GetGridPosition(gridField.grid[elements1.branchElementCoord[randBranch1].x, elements1.branchElementCoord[randBranch1].z]);
                 eFourDirection randDir1 = FPS.RandomFourDirection();
 
-                Debug.Log(randBranch1);
-
-                elements2 = new Elements(gridField.GetGridCoordinate(branchPos1), randDir1, section.mapSection[instanceCount2]);
+                elements2 = new SetElements(gridField.GetGridCoordinate(branchPos1), randDir1, section.mapSection[instanceCount2]);
                 if (CheckInstanceSection(elements2.seedElementCoord, elements2.branchElementCoord))
                 {
                     mapElements = elements2.SetElementType(mapElements, elements2.seedElementCoord, elements2.branchElementCoord);
+
                     int breakCount2 = 0;
-                    while (breakCount2 <= 100)
+                    while (breakCount2 <= 1000)
                     {
                         breakCount2++;
 
@@ -119,7 +118,7 @@ public class Map : MapGridField
                         Vector3 branchPos2 = gridField.GetGridPosition(gridField.grid[elements1.branchElementCoord[randBranch2].x, elements1.branchElementCoord[randBranch2].z]);
                         eFourDirection randDir2 = FPS.RandomFourDirection();
 
-                        elements3 = new Elements(gridField.GetGridCoordinate(branchPos2), randDir2, section.mapSection[instanceCount3]);
+                        elements3 = new SetElements(gridField.GetGridCoordinate(branchPos2), randDir2, section.mapSection[instanceCount3]);
 
                         if (CheckInstanceSection(elements3.seedElementCoord, elements3.branchElementCoord))
                         {
@@ -170,27 +169,28 @@ public class Map : MapGridField
 
                             // =========デバッグ====================================================================================================
 
-                            for (int x = 0; x < gridWidth; x++)
-                            {
+                            //for (int x = 0; x < gridWidth; x++)
+                            //{
 
-                                for (int z = 0; z < gridDepth; z++)
-                                {
-                                    if (mapElements[x, z] == Elements.eElementType.Room_Element ||
-                                        mapElements[x, z] == Elements.eElementType.Seed_Element)
-                                    {
-                                        Instantiate(red, gridField.grid[x, z], Quaternion.identity);
-                                    }
-                                    else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
-                                    {
-                                        Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
-                                    }
-                                }
-                            }
+                            //    for (int z = 0; z < gridDepth; z++)
+                            //    {
+                            //        if (mapElements[x, z] == Elements.eElementType.Room_Element ||
+                            //            mapElements[x, z] == Elements.eElementType.Seed_Element)
+                            //        {
+                            //            Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+                            //        }
+                            //        else if (mapElements[x, z] == Elements.eElementType.Branch_Element)
+                            //        {
+                            //            Instantiate(blue, gridField.grid[x, z], Quaternion.identity);
+                            //        }
+                            //    }
+                            //}
                             break;
                         }
                     }
                     break;
                 }
+                    Debug.Log("どこにも置けませんでした");
             }
         }
     }
@@ -210,7 +210,6 @@ public class Map : MapGridField
         {
             return true;
         }
-        Debug.Log("そこでは道を開けません");
         return false;
     }
 
@@ -221,7 +220,7 @@ public class Map : MapGridField
     /// <returns>座標が None_Element かどうか</returns>
     private bool CheckCell(Vector3Int coord)
     {
-        if (mapElements[coord.x, coord.z] == Elements.eElementType.None_Element)
+        if (mapElements[coord.x, coord.z] == SetElements.eElementType.None_Element)
         {
             return true;
         }
@@ -238,21 +237,21 @@ public class Map : MapGridField
 
             for (int z = 0; z < gridDepth; z++)
             {
-                if (mapElements[x,z] == Elements.eElementType.Branch_Element) 
+                if (mapElements[x,z] == SetElements.eElementType.Branch_Element) 
                 {
-                    if (mapElements[x + 1,z] == Elements.eElementType.Room_Element)
+                    if (mapElements[x + 1,z] == SetElements.eElementType.Room_Element)
                     {
                         BreakWall(gridField.grid[x, z], eFourDirection.right);
                     }
-                    else if (mapElements[x - 1, z] == Elements.eElementType.Room_Element)
+                    if (mapElements[x - 1, z] == SetElements.eElementType.Room_Element)
                     {
                         BreakWall(gridField.grid[x, z], eFourDirection.left);
                     }
-                    else if (mapElements[x, z + 1] == Elements.eElementType.Room_Element)
+                    if (mapElements[x, z + 1] == SetElements.eElementType.Room_Element)
                     {
                         BreakWall(gridField.grid[x, z], eFourDirection.top);
                     }
-                    else if (mapElements[x, z - 1] == Elements.eElementType.Room_Element)
+                    if (mapElements[x, z - 1] == SetElements.eElementType.Room_Element)
                     {
                         BreakWall(gridField.grid[x, z], eFourDirection.bottom);
                     }
