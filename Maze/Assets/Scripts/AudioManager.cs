@@ -9,12 +9,6 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] AudioSource audioSourceUI;
 
-
-    void Start()
-    {
-        
-    }
-
     public void PlaySE_SensorLv1()
     {
         audioSourceUI.PlayOneShot(sensorLv1_SE);
@@ -23,11 +17,5 @@ public class AudioManager : MonoBehaviour
     public void PlaySE_SensorLv2()
     {
         audioSourceUI.PlayOneShot(sensorLv2_SE);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

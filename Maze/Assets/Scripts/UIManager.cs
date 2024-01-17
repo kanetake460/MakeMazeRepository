@@ -7,26 +7,26 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     /*オブジェクト参照*/
-    public GameManager gameManager;
-    [SerializeField] Animator anim;
-    [SerializeField] Compass roomCompass;
+    [SerializeField] GameManager gameManager;       // ゲームマネージャー
+    [SerializeField] Animator flagAnim;             // フラグセンサーのアニメーション
+    [SerializeField] Animator hamburgerAnim;        // ハンバーガーセンサーのアニメーション
+    [SerializeField] Compass flagCompass;           // フラグのコンパス
+    [SerializeField] Compass hamburgerCompass;      // ハンバーガーのコンパス
+    [SerializeField] GameObject[] HamburgerUI;      // ハンバーガーのUI配列
+    [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
+    [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト
 
-    public Image CompussSensorLv1;
-    public Image CompussSensorLv2;
-    [SerializeField] GameObject[] HamburgerUI;
-
-    public TextMeshProUGUI flagCountText;
-
-
-    void Start()
-    {
-    }
-
+    /// <summary>
+    /// フラグのカウントのテキストを表示します
+    /// </summary>
     public void CountText()
     {
         flagCountText.text = gameManager.flags + " / " + gameManager.clearFlagNum;
     }
 
+    /// <summary>
+    /// ハンバーガーのUIの表示を管理します
+    /// </summary>
     public void HamburgerManager()
     {
         for(int i = 0; i < gameManager.hamburgerNum; i++) 
@@ -39,12 +39,31 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ゲームオーバーカウントを表示します
+    /// </summary>
+    public void CountDead()
+    {
+        // ハンバーガーがなくなったらカウントを開始
+        if (gameManager.hamburgerCount <= 0)
+        {
+            deadCountText.enabled = true;
+        }
+        else// それ以外では非表示にしてカウントを戻します
+        {
+            deadCountText.enabled = false;
+            gameManager.deadCount = 30;
+        }
+            deadCountText.text = gameManager.deadCount.ToString("f2");
+    }
 
 
     void Update()
     {
-        anim.SetFloat("CompassRotation",roomCompass.distance);
+        flagAnim.SetFloat("CompassRotation",flagCompass.distance);
+        hamburgerAnim.SetFloat("CompassRotation",hamburgerCompass.distance);
         CountText();
         HamburgerManager();
+        CountDead();
     }
 }

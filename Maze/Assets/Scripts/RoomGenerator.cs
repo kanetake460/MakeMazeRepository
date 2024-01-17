@@ -6,13 +6,15 @@ using UnityEngine;
 
 public class RoomGenerator : MonoBehaviour
 {
-    [SerializeField] Map map;
-    [SerializeField] GameManager gameManager;
-    [SerializeField] GameObject roomPrefab;
-    [SerializeField] Vector3Int roomSizeMin = new Vector3Int();
-    [SerializeField] Vector3Int roomSizeMax = new Vector3Int();
-    private int roomCount = 0;     // 生成のためのカウント
-    [SerializeField] int roomNum = 10;  // 生成する部屋の数
+    /*オブジェクト参照*/
+    [SerializeField] Map map;                                   // マップ
+    [SerializeField] GameManager gameManager;                   // ゲームマネージャー
+    [SerializeField] GameObject roomPrefab;                     // 部屋のプレハブ
+    [SerializeField] Vector3Int roomSizeMin = new Vector3Int(); // 部屋のサイズの最小値
+    [SerializeField] Vector3Int roomSizeMax = new Vector3Int(); // 部屋のサイズの最大値
+    private int roomCount = 0;                                  // 生成のためのカウント
+    [SerializeField] int roomNum = 10;                          // 生成する部屋の数
+
 
     /// <summary>
     /// フラグを生成する部屋を生成します
@@ -25,6 +27,7 @@ public class RoomGenerator : MonoBehaviour
             // ランダムなグリッド座標
             Vector3Int randomCoord = map.gridField.randomGridCoord;
 
+            // チェック
             if(CheckInstanceRoom(randomCoord,roomSizeMin,roomSizeMax))
             {
                 // ランダムな位置に部屋の中心を生成
@@ -35,10 +38,7 @@ public class RoomGenerator : MonoBehaviour
                 {
                     for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
                     {
-                        if (map.mapElements[randomCoord.x + x, randomCoord.z + z] == SetElements.eElementType.None_Element)
-                        {
-                            map.mapElements[randomCoord.x + x, randomCoord.z + z] = SetElements.eElementType.Room_Element;
-                        }
+                            map.mapElements[randomCoord.x + x, randomCoord.z + z] = Elements.eElementType.Room_Element;
                     }
                 }
 
@@ -58,6 +58,13 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 部屋を生成できるか調べます
+    /// </summary>
+    /// <param name="instanceCoord">インスタンスするグリッド座標</param>
+    /// <param name="roomSizeMin">部屋の最小値</param>
+    /// <param name="roomSizeMax">部屋の最大値</param>
+    /// <returns>部屋のすべてのエレメントがNoneかどうか</returns>
     private bool CheckInstanceRoom(Vector3Int instanceCoord,Vector3Int roomSizeMin,Vector3Int roomSizeMax)
     {
         // もし、グリッドの端じゃなければ(部屋の生成で配列外になる可能性があるため)
@@ -75,21 +82,15 @@ public class RoomGenerator : MonoBehaviour
         {
             for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
             {
-                if (map.mapElements[instanceCoord.x + x, instanceCoord.z + z] == SetElements.eElementType.None_Element)
+                if (map.mapElements[instanceCoord.x + x, instanceCoord.z + z] == Elements.eElementType.None_Element)
                 {
                     trueCount++;
                 }
             }
         }
+        // すべての部屋がNoneかどうか
         return trueCount == (roomSizeMax.x - roomSizeMin.x + 1) * (roomSizeMax.z - roomSizeMin.z + 1);
     }
-    void Start()
-    {
-
-
-    }
-
-
 
     void Update()
     {

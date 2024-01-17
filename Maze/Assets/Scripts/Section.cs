@@ -249,12 +249,4 @@ public class Section : MapGridField
             }
         Algorithm.Shuffle(mapSection);
     }
-
-
-    
-
-    void Update()
-    {
-        
-    }
 }

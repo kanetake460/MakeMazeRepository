@@ -5,10 +5,10 @@ using UnityEngine;
 using static Section;
 using static System.Collections.Specialized.BitVector32;
 
-public class SetElements : Section
+public class Elements : Section
 {
-    public Vector3Int seedElementCoord;
-    public Vector3Int[] branchElementCoord = new Vector3Int[3];
+    public Vector3Int seedElementCoord;                         // 種エレメントのグリッド座標
+    public Vector3Int[] branchElementCoord = new Vector3Int[3]; // 枝エレメントのグリッド座標の配列
 
     public enum eElementType
     {
@@ -19,18 +19,31 @@ public class SetElements : Section
         OutRange_Element,   // 範囲外
     }
 
-
-    public SetElements(Vector3Int coord, FPS.eFourDirection fourDirection,eMapSections mapSection)
+    /// <summary>
+    /// エレメントのコンストラクタ
+    /// </summary>
+    /// <param name="coord">グリッド座標</param>
+    /// <param name="fourDirection">向き</param>
+    /// <param name="mapSection">セクションの種類</param>
+    public Elements(Vector3Int coord, FPS.eFourDirection fourDirection,eMapSections mapSection)
     {
-        
+        // 種エレメントの座標にグリッド座標＋向きの方向に１
         seedElementCoord = coord + GetPreviousCoordinate(fourDirection);
         
         for (int i = 0; i < 3; i++)
         {
+            // 枝エレメントを入れる
             branchElementCoord[i] = GetBranchElement(mapSection, fourDirection, seedElementCoord, i);
         }
     }
 
+    /// <summary>
+    /// 座標にエレメントを確約します
+    /// </summary>
+    /// <param name="elements">エレメント</param>
+    /// <param name="seed">種のグリッド座標</param>
+    /// <param name="branch">枝のグリッド座標</param>
+    /// <returns></returns>
     public eElementType[,] SetElementType(eElementType[,] elements, Vector3Int seed, Vector3Int[] branch)
     {
         // プレイヤーの前の座標を種エレメントに
@@ -44,11 +57,31 @@ public class SetElements : Section
         return elements;
     }
 
+    /// <summary>
+    /// エレメントをNoneにします
+    /// </summary>
+    /// <param name="elements">エレメント</param>
+    /// <param name="seed">種</param>
+    /// <param name="branch">枝</param>
+    /// <returns></returns>
+    public eElementType[,] RestoreElementType(eElementType[,] elements, Vector3Int seed, Vector3Int[] branch)
+    {
+        // プレイヤーの前の座標をなしエレメントに
+        elements[seed.x, seed.z] = eElementType.None_Element;
+
+        // セクションのそのほかのエレメントをなしエレメントに
+        for (int i = 0; i < 3; i++)
+        {
+            elements[branch[i].x, branch[i].z] = eElementType.None_Element;
+        }
+        return elements;
+    }
+
 
     /// <summary>
     /// 向きに対応するひとつ前のグリッド座標を返します
     /// </summary>
-    /// <param name="eulerAngles">向き</param>
+    /// <param name="fourDirection">向き</param>
     /// <returns>向いている方向の一つ前のグリッド座標</returns>
     public static Vector3Int GetPreviousCoordinate(FPS.eFourDirection fourDirection)
     {

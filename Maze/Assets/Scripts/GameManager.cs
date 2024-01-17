@@ -12,24 +12,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]GameObject playerObj;
 
     /*パラメータ*/
-    public int flags = 0;     // 現在の集めたフラグの数
+    public int flags = 0;           // 現在の集めたフラグの数
     public int clearFlagNum = 10;   // クリアに必要なフラグの数
     public int hamburgerCount;      // 現在のハンバーガーの数
     public int hamburgerNum;        // ハンバーガーの最大値
+    public float deadCount = 30;    // ゲームオーバーカウント
 
-    void Start()
-    {
 
-    }
-
-    private void isGameClear()
-    {
-        if (flags >= clearFlagNum)
-        {
-
-        }
-    }
-
+    /// <summary>
+    /// ハンバーガーカウントの制限
+    /// </summary>
     private void HamburgerClamp()
     {
         if(hamburgerCount > hamburgerNum)
@@ -38,9 +30,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ハンバーガーがゼロになったらゲームオーバーカウントを減らす
+    /// </summary>
+    private void CountDead()
+    {
+        if(hamburgerCount <= 0) 
+        {
+            deadCount -= Time.deltaTime;
+        }
+    }
+
 
     void Update()
     {
         HamburgerClamp();
+        CountDead();
     }
 }

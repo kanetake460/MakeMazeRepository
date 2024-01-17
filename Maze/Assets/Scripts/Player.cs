@@ -14,8 +14,8 @@ using static UnityEngine.UI.Image;
 public class Player : MonoBehaviour
 {
     /*クラス参照*/
-    [SerializeField] Map map;
-    [SerializeField] GameManager gameManager;
+    [SerializeField] Map map;                   // マップ
+    [SerializeField] GameManager gameManager;   // ゲームマネージャー
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
@@ -34,28 +34,31 @@ public class Player : MonoBehaviour
     void Start()
     {
         latestPos = transform.position;
-        canLocomotion = true;
     }
 
     void Update()
     {
+        // FPS視点設定
         FPS.CameraViewport(mainCam, Xsensityvity, minX, maxX);
         FPS.PlayerViewport(gameObject, Ysensityvity);
         FPS.UpdateCursorLock(cursorLock);
+
+        // プレイヤーのグリッド座標
         Vector3Int playerGridPos = map.gridField.GetGridCoordinate(transform.position);
 
         // もし、プレイヤーのポジションがセクションの上でなければ
-        if (map.mapElements[playerGridPos.x, playerGridPos.z] == SetElements.eElementType.None_Element ||
-            map.mapElements[playerGridPos.x, playerGridPos.z] == SetElements.eElementType.OutRange_Element)
+        if (map.mapElements[playerGridPos.x, playerGridPos.z] == Elements.eElementType.None_Element ||
+            map.mapElements[playerGridPos.x, playerGridPos.z] == Elements.eElementType.OutRange_Element)
         {
             transform.position = latestPos;     // ポジションを一フレーム前の位置に固定
         }
         latestPos = transform.position;         // ポジションを格納
 
-        if (canLocomotion) FPS.Locomotion(transform, speed);
+        // プレイヤーの移動
+        FPS.Locomotion(transform, speed);
 
         // もし、ハンバーガーがあるなら
-        //if (gameManager.hamburgerCount > 0)
+        if (gameManager.hamburgerCount > 0)
         {
             SpreadMap();
         }
@@ -63,24 +66,35 @@ public class Player : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        // flagに当たっていたら
         if (other.gameObject.tag == "flag")
         {
-            CheckInItem(other.gameObject,gameManager.flags);
+            CheckInFlag(other.gameObject);
         }
-         if(other.gameObject.tag == "hamberger")
+        // ハンバーガーに当たっていたら
+        if (other.gameObject.tag == "hamburger")
         {
-            CheckInItem(other.gameObject,gameManager.hamburgerCount);
+            // ハンバーガーカウントがマックスでなければ
+            if (gameManager.hamburgerCount < gameManager.hamburgerNum)
+            {
+                CheckInHamburger(other.gameObject);
+            }
         }
     }
 
     /*=====プレイヤーのアクションによってマップを広げる関数=====*/
     private void SpreadMap()
     {
+        // 右クリックしたら
         if (Input.GetMouseButtonDown(0))
         {
-            map.InstanceMapBlock(transform.position, FPS.GetFourDirectionEulerAngles(transform.eulerAngles));
-            gameManager.hamburgerCount--;
-                //map.InstanceMapBlock(GridField.GetGridPosition(gridField,transform.position), FPS.InvestigateFourDirection(transform.eulerAngles));
+            // インスタンス
+            if (map.InstanceMapBlock(transform.position, FPS.GetFourDirectionEulerAngles(transform.eulerAngles))
+                == true)
+            {
+                // ハンバーガーを減らす
+                gameManager.hamburgerCount--;
+            }
         }
     }
 
@@ -88,23 +102,26 @@ public class Player : MonoBehaviour
     /// マウスの右クリックでアイテムを回収します
     /// </summary>
     /// <param name="item">回収するアイテム</param>
-    /// <param name="param">回収するアイテムのパラメータ</param>
     private void CheckInFlag(GameObject item)
     {
+
         if (Input.GetMouseButton(1))
         {
             item.SetActive(false);
+            gameManager.flags++;
         }
-    }    /// <summary>
-         /// マウスの右クリックでアイテムを回収します
-         /// </summary>
-         /// <param name="item">回収するアイテム</param>
-         /// <param name="param">回収するアイテムのパラメータ</param>
-    private void CheckInHambureger(GameObject item)
+    }
+
+    /// <summary>
+    /// マウスの右クリックでアイテムを回収します
+    /// </summary>
+    /// <param name="item">回収するアイテム</param>
+    private void CheckInHamburger(GameObject item)
     {
         if (Input.GetMouseButton(1))
         {
             item.SetActive(false);
+            gameManager.hamburgerCount += 2;
         }
     }
 }

@@ -6,18 +6,15 @@ using UnityEngine.UI;
 
 public class Compass : MonoBehaviour
 {
+    /*オブジェクト参照*/
     [SerializeField] Image needleImage;         // 針のイメージ
     [SerializeField] GameObject target;         // 針が指すもの
     [SerializeField] GameObject playerObj;      // コンパス原点
 
+    /*パラメータ*/
     [SerializeField] string targetTag;          // ターゲットのタグ名
-    public float distance;
+    public float distance;                      // ターゲットとの距離
 
-
-    void Start()
-    {
-        
-    }
 
     /// <summary>
     /// 最も近くのフラグのゲームオブジェクトを返します。
@@ -25,8 +22,11 @@ public class Compass : MonoBehaviour
     /// <returns>最も近くのフラグのゲームオブジェクト</returns>
     private GameObject FindNearestTarget(string targetTag)
     {
+        // 与えたタグのついたオブジェクトをすべて格納
         GameObject[] targets = GameObject.FindGameObjectsWithTag(targetTag);
+        // 最も近い距離
         float nearestDist = 1000000;
+        // 最も近いターゲット
         GameObject nearestTarget = null;
 
         // すべてのフラグの距離をループ処理で比べる
@@ -50,13 +50,19 @@ public class Compass : MonoBehaviour
     /// </summary>
     private void PointToTarget()
     {
+        // 最も近いターゲット
         GameObject target = FindNearestTarget(targetTag);
+        // プレイヤーとターゲットの距離をひいたもの
         Vector3 pos = playerObj.transform.position - target.transform.position;
+        // ターゲットのy角度
         float dir = playerObj.transform.rotation.eulerAngles.y + (Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg) + 90f;
         
         needleImage.rectTransform.rotation = Quaternion.Euler(0, 0, dir);
     }
 
+    /// <summary>
+    /// 最も近いターゲットの距離を計測します
+    /// </summary>
     private void MeasureDistance()
     {
         GameObject nearestFlag = FindNearestTarget(targetTag);
@@ -65,7 +71,7 @@ public class Compass : MonoBehaviour
 
     void Update()
     {
-        MeasureDistance();
         PointToTarget();
+        MeasureDistance();
     }
 }
