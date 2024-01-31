@@ -53,7 +53,8 @@ public class Compass : MonoBehaviour
         // 最も近いターゲット
         GameObject target = FindNearestTarget(targetTag);
         // プレイヤーとターゲットの距離をひいたもの
-        Vector3 pos = playerObj.transform.position - target.transform.position;
+        Vector3 pos;
+        _ = target == null ? pos = transform.position : pos = playerObj.transform.position - target.transform.position;
         // ターゲットのy角度
         float dir = playerObj.transform.rotation.eulerAngles.y + (Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg) + 90f;
         
@@ -66,7 +67,8 @@ public class Compass : MonoBehaviour
     private void MeasureDistance()
     {
         GameObject nearestFlag = FindNearestTarget(targetTag);
-        distance = Vector3.Distance(playerObj.transform.position, nearestFlag.transform.position);
+        _ = nearestFlag == null ?  distance = 0 : distance = Vector3.Distance(playerObj.transform.position, nearestFlag.transform.position);
+
     }
 
     void Update()
