@@ -16,15 +16,15 @@ namespace TakeshiClass
 
 //======変数===========================================================================================================================
  
-        public int gridWidth;               // グリッドの広さ
-        public int gridDepth;               //
-        public int gridHeight;
-        public float cellWidth;
-        public float cellDepth;
-        public float y;
-        public eGridAnchor gridAnchor;
-        public Vector3[,] grid = new Vector3[100, 100];      // グリッドのセルの配置Vector3の二次元配列
-        public Vector3Int gridCoordinate;// = Vector3Int.zero;         // グリッド座標
+        public int gridWidth { get; }               // グリッドの広さ
+        public int gridDepth { get;}               //
+        public int gridHeight { get; }
+        public float cellWidth { get; }
+        public float cellDepth { get; }
+        public float y { get; }
+        public eGridAnchor gridAnchor { get; }              // グリッドのアンカー
+        public Vector3[,] grid { get; } = new Vector3[100, 100];     // グリッドのセルの配置Vector3の二次元配列
+        public Vector3Int gridCoordinate { get; }           // = Vector3Int.zero;         // グリッド座標
 
         public enum eGridAnchor
         {
@@ -309,16 +309,16 @@ namespace TakeshiClass
         public Vector3Int GetGridCoordinate(Vector3 pos)
         {
             /*===二重ループで現在のセルを調べる===*/
-            for (gridCoordinate.x = 0; gridCoordinate.x < gridWidth; gridCoordinate.x++)
+            for (int x = 0; x < gridWidth; x++)
             {
-                for (gridCoordinate.z = 0; gridCoordinate.z < gridDepth; gridCoordinate.z++)
+                for (int z = 0; z < gridDepth; z++)
                 {
-                    if (pos.x <= grid[gridCoordinate.x, gridCoordinate.z].x + cellWidth / 2 &&
-                        pos.x >= grid[gridCoordinate.x, gridCoordinate.z].x - cellWidth / 2 &&
-                        pos.z <= grid[gridCoordinate.x, gridCoordinate.z].z + cellDepth / 2 &&
-                        pos.z >= grid[gridCoordinate.x, gridCoordinate.z].z - cellDepth / 2)     // もしあるセルの上にいるなら
+                    if (pos.x <= grid[x, z].x + cellWidth / 2 &&
+                        pos.x >= grid[x, z].x - cellWidth / 2 &&
+                        pos.z <= grid[x, z].z + cellDepth / 2 &&
+                        pos.z >= grid[x, z].z - cellDepth / 2)     // もしあるセルの上にいるなら
                     {
-                        return gridCoordinate;                      // セルの Vector3を返す
+                        return new Vector3Int(x,(int)y,z);                      // セルの Vector3を返す
                     }
                 }
             }

@@ -52,7 +52,7 @@ namespace TakeshiClass
         ///<param name="Xsensityvity"<pragma>視点移動スピード</pragma>
         ///<param name="minX"<pragma>下の角度制限</pragma>
         ///<param name="maxX"<pragma>上の角度制限</pragma>
-        public static void CameraViewport(GameObject camera, float Xsensityvity, float minX, float maxX)
+        public static void CameraViewport(GameObject camera, float Xsensityvity = 3f, float minX = -90f, float maxX = 90f)
         {
             float yRot = Input.GetAxis("Mouse Y") * Xsensityvity;       // マウスの座標代入
             camera.transform.localRotation *= Quaternion.Euler(-yRot, 0, 0);     // 角度代入
@@ -69,7 +69,7 @@ namespace TakeshiClass
         /// <param name="player"></param>
         /// <param name="Xsensityvity"></param>
         /// <returns></returns>
-        public static void PlayerViewport(GameObject player, float Ysensityvity)
+        public static void PlayerViewport(GameObject player, float Ysensityvity = 3f)
         {
             float xRot = Input.GetAxis("Mouse X") * Ysensityvity;       // マウスの座標代入
             player.transform.localRotation *= Quaternion.Euler(0, xRot, 0);   // 角度代入
@@ -82,7 +82,7 @@ namespace TakeshiClass
         /// </summary>
         /// <param name="player">動かすプレイヤー</param>
         /// <param name="speed">移動スピード</param>
-        public static void Locomotion(Transform player, float speed)
+        public static void Locomotion(Transform player, float speed = 10f)
         {
             float x = 0;
             float z = 0;
