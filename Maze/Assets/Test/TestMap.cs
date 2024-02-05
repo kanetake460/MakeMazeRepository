@@ -3,21 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using TakeshiClass;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class TestMap : MonoBehaviour
 {
     /*プレハブ*/
     [SerializeField] GameObject space;
     [SerializeField] GameObject wall;
+    [SerializeField] GameObject pathObj;
+
+    /*オブジェクト*/
+    [SerializeField] GameObject player;
+    [SerializeField] GameObject enemy;
 
     /*グリッド*/
     GridField gridField;
 
-    [SerializeField] int gridWidth { get; } = 20;
-    [SerializeField] int gridDepth { get; } = 10;
-    [SerializeField] float cellWidth { get; } = 10;
-    [SerializeField] float cellDepth { get; } = 10;
-    [SerializeField] float y { get; } = 0;
+    /* A*クラス */
+    AStar aStar;
+
+    public int gridWidth = 20;
+    public int gridDepth = 10;
+    public float cellWidth = 10;
+    public float cellDepth = 10;
+    public float y = 0;
 
     /// <summary>
     /// マップクラス
@@ -131,10 +140,24 @@ public class TestMap : MonoBehaviour
                 if (x % 2 == 1 && z % 2 == 1) map.SetWall(x, z);
             }
         }
+        map.SetWall(0,1);
+            map.SetWall(2, 1);
+        map.SetWall(4, 1);
+        map.SetWall(5, 1);
         // マップオブジェクト作成
         map.InstanceMapObjects(space, wall, gridField);
 
+        aStar = new AStar(gridField,map,gridField.GetGridCoordinate(enemy.transform.position),gridField.GetGridCoordinate(player.transform.position));
 
+        aStar.AStarPath();
+        while(aStar.pathStack.Count > 0)
+        {
+            //Debug.Log(aStar.pathStack.Pop().position);
+            Vector3Int popedInfo = aStar.pathStack.Pop().position;
+            Instantiate(pathObj, gridField.grid[popedInfo.x,popedInfo.z], Quaternion.identity);
+            Debug.Log(gridField.grid[popedInfo.x,popedInfo.z]);
+
+        }
     }
 
     private void Update()
@@ -143,3 +166,4 @@ public class TestMap : MonoBehaviour
         gridField.DrowGrid();
     }
 }
+
