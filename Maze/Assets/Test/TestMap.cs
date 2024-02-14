@@ -140,10 +140,10 @@ public class TestMap : MonoBehaviour
                 if (x % 2 == 1 && z % 2 == 1) map.SetWall(x, z);
             }
         }
-        map.SetWall(0,1);
-            map.SetWall(2, 1);
-        map.SetWall(4, 1);
-        map.SetWall(5, 1);
+        //map.SetWall(0,1);
+        //    map.SetWall(2, 1);
+        //map.SetWall(4, 1);
+        //map.SetWall(5, 1);
         // マップオブジェクト作成
         map.InstanceMapObjects(space, wall, gridField);
 

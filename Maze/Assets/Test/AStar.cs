@@ -23,14 +23,6 @@ namespace TakeshiClass
             public CellInfo parent { get; set; }          // 親のセルの位置
             public bool isOpen { get; set; }                // 調査対象かどうか
 
-            //public CellInfo(Vector3Int pos, float cost, float heuristicCost, float sumCost, CellInfo parent, bool isOpen)
-            //{
-            //    position = pos;
-            //    this.cost = cost;
-            //    this.heuristicCost = heuristicCost;
-            //    this.sumCost = sumCost;
-            //    this.isOpen = isOpen;
-            //}
         }
 
         GridField m_GridField;
@@ -61,6 +53,7 @@ namespace TakeshiClass
             startCell.isOpen = true;
 
             cellInfoList.Add(startCell);
+
         }
 
         /// <summary>
@@ -70,7 +63,7 @@ namespace TakeshiClass
         {
             int count = 0;
             CellInfo minCell = cellInfoList.First();
-            while (true)
+            while (count < 100000)
             {
 
                 minCell = SearchMinCell();
@@ -102,17 +95,29 @@ namespace TakeshiClass
                         Vector3Int searchPos = new Vector3Int(centerPos.x + x, centerPos.y, centerPos.z + z);
                         CellInfo aroundCell = new CellInfo();
 
+                        // マップの外ならオープンしない
                         if (searchPos.x >= m_Map.mapWidth ||
                             searchPos.z >= m_Map.mapDepth ||
-                            searchPos.x < 0 || searchPos.z < 0) continue; 
+                            searchPos.x < 0 || searchPos.z < 0) continue;
 
+                        // マップの壁マスならオープンしない
                         if (m_Map.blocks[searchPos.x, searchPos.z].type == TestMap.Map.BlockType.eWall) continue;
+                        Debug.Log("壁じゃない");
 
-                        if (cellInfoList.Where(x => x.isOpen == true).All(x => x.position == searchPos)) continue;
+                        //// サーチポスがリストにないならオープンしない
+                        //if (cellInfoList.Where(x => x.position == searchPos).All(x => x != null))
+                        //{
+                        //    Debug.Log("リストにある");
 
-                        // 親のポジションでない、x場合は
-                        if (center.parent == null || searchPos != center.parent.position && searchPos != center.position)
+                        //    // サーチポスがオープン済みならオープンしない
+                        //    if (cellInfoList.Where(x => x.position == searchPos).All(x => x.isOpen)) continue;
+                        //    Debug.Log("オープンじゃない");
+                        //}
+                        // 親のポジションでない、センターでない、親がない
+                        if (center.parent == null 
+                            || searchPos != center.parent.position && searchPos != center.position)
                         {
+                            // 周りのセルに情報を入れる
                             aroundCell.position = searchPos;
                             aroundCell.cost = center.cost + 1;
                             aroundCell.heuristicCost = Vector3Int.Distance(searchPos, goal);
@@ -120,8 +125,10 @@ namespace TakeshiClass
                             aroundCell.parent = center;
                             aroundCell.isOpen = true;
 
+                            Debug.Log(aroundCell.position);
                             cellInfoList.Add(aroundCell);
 
+                            // 真ん中のセルを閉じる
                             center.isOpen = false;
                         }
                     }
@@ -143,13 +150,12 @@ namespace TakeshiClass
             int count = 0;
             CellInfo preCell = cell;
             // 前回のセルがスタートの位置じゃない限りスタックにため続ける
-            while (preCell.parent != null)
+            while (preCell.parent != null )
             {
                 // ポップしないと無限ループが発生してします。
                 pathStack.Push(preCell);
 
-                    preCell = preCell.parent;
-                 //Debug.Log(pathStack.Pop().position);
+                preCell = preCell.parent;
                 count++;
 
 
