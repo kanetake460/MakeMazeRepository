@@ -309,7 +309,7 @@ public class MakeMap : MapGridField
     /// <summary>
     /// 現在のエレメントからマップを生成します
     /// </summary>
-    private void CreateMaze()
+    public void CreateMaze()
     {
         for (int x = 0; x < gridWidth; x++)
         {
@@ -320,23 +320,19 @@ public class MakeMap : MapGridField
                     mapElements[x,z] == Elements.eElementType.Branch_Element ||
                     mapElements[x,z] == Elements.eElementType.Room_Element)
                 {
-
+                    if (red.activeSelf == false)
+                    {
+                        Instantiate(red, gridField.grid[x, z], Quaternion.identity);
+                    }
                 }
                 else
                 {
                     map.SetWallBlock(x, z);
+
                 }
             }
         }
-        foreach (Elements.eElementType e in mapElements)
-        {
-            if (e == Elements.eElementType.Seed_Element ||
-                e == Elements.eElementType.Branch_Element ||
-                e == Elements.eElementType.Room_Element)
-            {
-                
-            }
-        }
+
     }
 
 

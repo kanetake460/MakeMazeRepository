@@ -17,7 +17,8 @@ public class SceneManager : MonoBehaviour
     public enum eScenes
     {
         Title_Scene,    // タイトルシーン
-        Game_Scene,     // ゲームシーン
+        Make_Scene,     // ゲームシーン
+        Escape_Scene,   // 逃げるシーン
         Result_Scene,   // リザルトシーン
     }
 
@@ -34,7 +35,8 @@ public class SceneManager : MonoBehaviour
     private void Update()
     {
         SceneManagement();
-        GameClear();
+        //GameClear();
+        EscapeTime();
         GameOver();
     }
 
@@ -52,7 +54,7 @@ public class SceneManager : MonoBehaviour
             case eScenes.Title_Scene:       // タイトルなら
                 titleCanvas.enabled = true;     // タイトルキャンバス見せる
                 break;
-            case eScenes.Game_Scene:        // ゲームマシーンなら
+            case eScenes.Make_Scene:        // ゲームマシーンなら
                 playerController.enabled = true;// プレイヤーコントローラーを動かす
                 UICanvas.SetActive(true);       // UI表示
                 break;
@@ -68,7 +70,7 @@ public class SceneManager : MonoBehaviour
     /// </summary>
     public void StartButton()
     {
-        currentScene = eScenes.Game_Scene;
+        currentScene = eScenes.Make_Scene;
     }
 
     /// <summary>
@@ -81,6 +83,15 @@ public class SceneManager : MonoBehaviour
         {
             currentScene = eScenes.Result_Scene;
             resultText.text = "GameClear";
+        }
+    }
+
+    private void EscapeTime()
+    {
+        if (gameManager.flags >= gameManager.clearFlagNum)
+        {
+            currentScene = eScenes.Escape_Scene;
+            gameManager.map.CreateMaze();
         }
     }
 

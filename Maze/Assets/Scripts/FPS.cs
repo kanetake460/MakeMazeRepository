@@ -180,6 +180,59 @@ namespace TakeshiLibrary
             }
         }
 
+        /// <summary>
+        /// 隣の向きを返します
+        /// </summary>
+        /// <param name="dir">調べたい向き</param>
+        /// <param name="isAnti">時計回りか、反時計回りか</param>
+        /// <returns>隣の向き</returns>
+        public static void ClockwiseDirection(ref eFourDirection dir , bool isAnti = false)
+        {
+            if (isAnti == false)
+            {
+                switch (dir)
+                {
+                    case eFourDirection.top:
+                        dir = eFourDirection.right;
+                        return;
+
+                    case eFourDirection.bottom:
+                        dir = eFourDirection.left;
+                        return;
+
+                    case eFourDirection.left:
+                        dir = eFourDirection.top;
+                        return;
+
+                    case eFourDirection.right:
+                        dir = eFourDirection.bottom;
+                        return;
+                }
+                dir = eFourDirection.No;
+            }
+            else
+            {
+                switch (dir)
+                {
+                    case eFourDirection.top:
+                        dir = eFourDirection.left;
+                        return;
+
+                    case eFourDirection.bottom:
+                        dir = eFourDirection.right;
+                        return;
+
+                    case eFourDirection.left:
+                        dir = eFourDirection.bottom;
+                        return;
+
+                    case eFourDirection.right:
+                        dir = eFourDirection.top;
+                        return;
+                }
+                dir = eFourDirection.No;
+            }
+        }
 
         /// <summary>
         /// ランダムな4方向の列挙子を返します
@@ -200,7 +253,8 @@ namespace TakeshiLibrary
         /// <param name="pos">動かす物のポジション</param>
         /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
-        public static void MoveToPoint(ref Vector3 pos,Vector3 point,float speed = 1)
+        /// <returns>ポイントに到達したらtrueを返します</returns>
+        public static bool MoveToPoint(ref Vector3 pos,Vector3 point,float speed = 1)
         {
             pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
             pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;
@@ -209,33 +263,43 @@ namespace TakeshiLibrary
             if (pos.x <= point.x + speed * 0.1f && pos.x >= point.x + speed * -0.1f) pos.x = point.x;
             if (pos.y <= point.y + speed * 0.1f && pos.y >= point.y + speed * -0.1f) pos.y = point.y;
             if (pos.z <= point.z + speed * 0.1f && pos.z >= point.z + speed * -0.1f) pos.z = point.z;
+
+            return pos == point;
         }
 
         /// <summary>
         /// エネミーオブジェクトがプレイヤーを追いかけます
         /// </summary>
-        void EnemyMovement(ref Transform enemyTrafo,Transform player, GridFieldMap map, GridFieldAStar aStar,float moveSpeed = 1 )
+        public static void Chase(ref Transform enemyTrafo,Transform player, GridFieldMap map, ref GridFieldAStar aStar,float moveSpeed = 1 )
         {
             Vector3 enemyPos;
             Vector3 pathTarget;
 
+            if (aStar.pathStack.Count == 0)
+            {
+                aStar.AStarPath();
+                Debug.Log(aStar.pathStack.Count);
+            }
+
             Vector3Int targetCoord = aStar.pathStack.Peek().position;
             pathTarget = map.gridField.GetVector3Position(targetCoord);
 
-            if (enemyTrafo.position == aStar.pathStack.Peek().position)
+
+            if (enemyTrafo.position == pathTarget)
             {
-                if (aStar == null ||
-                    aStar.pathStack.Count == 0)
-                {
-                    aStar = new GridFieldAStar(map, map.gridField.GetGridCoordinate(transform.position), map.gridField.GetGridCoordinate(player.position));
-                    aStar.AStarPath();
-                }
+
                 aStar.pathStack.Pop();
+                Debug.Log("pop");
             }
 
+            if(aStar.pathStack.Count == 0)
+            {
+                aStar = new GridFieldAStar(map, map.gridField.GetGridCoordinate(enemyTrafo.position),map.gridField.GetGridCoordinate(player.position));
+                aStar.AStarPath();
+            }
             enemyPos = enemyTrafo.position;
 
-            FPS.MoveToPoint(ref enemyPos, pathTarget, moveSpeed);
+                FPS.MoveToPoint(ref enemyPos, pathTarget, moveSpeed);
 
             enemyTrafo.position = enemyPos;
         }

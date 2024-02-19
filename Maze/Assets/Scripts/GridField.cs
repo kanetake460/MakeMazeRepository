@@ -389,6 +389,30 @@ namespace TakeshiLibrary
         }
 
         /// <summary>
+        /// 向きに対応するひとつ前のグリッド座標を返します
+        /// </summary>
+        /// <param name="fourDirection">向き</param>
+        /// <returns>向いている方向の一つ前のグリッド座標</returns>
+        public Vector3Int GetPreviousCoordinate(FPS.eFourDirection fourDirection)
+        {
+            switch (fourDirection)
+            {
+                case FPS.eFourDirection.top:
+                    return Vector3Int.forward;
+
+                case FPS.eFourDirection.bottom:
+                    return Vector3Int.back;
+
+                case FPS.eFourDirection.left:
+                    return Vector3Int.left;
+
+                case FPS.eFourDirection.right:
+                    return Vector3Int.right;
+            }
+            return Vector3Int.zero;
+        }
+
+        /// <summary>
         /// 与えた posistion がグリッドの上にいるかどうか調べます
         /// </summary>
         /// <param name="pos">調べたいポジション</pragma>

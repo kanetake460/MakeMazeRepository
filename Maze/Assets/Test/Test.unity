@@ -317,6 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bfc59c441a4bdf46959c20a005cb18c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathObj: {fileID: 4985950377011335953, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
   player: {fileID: 1260217917}
   testMap: {fileID: 1259732288}
   moveSpeed: 4

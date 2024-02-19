@@ -182,6 +182,11 @@ namespace TakeshiLibrary
             pathStack.Clear();
             int count = 0;
             CellInfo preCell = cell;
+            if(preCell.position == start)
+            {
+                Debug.Log("ゴールとスタートの位置が同じです");
+                pathStack.Push(cell);
+            }
 
             // 前回のセルがスタートの位置じゃない限りスタックにため続ける
             while (preCell.parent != null)

@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TakeshiLibrary;
+using System.IO;
 
 public class TestEnemyController : MonoBehaviour
 {
+    [SerializeField] GameObject pathObj;
 
     private Transform enemyTrafo;
     private Vector3 pathTarget;
@@ -19,6 +21,11 @@ public class TestEnemyController : MonoBehaviour
     {
         enemyTrafo = transform;
         pathTarget = enemyTrafo.position;
+    }
+
+    private void Awake()
+    {
+        
     }
 
 
@@ -52,7 +59,11 @@ public class TestEnemyController : MonoBehaviour
 
     void Update()
     {
-        EnemyMovement();
+        if (AS == null)
+        {
+            AS = new GridFieldAStar(testMap.map, testMap.gridField.GetGridCoordinate(transform.position), testMap.gridField.GetGridCoordinate(player.transform.position));
+        }
+        FPS.Chase(ref enemyTrafo, player.transform, testMap.map, ref AS, moveSpeed);
 
     }
 }

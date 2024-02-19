@@ -348,6 +348,7 @@
 "Assets/Scripts/Algorithm.cs"
 "Assets/Scripts/AudioManager.cs"
 "Assets/Scripts/Compass.cs"
+"Assets/Scripts/Enemy.cs"
 "Assets/Scripts/EnumIndexAttribute.cs"
 "Assets/Scripts/Flag.cs"
 "Assets/Scripts/FPS.cs"

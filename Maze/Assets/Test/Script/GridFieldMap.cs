@@ -176,6 +176,16 @@ using System.Linq;
         }
 
 
+    /// <summary>
+    /// 与えられたグリッド座標から指定の範囲でランダムな座標を取得します
+    /// </summary>
+    public void GetRandomPoint(Vector3Int coord, int areaX,int areaZ)
+    {
+        blocks[x,z]
+
+    }
+
+
         /// <summary>
         /// AStarの道を設定します
         /// </summary>
