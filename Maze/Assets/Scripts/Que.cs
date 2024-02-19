@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TakeshiClass
+namespace TakeshiLibrary
 {
     /*=====アルゴリズム関数です=====*/
     // 主に授業で作ったアルゴリズムを参考に作成

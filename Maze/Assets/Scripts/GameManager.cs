@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TakeshiClass;
+using TakeshiLibrary;
 
 public class GameManager : MonoBehaviour
 {
     /*コンポーネント*/
-    public Map map;
+    public MakeMap map;
 
     /*ゲームオブジェクト*/
     [SerializeField]GameObject playerObj;
@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
             hamburgerCount = hamburgerNum;
         }
     }
+
 
     /// <summary>
     /// ハンバーガーがゼロになったらゲームオーバーカウントを減らす

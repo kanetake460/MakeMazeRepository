@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TakeshiClass
+namespace TakeshiLibrary
 {
     public class Algorithm : MonoBehaviour
     {

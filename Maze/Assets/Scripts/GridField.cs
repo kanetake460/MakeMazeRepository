@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TakeshiClass
+namespace TakeshiLibrary
 {
     /*=====グリッドフィールドを作成する関数=====*/
     // Vector3のクラスを参考に作成しました
@@ -339,6 +339,26 @@ namespace TakeshiClass
             return grid[GetGridCoordinate(pos).x, GetGridCoordinate(pos).z];
         }
 
+
+        /// <summary>
+        /// 引数に与えた Vector3position を グリッド座標に変換します
+        /// </summary>
+        /// <param name="pos">変換したいポジション</param>
+        public void ConvertVector3ToGridCoord(ref Vector3 pos)
+        {
+            pos = GetGridPosition(pos);
+        }
+
+
+        /// <summary>
+        /// 引数に与えた グリッド座標 から Vector3ポジション を返します
+        /// </summary>
+        /// <param name="gridCoord">グリッド座標</param>
+        /// <returns>Vecto3ポジション</returns>
+        public Vector3 GetVector3Position(Vector3Int gridCoord)
+        {
+            return grid[gridCoord.x, gridCoord.z];
+        }
 
         /// <summary>
         /// 与えたpositionから任意の距離のほかのpositionのグリッド座標を調べます

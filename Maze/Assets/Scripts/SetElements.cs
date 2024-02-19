@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using TakeshiClass;
+using TakeshiLibrary;
 using UnityEngine;
 using static Section;
 using static System.Collections.Specialized.BitVector32;
@@ -88,18 +88,18 @@ public class Elements : Section
         switch (fourDirection)
         {
             case FPS.eFourDirection.top:
-                return new Vector3Int(0, 0, 1);
+                return Vector3Int.forward;
 
             case FPS.eFourDirection.bottom:
-                return new Vector3Int(0, 0, -1);
+                return Vector3Int.back;
 
             case FPS.eFourDirection.left:
-                return new Vector3Int(-1, 0, 0);
+                return Vector3Int.left;
 
             case FPS.eFourDirection.right:
-                return new Vector3Int(1, 0, 0);
+                return Vector3Int.right;
         }
-        return new Vector3Int(0, 0, 0);
+        return Vector3Int.zero;
     }
 
     /// <summary>
@@ -256,5 +256,4 @@ public class Elements : Section
         Debug.LogError("ÉâÉxÉãÇèoÇ‹ÇµÇΩ");
         return Vector3Int.zero;
     }
-
 }

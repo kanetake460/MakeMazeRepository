@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TakeshiClass;
+using TakeshiLibrary;
 using UnityEngine;
-using static TakeshiClass.FPS;
+using static TakeshiLibrary.FPS;
 
 public class Section : MapGridField
 {
     [EnumIndex(typeof(eMapSections)), SerializeField] public GameObject[] sections;
-    [SerializeField] Map map;
+    [SerializeField] MakeMap map;
 
     /*それぞれのセクションのテーブル*/
     // 左下から設定しています

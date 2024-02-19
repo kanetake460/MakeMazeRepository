@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using TakeshiClass;
+using TakeshiLibrary;
 using UnityEngine;
 
 public class Test1 : MonoBehaviour

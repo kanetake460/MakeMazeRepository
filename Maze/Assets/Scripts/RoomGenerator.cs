@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TakeshiClass;
+using TakeshiLibrary;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoomGenerator : MonoBehaviour
 {
     /*オブジェクト参照*/
-    [SerializeField] Map map;                                   // マップ
+    [SerializeField] MakeMap map;                                   // マップ
     [SerializeField] GameManager gameManager;                   // ゲームマネージャー
     [SerializeField] GameObject roomPrefab;                     // 部屋のプレハブ
     [SerializeField] Vector3Int roomSizeMin = new Vector3Int(); // 部屋のサイズの最小値
@@ -42,15 +42,17 @@ public class RoomGenerator : MonoBehaviour
                     }
                 }
 
-                // ===デバッグ========================================================================================================================
-                //Instantiate(roomPrefab, map.gridField.grid[55, 55], Quaternion.identity);
-                //for (int x = -1; x <= 1; x++)
-                //{
-                //    for (int z = -1; z <= 1; z++)
-                //    {
-                //        map.mapElements[55 + x, 55 + z] = Elements.eElementType.Room_Element;
-                //    }
-                //}
+                ///<summary>
+                /// ===デバッグ========================================================================================================================
+                ///Instantiate(roomPrefab, map.gridField.grid[55, 55], Quaternion.identity);
+                ///for (int x = -1; x <= 1; x++)
+                ///{
+                ///    for (int z = -1; z <= 1; z++)
+                ///    {
+                ///        map.mapElements[55 + x, 55 + z] = Elements.eElementType.Room_Element;
+                ///    }
+                ///}
+                ///</summary>
 
                 // ランダムな位置で生成可能だったのでループを抜ける
                 return;

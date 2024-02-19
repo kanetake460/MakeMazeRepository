@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using TakeshiLibrary;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -10,8 +11,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameManager gameManager;       // ゲームマネージャー
     [SerializeField] Animator flagAnim;             // フラグセンサーのアニメーション
     [SerializeField] Animator hamburgerAnim;        // ハンバーガーセンサーのアニメーション
-    [SerializeField] Compass flagCompass;           // フラグのコンパス
-    [SerializeField] Compass hamburgerCompass;      // ハンバーガーのコンパス
+    [SerializeField] TakeshiLibrary.Compass flagCompass;           // フラグのコンパス
+    [SerializeField] TakeshiLibrary.Compass hamburgerCompass;      // ハンバーガーのコンパス
     [SerializeField] GameObject[] HamburgerUI;      // ハンバーガーのUI配列
     [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
     [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト

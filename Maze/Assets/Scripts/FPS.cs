@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace TakeshiClass
+namespace TakeshiLibrary
 {
     /*=====FPSの移動関連のスクリプトです=====*/
     // 参考サイト
@@ -21,6 +21,7 @@ namespace TakeshiClass
             right = 90,
             No = 0,
         }
+
 
         /// <summary>
         /// カメラの角度制限をします(上下)
@@ -47,6 +48,7 @@ namespace TakeshiClass
             return q;
         }
 
+
         ///<summary>カメラの視点移動関数(上下の視点移動)</summary>>
         ///<param name="camera"<pragma>カメラの初期向き設定</pragma>
         ///<param name="Xsensityvity"<pragma>視点移動スピード</pragma>
@@ -63,6 +65,7 @@ namespace TakeshiClass
             //return cameraRot;
         }
 
+
         /// <summary>
         /// プレイヤーの視点移動関数(左右視点移動)
         /// </summary>
@@ -76,6 +79,7 @@ namespace TakeshiClass
 
             //return characterRot;
         }
+
 
         /// <summary>
         /// プレイヤーをキー入力によって移動させます
@@ -96,6 +100,7 @@ namespace TakeshiClass
             player.position += player.forward * z * Time.deltaTime + player.right * x * Time.deltaTime;  // 移動
 
         }
+
 
         /// <summary>
         /// カーソルをロックします
@@ -147,6 +152,7 @@ namespace TakeshiClass
             }
         }
 
+
         /// <summary>
         /// プレイヤーの向きからVector3の四方向を返します
         /// </summary>
@@ -174,6 +180,7 @@ namespace TakeshiClass
             }
         }
 
+
         /// <summary>
         /// ランダムな4方向の列挙子を返します
         /// </summary>
@@ -186,6 +193,52 @@ namespace TakeshiClass
             return GetFourDirection(rand);
         }
 
+
+        /// <summary>
+        /// ある地点まで Vector3 の値まで動かします
+        /// </summary>
+        /// <param name="pos">動かす物のポジション</param>
+        /// <param name="point">目的地</param>
+        /// <param name="speed">動かすスピード</param>
+        public static void MoveToPoint(ref Vector3 pos,Vector3 point,float speed = 1)
+        {
+            pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
+            pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;
+            pos.z += pos.z <= point.z ? speed * 0.01f : speed * -0.01f;
+
+            if (pos.x <= point.x + speed * 0.1f && pos.x >= point.x + speed * -0.1f) pos.x = point.x;
+            if (pos.y <= point.y + speed * 0.1f && pos.y >= point.y + speed * -0.1f) pos.y = point.y;
+            if (pos.z <= point.z + speed * 0.1f && pos.z >= point.z + speed * -0.1f) pos.z = point.z;
+        }
+
+        /// <summary>
+        /// エネミーオブジェクトがプレイヤーを追いかけます
+        /// </summary>
+        void EnemyMovement(ref Transform enemyTrafo,Transform player, GridFieldMap map, GridFieldAStar aStar,float moveSpeed = 1 )
+        {
+            Vector3 enemyPos;
+            Vector3 pathTarget;
+
+            Vector3Int targetCoord = aStar.pathStack.Peek().position;
+            pathTarget = map.gridField.GetVector3Position(targetCoord);
+
+            if (enemyTrafo.position == aStar.pathStack.Peek().position)
+            {
+                if (aStar == null ||
+                    aStar.pathStack.Count == 0)
+                {
+                    aStar = new GridFieldAStar(map, map.gridField.GetGridCoordinate(transform.position), map.gridField.GetGridCoordinate(player.position));
+                    aStar.AStarPath();
+                }
+                aStar.pathStack.Pop();
+            }
+
+            enemyPos = enemyTrafo.position;
+
+            FPS.MoveToPoint(ref enemyPos, pathTarget, moveSpeed);
+
+            enemyTrafo.position = enemyPos;
+        }
 
 
         /// <summary>

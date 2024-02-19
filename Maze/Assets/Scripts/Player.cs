@@ -1,20 +1,11 @@
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using TakeshiClass;
-using Unity.VisualScripting;
-using UnityEditor;
+using TakeshiLibrary;
 using UnityEngine;
-using UnityEngine.iOS;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.UI.Image;
 
 public class Player : MonoBehaviour
 {
     /*クラス参照*/
-    [SerializeField] Map map;                   // マップ
+    [SerializeField] MakeMap map;                   // マップ
     [SerializeField] GameManager gameManager;   // ゲームマネージャー
 
     /*パラメータ*/
@@ -29,8 +20,6 @@ public class Player : MonoBehaviour
     private bool cursorLock = true;                 // カーソルロックのON/OFF
     float minX = -90f, maxX = 90f;                  // 角度の制限
 
-    Ray ray;
-    bool canLocomotion;
     void Start()
     {
         latestPos = transform.position;

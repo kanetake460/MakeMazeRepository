@@ -353,7 +353,7 @@
 "Assets/Scripts/FPS.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/GridField.cs"
-"Assets/Scripts/Map.cs"
+"Assets/Scripts/MakeMap.cs"
 "Assets/Scripts/MapGridField.cs"
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/Que.cs"
@@ -364,9 +364,11 @@
 "Assets/Scripts/Test1.cs"
 "Assets/Scripts/UIManager.cs"
 "Assets/Scripts/WorldGridField.cs"
-"Assets/Test/AStar.cs"
-"Assets/Test/TestMap.cs"
-"Assets/Test/TestPlayerController.cs"
+"Assets/Test/Script/GridFieldAStar.cs"
+"Assets/Test/Script/GridFieldMap.cs"
+"Assets/Test/Script/TestEnemyController.cs"
+"Assets/Test/Script/TestMap.cs"
+"Assets/Test/Script/TestPlayerController.cs"
 -langversion:9.0
 
 /deterministic
