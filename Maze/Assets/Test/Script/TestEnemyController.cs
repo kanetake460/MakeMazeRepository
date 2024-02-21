@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using TakeshiLibrary;
 using System.IO;
+using System.Linq;
 
 public class TestEnemyController : MonoBehaviour
 {
     [SerializeField] GameObject pathObj;
 
     private Transform enemyTrafo;
-    private Vector3 pathTarget;
     [SerializeField] GameObject player;
 
     [SerializeField] TestMap testMap;
 
     [SerializeField] float moveSpeed = 1;
+    bool isChase;
 
-    GridFieldAStar AS;
+    GridFieldAStar aStar;
     private void Start()
     {
         enemyTrafo = transform;
-        pathTarget = enemyTrafo.position;
     }
 
     private void Awake()
@@ -28,42 +28,28 @@ public class TestEnemyController : MonoBehaviour
         
     }
 
-
-    /// <summary>
-    /// エネミーオブジェクトがプレイヤーを追いかけます
-    /// </summary>
-    void EnemyMovement()
-    {
-        Vector3 enemyPos;
-
-        if (enemyTrafo.position == pathTarget) 
-        {
-            if (AS == null || 
-                AS.pathStack.Count == 0) 
-            {
-                AS = new GridFieldAStar(testMap.map, testMap.gridField.GetGridCoordinate(transform.position), testMap.gridField.GetGridCoordinate(player.transform.position));
-                AS.AStarPath();
-            }
-
-            Vector3Int targetCoord = AS.pathStack.Pop().position;
-            pathTarget = testMap.gridField.GetVector3Position(targetCoord);
-
-        }
-
-        enemyPos = enemyTrafo.position;
-
-        FPS.MoveToPoint(ref enemyPos, pathTarget,moveSpeed);
-            
-        enemyTrafo.position = enemyPos;
-    }
-
     void Update()
     {
-        if (AS == null)
+        if (Vector3.Distance(enemyTrafo.position, player.transform.position) < 50)
         {
-            AS = new GridFieldAStar(testMap.map, testMap.gridField.GetGridCoordinate(transform.position), testMap.gridField.GetGridCoordinate(player.transform.position));
+            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.red;
+            isChase = true;
         }
-        FPS.Chase(ref enemyTrafo, player.transform, testMap.map, ref AS, moveSpeed);
+        else
+        {
+            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+            isChase = false;
+        }
+
+        if (isChase)
+        {
+            FPS.Chase(ref enemyTrafo, player.transform.position, testMap.map, moveSpeed);
+        }
+        else
+        {
+            FPS.Wandering(ref enemyTrafo, testMap.map, moveSpeed, 5, 5);
+        }
+
 
     }
 }

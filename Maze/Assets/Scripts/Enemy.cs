@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
             aStar = new GridFieldAStar(map.map, map.gridField.GetGridCoordinate(transform.position), map.gridField.GetGridCoordinate(player.transform.position));
         }
 
-        FPS.Chase(ref enemy, player, map.map, ref aStar, speed);
+        FPS.Chase(ref enemy, player.position, map.map, speed);
     }
 
     /// <summary>
@@ -55,17 +55,20 @@ public class Enemy : MonoBehaviour
             Debug.Log(dir);
         }
 
-        FPS.MoveToPoint(ref enemyPos, map.gridField.grid[prevPos.x,prevPos.z]);
+        FPS.MoveToPoint(ref enemy, map.gridField.grid[prevPos.x,prevPos.z]);
 
         enemy.position = enemyPos;
     }
+
+
+
 
     private void Update()
     {
         if (manager.currentScene == SceneManager.eScenes.Escape_Scene)
         {
             //ChasePlayer();
-            Wandering();
+            //Wandering();
         }
     }
 }

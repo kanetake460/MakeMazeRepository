@@ -180,6 +180,7 @@ namespace TakeshiLibrary
             }
         }
 
+
         /// <summary>
         /// 隣の向きを返します
         /// </summary>
@@ -234,6 +235,7 @@ namespace TakeshiLibrary
             }
         }
 
+
         /// <summary>
         /// ランダムな4方向の列挙子を返します
         /// </summary>
@@ -254,8 +256,10 @@ namespace TakeshiLibrary
         /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public static bool MoveToPoint(ref Vector3 pos,Vector3 point,float speed = 1)
+        public static bool MoveToPoint(ref Transform trafo,Vector3 point,float speed = 1)
         {
+            Vector3 pos = trafo.position;
+
             pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
             pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;
             pos.z += pos.z <= point.z ? speed * 0.01f : speed * -0.01f;
@@ -264,44 +268,75 @@ namespace TakeshiLibrary
             if (pos.y <= point.y + speed * 0.1f && pos.y >= point.y + speed * -0.1f) pos.y = point.y;
             if (pos.z <= point.z + speed * 0.1f && pos.z >= point.z + speed * -0.1f) pos.z = point.z;
 
+            trafo.position = pos;
+
             return pos == point;
         }
 
+
+        static GridFieldAStar aStar;        // AStar
+        static Vector3Int targetCoord;      // ターゲットの座標
         /// <summary>
         /// エネミーオブジェクトがプレイヤーを追いかけます
         /// </summary>
-        public static void Chase(ref Transform enemyTrafo,Transform player, GridFieldMap map, ref GridFieldAStar aStar,float moveSpeed = 1 )
+        /// <param name="enemyTrafo">エネミーのトランスフォーム</param>
+        /// <param name="player">追いかける物の位置</param>
+        /// <param name="map">マップ</param>
+        /// <param name="moveSpeed">追いかけるスピード</param>
+        /// <returns>追いついたらtrue</returns>
+        public static bool Chase(ref Transform enemyTrafo, Vector3 player, GridFieldMap map, float moveSpeed = 1)
         {
-            Vector3 enemyPos;
-            Vector3 pathTarget;
+            Vector3Int enemyCoord = map.gridField.GetGridCoordinate(enemyTrafo.position);
 
+            // aStar初期化
+            if (aStar == null)
+            {
+                aStar = new GridFieldAStar(map, map.gridField.GetGridCoordinate(enemyTrafo.position), map.gridField.GetGridCoordinate(player));
+                aStar.AStarPath();
+                targetCoord = enemyCoord;
+            }
+
+            Vector3 pathTarget = map.gridField.GetVector3Position(targetCoord);
+
+            // ターゲットに追いついたら
+            if (MoveToPoint(ref enemyTrafo, pathTarget, moveSpeed))
+            {
+                targetCoord = aStar.pathStack.Pop().position;
+            }
+
+            // パススタックがなくなったら新しくパスを作る
             if (aStar.pathStack.Count == 0)
             {
-                aStar.AStarPath();
-                Debug.Log(aStar.pathStack.Count);
-            }
-
-            Vector3Int targetCoord = aStar.pathStack.Peek().position;
-            pathTarget = map.gridField.GetVector3Position(targetCoord);
-
-
-            if (enemyTrafo.position == pathTarget)
-            {
-
-                aStar.pathStack.Pop();
-                Debug.Log("pop");
-            }
-
-            if(aStar.pathStack.Count == 0)
-            {
-                aStar = new GridFieldAStar(map, map.gridField.GetGridCoordinate(enemyTrafo.position),map.gridField.GetGridCoordinate(player.position));
+                aStar = new GridFieldAStar(map, enemyCoord, map.gridField.GetGridCoordinate(player));
                 aStar.AStarPath();
             }
-            enemyPos = enemyTrafo.position;
 
-                FPS.MoveToPoint(ref enemyPos, pathTarget, moveSpeed);
+            ;
 
-            enemyTrafo.position = enemyPos;
+            return enemyTrafo.position == player;
+        }
+
+
+        static Vector3Int wandPoint;        // 徘徊ポイント
+        /// <summary>
+        /// エネミーを徘徊させます
+        /// </summary>
+        /// 
+        public static void Wandering(ref Transform enemyTrafo,GridFieldMap map,float moveSpeed,int areaX = 10,int areaZ = 10)
+        {
+            Vector3Int enemyCoord = map.gridField.GetGridCoordinate(enemyTrafo.position);
+
+            // 徘徊ポイントを初期化
+            if(wandPoint == Vector3Int.zero)
+            {
+                wandPoint = enemyCoord;
+            }
+
+            // 徘徊ポイントについたらランダムな位置を徘徊ポイントにする
+            if (Chase(ref enemyTrafo, map.gridField.grid[wandPoint.x, wandPoint.z], map, moveSpeed))
+            {
+                wandPoint = map.GetRandomPoint(enemyCoord, areaX, areaZ);
+            }
         }
 
 

@@ -63,7 +63,7 @@ using System.Linq;
             public bool CheckWall(int x, int z)
             {
                 Vector3 checkDir = new Vector3(x, 0, z);
-                Debug.Log(checkDir);
+                //Debug.Log(checkDir);
                 return GetWallDirection(checkDir);
             }
         }
@@ -175,14 +175,62 @@ using System.Linq;
             }
         }
 
+    /// <summary>
+    /// 与えたグリッド座標がマップないならtrueを返します
+    /// </summary>
+    /// <param name="coord">座標</param>
+    /// <returns>グリッドの上ならtrue</returns>
+    public bool CheckMap(Vector3Int coord)
+    {
+        return  coord.x >= 0 &&
+                coord.z >= 0 && 
+                coord.x < gridField.gridWidth &&
+                coord.z < gridField.gridDepth;
+    }
+
 
     /// <summary>
     /// 与えられたグリッド座標から指定の範囲でランダムな座標を取得します
     /// </summary>
-    public void GetRandomPoint(Vector3Int coord, int areaX,int areaZ)
+    public Vector3Int GetRandomPoint(Vector3Int coord, int areaX, int areaZ)
     {
-        blocks[x,z]
+        // 選択範囲のブロックのリスト
+        List<Block> lAreaBlock = new List<Block>();
 
+        // 検索範囲のブロックをリストに追加
+        for (int x = -areaX; x < areaX; x++)
+        {
+            for (int z = -areaZ; z < areaZ; z++)
+            {
+                if (!CheckMap(new Vector3Int(coord.x + x, 0, coord.z + z))) continue;
+                Block b = blocks[coord.x + x, coord.z + z];
+                lAreaBlock.Add(b);
+            }
+        }
+
+        Vector3Int randCoord = coord;
+
+        int count = 0;
+        while (true)
+        {
+            count++;
+            if(count >= areaX * areaZ)
+            {
+                randCoord = coord;
+                Debug.Log("見つかりませんでした");
+                break;
+            }
+
+            // エリア範囲内のランダムな値
+            int randX = Random.Range(-areaX, areaX + 1);
+            int randZ = Random.Range(-areaZ, areaZ + 1);
+
+            randCoord = new Vector3Int(coord.x + randX, 0, coord.z + randZ);
+
+            // リストの中にスペースで、ランダムな値座標が一致するものがあればループ終了
+            if (lAreaBlock.FindAll(b => b.isSpace == true).Find(b => b.coord == randCoord) != null) break;
+        }
+        return randCoord;
     }
 
 
