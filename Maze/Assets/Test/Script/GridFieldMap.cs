@@ -5,6 +5,8 @@ using TakeshiLibrary;
 using Unity.VisualScripting;
 using System.Linq;
 
+namespace TakeshiLibrary
+{
     /// <summary>
     /// マップクラス
     /// </summary>
@@ -69,28 +71,28 @@ using System.Linq;
         }
 
         // ブロックの二次元配列
-        public Block[,] blocks { get; } = new Block[100,100];
+        public Block[,] blocks { get; } = new Block[100, 100];
 
-        public GridField gridField { get;}
+        public GridField gridField { get; }
 
 
-    /// <summary>
-    /// マップを作成するコンストラクタです
-    /// </summary>
-    /// <param name="gridWidth">グリッドの横幅</param>
-    /// <param name="gridDepth">グリッドの奥行</param>
-    /// <param name="t">ブロックのタイプ</param>
-    public GridFieldMap(GridField gridField)
-    {
-        this.gridField = gridField;
-        for (int x = 0; x < gridField.gridWidth; x++)
+        /// <summary>
+        /// マップを作成するコンストラクタです
+        /// </summary>
+        /// <param name="gridWidth">グリッドの横幅</param>
+        /// <param name="gridDepth">グリッドの奥行</param>
+        /// <param name="t">ブロックのタイプ</param>
+        public GridFieldMap(GridField gridField)
         {
-            for (int z = 0; z < gridField.gridDepth; z++)
+            this.gridField = gridField;
+            for (int x = 0; x < gridField.gridWidth; x++)
             {
-                blocks[x, z] = new Block(x, z);
+                for (int z = 0; z < gridField.gridDepth; z++)
+                {
+                    blocks[x, z] = new Block(x, z);
+                }
             }
         }
-    }
 
 
         /// <summary>
@@ -120,6 +122,24 @@ using System.Linq;
 
 
         /// <summary>
+        /// すべての向きの壁を設定します
+        /// </summary>
+        /// <param name="x">xグリッド座標</param>
+        /// <param name="z">zグリッド座標</param>
+        /// <param name="foward">前壁</param>
+        /// <param name="right">右壁</param>
+        /// <param name="back">後壁</param>
+        /// <param name="left">左壁</param>
+        public void SetWalls(int x, int z, bool foward = false, bool right = false, bool back = false, bool left = false)
+        {
+            blocks[x, z].fowardWall = foward;
+            blocks[x, z].rightWall = right;
+            blocks[x, z].backWall = back;
+            blocks[x, z].leftWall = left;
+        }
+
+
+        /// <summary>
         /// 指定した座標のブロック、向きの壁をなくします
         /// </summary>
         /// <param name="x">xグリッド座標</param>
@@ -140,14 +160,14 @@ using System.Linq;
         /// <param name="space">spaceのオブジェクト</param>
         /// <param name="wall">wallのオブジェクト</param>
         /// <param name="gf">gridField</param>
-        public void InstanceMapObjects(GameObject space,GameObject wall)
+        public void InstanceMapObjects(GameObject space, GameObject wall)
         {
             for (int x = 0; x < gridField.gridWidth; x++)
             {
                 for (int z = 0; z < gridField.gridDepth; z++)
                 {
                     if (blocks[x, z].isSpace) MonoBehaviour.Instantiate(space, gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
-                    else if (blocks[x, z].isSpace == false) MonoBehaviour.Instantiate(wall, gridField.grid[blocks[x,z].coord.x, blocks[x, z].coord.z] + new Vector3(0,5,0), Quaternion.identity);
+                    else if (blocks[x, z].isSpace == false) MonoBehaviour.Instantiate(wall, gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z] + new Vector3(0, 5, 0), Quaternion.identity);
                 }
             }
         }
@@ -175,63 +195,43 @@ using System.Linq;
             }
         }
 
-    /// <summary>
-    /// 与えたグリッド座標がマップないならtrueを返します
-    /// </summary>
-    /// <param name="coord">座標</param>
-    /// <returns>グリッドの上ならtrue</returns>
-    public bool CheckMap(Vector3Int coord)
-    {
-        return  coord.x >= 0 &&
-                coord.z >= 0 && 
-                coord.x < gridField.gridWidth &&
-                coord.z < gridField.gridDepth;
-    }
 
-
-    /// <summary>
-    /// 与えられたグリッド座標から指定の範囲でランダムな座標を取得します
-    /// </summary>
-    public Vector3Int GetRandomPoint(Vector3Int coord, int areaX, int areaZ)
-    {
-        // 選択範囲のブロックのリスト
-        List<Block> lAreaBlock = new List<Block>();
-
-        // 検索範囲のブロックをリストに追加
-        for (int x = -areaX; x < areaX; x++)
+        /// <summary>
+        /// 与えたグリッド座標がマップないならtrueを返します
+        /// </summary>
+        /// <param name="coord">座標</param>
+        /// <returns>グリッドの上ならtrue</returns>
+        public bool CheckMap(Vector3Int coord)
         {
-            for (int z = -areaZ; z < areaZ; z++)
-            {
-                if (!CheckMap(new Vector3Int(coord.x + x, 0, coord.z + z))) continue;
-                Block b = blocks[coord.x + x, coord.z + z];
-                lAreaBlock.Add(b);
-            }
+            return coord.x >= 0 &&
+                    coord.z >= 0 &&
+                    coord.x < gridField.gridWidth &&
+                    coord.z < gridField.gridDepth;
         }
 
-        Vector3Int randCoord = coord;
 
-        int count = 0;
-        while (true)
+        /// <summary>
+        /// 与えられたグリッド座標から指定の範囲でランダムな座標を取得します
+        /// </summary>
+        public Vector3Int GetRandomPoint(Vector3Int coord, int areaX, int areaZ)
         {
-            count++;
-            if(count >= areaX * areaZ)
+            // 選択範囲のブロックのリスト
+            List<Block> lAreaBlock = new List<Block>();
+
+            // 検索範囲のブロックをリストに追加
+            for (int x = -areaX; x < areaX; x++)
             {
-                randCoord = coord;
-                Debug.Log("見つかりませんでした");
-                break;
+                for (int z = -areaZ; z < areaZ; z++)
+                {
+                    if (!CheckMap(new Vector3Int(coord.x + x, 0, coord.z + z))) continue;
+                    Block b = blocks[coord.x + x, coord.z + z];
+                    lAreaBlock.Add(b);
+                }
             }
+            Debug.Log(lAreaBlock.FindAll(b => b.isSpace == true).Count);
 
-            // エリア範囲内のランダムな値
-            int randX = Random.Range(-areaX, areaX + 1);
-            int randZ = Random.Range(-areaZ, areaZ + 1);
-
-            randCoord = new Vector3Int(coord.x + randX, 0, coord.z + randZ);
-
-            // リストの中にスペースで、ランダムな値座標が一致するものがあればループ終了
-            if (lAreaBlock.FindAll(b => b.isSpace == true).Find(b => b.coord == randCoord) != null) break;
+            return lAreaBlock.FindAll(b => b.isSpace == true)[Random.Range(0, lAreaBlock.FindAll(b => b.isSpace).Count)].coord;
         }
-        return randCoord;
-    }
 
 
         /// <summary>
@@ -241,7 +241,7 @@ using System.Linq;
         /// <param name="goal">探索のゴール地点</param>
         /// <param name="gridField">グリッドフィールド</param>
         /// <param name="pathObj">経路に配置するオブジェクト</param>
-        public void SetAStar(Vector3 start,Vector3 goal,GameObject pathObj,GridFieldAStar aStar)
+        public void SetAStar(Vector3 start, Vector3 goal, GameObject pathObj, GridFieldAStar aStar)
         {
             if (aStar == null)
             {
@@ -257,3 +257,4 @@ using System.Linq;
             }
         }
     }
+}

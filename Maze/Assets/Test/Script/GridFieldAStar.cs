@@ -40,7 +40,7 @@ namespace TakeshiLibrary
         /// <param name="gf">グリッド座標</param>
         /// <param name="position"></param>
         /// <param name="targetPos"></param>
-        public GridFieldAStar(GridFieldMap map, Vector3Int position, Vector3Int targetPos ,int searchLimit = 10000)
+        public GridFieldAStar(GridFieldMap map, Vector3Int position, Vector3Int targetPos ,int searchLimit = 1000)
         {
             m_searchLimit = searchLimit;
             m_Map = map;

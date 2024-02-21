@@ -9,13 +9,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] SceneManager manager;
     [SerializeField] MakeMap map;
 
-    GridFieldAStar aStar;
-
     [SerializeField] Transform enemy;
     [SerializeField] Transform player;
 
-    [SerializeField] float speed;
-    FPS.eFourDirection dir = FPS.eFourDirection.right;
+    [SerializeField] float moveSpeed;
+
+    private bool isChase = false;
+    private bool isInit = false;
 
 
 
@@ -24,51 +24,49 @@ public class Enemy : MonoBehaviour
         enemy = transform;
     }
 
-    private void ChasePlayer()
+    private void EnemyMovement()
     {
-        if (aStar == null)
+        if (Vector3.Distance(enemy.position, player.position) < 50)
         {
-            aStar = new GridFieldAStar(map.map, map.gridField.GetGridCoordinate(transform.position), map.gridField.GetGridCoordinate(player.transform.position));
+            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.red;
+            isChase = true;
+        }
+        else
+        {
+            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+            isChase = false;
         }
 
-        FPS.Chase(ref enemy, player.position, map.map, speed);
-    }
-
-    /// <summary>
-    /// 徘徊します
-    /// </summary>
-    private void Wandering()
-    {
-        // 向き
-        Vector3 rot = new Vector3(0,(int)dir,0);
-
-        enemy.localEulerAngles = rot;
-
-        // 向きに対応するエネミーの一つ前
-        Vector3Int prev = map.gridField.GetPreviousCoordinate(dir);
-        // エネミーのひとつ前のグリッド座標
-        Vector3Int prevPos = map.gridField.GetOtherGridCoordinate(enemy.position,prev);
-        Vector3 enemyPos = enemy.position;
-        if(map.map.blocks[prevPos.x,prevPos.z].isSpace == false)
+        if (isChase)
         {
-            FPS.ClockwiseDirection(ref dir,false);
-            Debug.Log(dir);
+            FPS.Chase(ref enemy, player.transform.position, map.map, moveSpeed);
         }
-
-        FPS.MoveToPoint(ref enemy, map.gridField.grid[prevPos.x,prevPos.z]);
-
-        enemy.position = enemyPos;
+        else
+        {
+            FPS.Wandering(ref enemy, map.map, moveSpeed, 5, 5);
+        }
     }
-
 
 
 
     private void Update()
     {
+
+
         if (manager.currentScene == SceneManager.eScenes.Escape_Scene)
         {
-            //ChasePlayer();
-            //Wandering();
+            if(!isInit)
+            {
+                isInit = true;
+                Vector3Int randCoord = map.map.GetRandomPoint(map.gridField.GetGridCoordinate(enemy.position), map.gridField.gridWidth, map.gridField.gridDepth);
+                transform.position = map.gridField.grid[randCoord.x, randCoord.z];
+            }
+            EnemyMovement();
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
+        }
+        else
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 }
