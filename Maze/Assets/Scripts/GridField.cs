@@ -24,7 +24,6 @@ namespace TakeshiLibrary
         public float y { get; }
         public eGridAnchor gridAnchor { get; }              // グリッドのアンカー
         public Vector3[,] grid { get; } = new Vector3[100, 100];     // グリッドのセルの配置Vector3の二次元配列
-        public Vector3Int gridCoordinate { get; }           // = Vector3Int.zero;         // グリッド座標
 
         public enum eGridAnchor
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -20,7 +21,21 @@ namespace TakeshiLibrary
         public class CellInfo
         {
             public Vector3Int position { get; set; }       // 親セルのグリッド座標
-            public float cost { get; set; }                 // 実コスト
+            private float _cost;
+            public float cost {
+                get
+                {
+                    return _cost;
+                }
+                set
+                {
+                    if (value < 0)
+                    {
+                        new InvalidOperationException("");
+                    }
+                    _cost = value;
+                }
+                }                 // 実コスト
             public float heuristicCost { get; set; }        // 推定コスト
             public float sumCost { get; set; }              // 総コスト
             public CellInfo parent { get; set; }          // 親のセルの位置
@@ -30,9 +45,9 @@ namespace TakeshiLibrary
         public Stack<CellInfo> pathStack { get; } = new Stack<CellInfo>();
         private List<CellInfo> openList = new List<CellInfo>();
         private List<CellInfo> closeList = new List<CellInfo>();
-        private readonly Vector3Int goal;
-        private readonly Vector3Int start;
-        private readonly int m_searchLimit = 10000;
+        private Vector3Int goal;
+        private Vector3Int start;
+        private readonly int m_searchLimit = 1000;
 
         /// <summary>
         /// AStarのコンストラクタ(与えたグリッドフィールドマップでA*探索を行います)
@@ -40,29 +55,24 @@ namespace TakeshiLibrary
         /// <param name="gf">グリッド座標</param>
         /// <param name="position"></param>
         /// <param name="targetPos"></param>
-        public GridFieldAStar(GridFieldMap map, Vector3Int position, Vector3Int targetPos ,int searchLimit = 1000)
+        public GridFieldAStar(int searchLimit = 1000)
         {
             m_searchLimit = searchLimit;
-            m_Map = map;
-            start = position;
-            goal = targetPos;
-
-            // 探索開始地点のセル
-            CellInfo startCell = new CellInfo();
-            startCell.position = start;
-            startCell.cost = 0;
-            startCell.heuristicCost = Vector3Int.Distance(start, goal);
-            startCell.sumCost = startCell.cost + startCell.heuristicCost;
-
-            openList.Add(startCell);
         }
 
 
         /// <summary>
         /// 経路を探索します
         /// </summary>
-        public void AStarPath()
+        public void AStarPath(GridFieldMap map, Vector3Int position, Vector3Int targetPos)
         {
+            m_Map = map;
+            start = position;
+            goal = targetPos;
+
+            // スタート地点のセルを入れる
+            AddSatrtCell();
+
             int count = 0;
             CellInfo minCell = new CellInfo();
 
@@ -82,7 +92,7 @@ namespace TakeshiLibrary
 
             if (count >= m_searchLimit)
             {
-                Debug.Log("ゴールが見つからないまま探索が中断されました"); 
+                Debug.Log("ゴールが見つからないまま探索が中断されました");
             }
             else
             {
@@ -91,6 +101,22 @@ namespace TakeshiLibrary
             }
             // ゴールにたどり着いたセルから順にたどってスタートまでの道のりをスタック
             StackPath(minCell);
+        }
+
+
+        /// <summary>
+        /// 探索開始地点のセルをオープンリストに入れます
+        /// </summary>
+        private void AddSatrtCell()
+        {
+            // 探索開始地点のセル
+            CellInfo startCell = new CellInfo();
+            startCell.position = start;
+            startCell.cost = 0;
+            startCell.heuristicCost = Vector3Int.Distance(start, goal);
+            startCell.sumCost = startCell.cost + startCell.heuristicCost;
+
+            openList.Add(startCell);
         }
 
 

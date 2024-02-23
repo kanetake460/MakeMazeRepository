@@ -245,10 +245,10 @@ namespace TakeshiLibrary
         {
             if (aStar == null)
             {
-                aStar = new GridFieldAStar(this, gridField.GetGridCoordinate(start), gridField.GetGridCoordinate(goal));
+                aStar = new GridFieldAStar();
             }
 
-            aStar.AStarPath();
+            aStar.AStarPath(this, gridField.GetGridCoordinate(start), gridField.GetGridCoordinate(goal));
 
             while (aStar.pathStack.Count > 0)
             {

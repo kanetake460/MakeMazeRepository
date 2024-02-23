@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -74,8 +75,8 @@ namespace TakeshiLibrary
         /// <returns></returns>
         public static void PlayerViewport(GameObject player, float Ysensityvity = 3f)
         {
-            float xRot = Input.GetAxis("Mouse X") * Ysensityvity;       // マウスの座標代入
-            player.transform.localRotation *= Quaternion.Euler(0, xRot, 0);   // 角度代入
+            float xRot = Input.GetAxis("Mouse X") * Ysensityvity;               // マウスの座標代入
+            player.transform.localRotation *= Quaternion.Euler(0, xRot, 0);     // 角度代入
 
             //return characterRot;
         }
@@ -252,17 +253,19 @@ namespace TakeshiLibrary
         /// <summary>
         /// ある地点まで Vector3 の値まで動かします
         /// </summary>
-        /// <param name="pos">動かす物のポジション</param>
+        /// <param name="trafo">動かす物のトランスフォーム</param>
         /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public static bool MoveToPoint(ref Transform trafo,Vector3 point,float speed = 1)
+        public bool MoveToPoint(Transform trafo,Vector3 point,float speed = 1)// refけす
         {
             Vector3 pos = trafo.position;
 
             pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
             pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;
             pos.z += pos.z <= point.z ? speed * 0.01f : speed * -0.01f;
+
+            //Mathf.Approximately(speed, 0.0f);
 
             if (pos.x <= point.x + speed * 0.1f && pos.x >= point.x + speed * -0.1f) pos.x = point.x;
             if (pos.y <= point.y + speed * 0.1f && pos.y >= point.y + speed * -0.1f) pos.y = point.y;
@@ -273,9 +276,11 @@ namespace TakeshiLibrary
             return pos == point;
         }
 
+        // enter,stay,exitでわけて
 
-        static GridFieldAStar aStar;        // AStar
-        static Vector3Int targetCoord;      // ターゲットの座標
+
+        GridFieldAStar aStar;        // AStar
+        Vector3Int targetCoord;      // ターゲットの座標
         /// <summary>
         /// エネミーオブジェクトがプレイヤーを追いかけます
         /// </summary>
@@ -284,22 +289,21 @@ namespace TakeshiLibrary
         /// <param name="map">マップ</param>
         /// <param name="moveSpeed">追いかけるスピード</param>
         /// <returns>追いついたらtrue</returns>
-        public static bool Chase(ref Transform enemyTrafo, Vector3 player, GridFieldMap map, float moveSpeed = 1)
+        public bool Chase(Transform enemyTrafo, Vector3 player, GridFieldMap map, float moveSpeed = 1)
         {
             Vector3Int enemyCoord = map.gridField.GetGridCoordinate(enemyTrafo.position);
-
             // aStar初期化
             if (aStar == null)
             {
-                aStar = new GridFieldAStar(map, map.gridField.GetGridCoordinate(enemyTrafo.position), map.gridField.GetGridCoordinate(player));
-                aStar.AStarPath();
+                aStar = new GridFieldAStar();
+                aStar.AStarPath(map, map.gridField.GetGridCoordinate(enemyTrafo.position), map.gridField.GetGridCoordinate(player));
                 targetCoord = enemyCoord;
             }
 
             Vector3 pathTarget = map.gridField.GetVector3Position(targetCoord);
 
             // ターゲットに追いついたら
-            if (MoveToPoint(ref enemyTrafo, pathTarget, moveSpeed))
+            if (MoveToPoint(enemyTrafo, pathTarget, moveSpeed))
             {
                 targetCoord = aStar.pathStack.Pop().position;
             }
@@ -307,8 +311,7 @@ namespace TakeshiLibrary
             // パススタックがなくなったら新しくパスを作る
             if (aStar.pathStack.Count == 0)
             {
-                aStar = new GridFieldAStar(map, enemyCoord, map.gridField.GetGridCoordinate(player));
-                aStar.AStarPath();
+                aStar.AStarPath(map, map.gridField.GetGridCoordinate(enemyTrafo.position), map.gridField.GetGridCoordinate(player));// new は毎回しない
             }
 
             ;
@@ -317,12 +320,12 @@ namespace TakeshiLibrary
         }
 
 
-        static Vector3Int wandPoint;        // 徘徊ポイント
+        Vector3Int wandPoint;        // 徘徊ポイント
         /// <summary>
         /// エネミーを徘徊させます
         /// </summary>
         /// 
-        public static void Wandering(ref Transform enemyTrafo,GridFieldMap map,float moveSpeed,int areaX = 10,int areaZ = 10)
+        public void Wandering(Transform enemyTrafo,GridFieldMap map,float moveSpeed,int areaX = 10,int areaZ = 10)
         {
             Vector3Int enemyCoord = map.gridField.GetGridCoordinate(enemyTrafo.position);
 
@@ -333,7 +336,7 @@ namespace TakeshiLibrary
             }
 
             // 徘徊ポイントについたらランダムな位置を徘徊ポイントにする
-            if (Chase(ref enemyTrafo, map.gridField.grid[wandPoint.x, wandPoint.z], map, moveSpeed))
+            if (Chase(enemyTrafo, map.gridField.grid[wandPoint.x, wandPoint.z], map, moveSpeed))
             {
                 wandPoint = map.GetRandomPoint(enemyCoord, areaX, areaZ);
             }

@@ -15,7 +15,13 @@ public class TestEnemyController : MonoBehaviour
     [SerializeField] TestMap testMap;
 
     [SerializeField] float moveSpeed = 1;
+
+    [SerializeField] Material MT_Red;
+    [SerializeField] Material MT_Blue;
+
     bool isChase;
+
+    private FPS fps = new FPS();
 
     GridFieldAStar aStar;
     private void Start()
@@ -32,22 +38,22 @@ public class TestEnemyController : MonoBehaviour
     {
         if (Vector3.Distance(enemyTrafo.position, player.transform.position) < 50)
         {
-            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.red;
+            gameObject.GetComponent<MeshRenderer>().material = MT_Red;
             isChase = true;
         }
         else
         {
-            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+            gameObject.GetComponent<MeshRenderer>().material = MT_Blue;
             isChase = false;
         }
 
         if (isChase)
         {
-            FPS.Chase(ref enemyTrafo, player.transform.position, testMap.map, moveSpeed);
+            fps.Chase(enemyTrafo, player.transform.position, testMap.map, moveSpeed);
         }
         else
         {
-            FPS.Wandering(ref enemyTrafo, testMap.map, moveSpeed, 5, 5);
+            fps.Wandering(enemyTrafo, testMap.map, moveSpeed, 5, 5);
         }
 
 

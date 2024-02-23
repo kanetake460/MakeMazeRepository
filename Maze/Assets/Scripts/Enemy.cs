@@ -17,11 +17,15 @@ public class Enemy : MonoBehaviour
     private bool isChase = false;
     private bool isInit = false;
 
+    private FPS fps = new FPS();
+
+    Physics p;
 
 
     private void Start()
     {
         enemy = transform;
+        p = GetComponent<Physics>();
     }
 
     private void EnemyMovement()
@@ -39,19 +43,18 @@ public class Enemy : MonoBehaviour
 
         if (isChase)
         {
-            FPS.Chase(ref enemy, player.transform.position, map.map, moveSpeed);
+            fps.Chase(enemy, player.transform.position, map.map, moveSpeed);
         }
         else
         {
-            FPS.Wandering(ref enemy, map.map, moveSpeed, 5, 5);
+            fps.Wandering(enemy, map.map, moveSpeed, 5, 5);
         }
     }
 
 
-
     private void Update()
     {
-
+        
 
         if (manager.currentScene == SceneManager.eScenes.Escape_Scene)
         {
@@ -68,5 +71,6 @@ public class Enemy : MonoBehaviour
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
+        //p.spher
     }
 }
