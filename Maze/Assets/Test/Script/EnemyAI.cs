@@ -6,14 +6,13 @@ namespace TakeshiLibrary
 {
     public class EnemyAI
     {
-        private GridFieldAStar _aStar;        // AStar
-        private GridFieldMap _map;
-        private Vector3Int _locoGoalPoint;
-        private Vector3Int _pathTargetCoord;      // ターゲットの座標
-        private Transform _enemyTrafo;
-        private Vector3Int _enemyCoord;
-        private bool isStay;
-        private bool isExit;
+        private GridFieldAStar _aStar;          // AStar
+        private GridFieldMap _map;              // マップ
+        
+        private Vector3Int _pathTargetCoord;    // 道のりのターゲットの座標
+        private Transform _enemyTrafo;          // エネミーのトランスフォーム
+        
+        private int _stayCount = 0;             // AStarLocomotionの再探索までのカウント
 
 
         public EnemyAI(Transform enemyTrafo,GridFieldMap map)
@@ -21,9 +20,7 @@ namespace TakeshiLibrary
             _aStar = new GridFieldAStar();
             _map = map;
             _enemyTrafo = enemyTrafo;
-            _enemyCoord = _map.gridField.GetGridCoordinate(_enemyTrafo.position);
-            _locoGoalPoint = _enemyCoord;
-            _pathTargetCoord = _enemyCoord;
+            _pathTargetCoord = _map.gridField.GetGridCoordinate(_enemyTrafo.position);
         }
 
 
@@ -34,7 +31,7 @@ namespace TakeshiLibrary
         /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public bool MoveToPoint(Transform trafo, Vector3 point, float speed = 1)// refけす
+        public bool MoveToPoint(Transform trafo, Vector3 point, float speed = 1)
         {
             Vector3 pos = trafo.position;
 
@@ -49,8 +46,9 @@ namespace TakeshiLibrary
             trafo.position = pos;
 
             return pos == point;
-        } 
-        
+        }
+
+
         /// <summary>
         /// ある地点まで Vector3 の値まで動かします
         /// </summary>
@@ -58,10 +56,10 @@ namespace TakeshiLibrary
         /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public bool LocomotionToCoordPoint( Vector3Int coord,GridFieldMap map, float speed = 1)// refけす
+        public bool LocomotionToCoordPoint(Vector3Int coord, float speed = 1)
         {
             Vector3 pos = _enemyTrafo.position;
-            Vector3 point = map.gridField.grid[coord.x, coord.z];
+            Vector3 point = _map.gridField.grid[coord.x, coord.z];
 
             pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
             pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;
@@ -76,41 +74,32 @@ namespace TakeshiLibrary
             return pos == point;
         }
 
-        /// <summary>
-        /// enter,stay,exitでわけて
-        /// </summary>
-
-
 
         /// <summary>
         /// 最短経路で目的地まで動かします。一度目的地についたら終了します。
         /// </summary>
-        /// <param name="map">マップ</param>
         /// <param name="moveSpeed">追いかけるスピード</param>
         /// <returns>到着したら true</returns>
-        public bool LocomotionToAStar(GridFieldMap map, float moveSpeed = 1)
+        public bool LocomotionToAStar( float moveSpeed = 1)
         {
-            //Debug.Log(map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z]);
-            //Debug.Log(_enemyTrafo.position);
-
             // パススタックがあるなら
             if (_aStar.pathStack.Count != 0)
             {
                 // パスターゲットに追いついたら
-                if (LocomotionToCoordPoint(_pathTargetCoord, map, moveSpeed))
+                if (LocomotionToCoordPoint(_pathTargetCoord, moveSpeed)) 
                 {
                     // 新しいパスターゲットをポップ
                     _pathTargetCoord = _aStar.pathStack.Pop().position;
-                    Debug.DrawLine(map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z], map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z] + Vector3.up, Color.red, 0.1f);
+                    Debug.DrawLine(_map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z], _map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z] + Vector3.up, Color.red, 0.1f);
                 }
             }
             // ない場合
             else
             {
                 // エネミーが最後のパスターゲットの位置に来てなかったら
-                if(_enemyTrafo.position != map.gridField.grid[_pathTargetCoord.x,_pathTargetCoord.z])
+                if(_enemyTrafo.position != _map.gridField.grid[_pathTargetCoord.x,_pathTargetCoord.z])
                 {
-                    return LocomotionToCoordPoint(_pathTargetCoord, map, moveSpeed);
+                    return LocomotionToCoordPoint(_pathTargetCoord, moveSpeed);
                 }
             }
 
@@ -119,76 +108,70 @@ namespace TakeshiLibrary
 
 
         /// <summary>
-        /// 最短経路で目的地まで動か続けます。
+        /// 最短経路で目的地まで動かし続けます。
         /// </summary>
         /// <param name="goalPos">追いかける物の位置</param>
         /// <param name="map">マップ</param>
         /// <param name="aStarCount">再探索を行う間隔</param>
         /// <param name="moveSpeed">追いかけるスピード</param>
         /// <returns>追いついたらtrue</returns>
-        public void StayLocomotionToAStar(Vector3 goalPos, GridFieldMap map,int aStarCount = 60, float moveSpeed = 1)
+        public void StayLocomotionToAStar(Vector3 goalPos,float moveSpeed = 1, int aStarCount = 360)
         {
-            if (_aStar.pathStack.Count != 0)
+            LocomotionToAStar(moveSpeed);
+
+            _stayCount++;
+            if(_stayCount > aStarCount)
             {
-                // パスターゲットに追いついたら
-                if (LocomotionToCoordPoint(_pathTargetCoord, map, moveSpeed))
-                {
-                    // 新しいパスターゲットをポップ
-                    _pathTargetCoord = _aStar.pathStack.Pop().position;
-                    Debug.DrawLine(map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z], map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z] + Vector3.up, Color.red, 0.1f);
-                }
-
-                // パススタックがなくなったら新しくパスを作る
-                if (_aStar.pathStack.Count == 0)
-                {
-                    _locoGoalPoint = map.gridField.GetGridCoordinate(goalPos);
-                    _enemyCoord = map.gridField.GetGridCoordinate(_enemyTrafo.position);
-
-                    _aStar.AStarPath(map, _enemyCoord, _locoGoalPoint);
-                    _pathTargetCoord = _enemyCoord;
-                }
+                _stayCount = 0;
+                EnterLocomotionToAStar(goalPos);
             }
         }
+
 
         /// <summary>
         /// AStarクラスからパスを設定します。
         /// </summary>
         /// <param name="goalPos"></param>
-        /// <param name="map"></param>
-        public void EnterLocomotionToAStar(Vector3 goalPos, GridFieldMap map)
+        public void EnterLocomotionToAStar(Vector3 goalPos)
         {
-            _locoGoalPoint = map.gridField.GetGridCoordinate(goalPos);
-            _enemyCoord = map.gridField.GetGridCoordinate(_enemyTrafo.position) ;
+            var enemyCoord = _map.gridField.GetGridCoordinate(_enemyTrafo.position) ;
+            var locoGoalCoord = _map.gridField.GetGridCoordinate(goalPos);
 
             // パスを作って、エネミーのいる場所を最初の場所にする
-            _aStar.AStarPath(map, _enemyCoord, _locoGoalPoint);
-            Debug.Log(_aStar.pathStack.Count);
+            _aStar.AStarPath(_map, enemyCoord, locoGoalCoord);
 
-            map.SetAStar(_enemyTrafo.position,map.gridField.grid[_locoGoalPoint.x,_locoGoalPoint.z],_aStar);
-            _pathTargetCoord = _aStar.pathStack.Pop().position;
+            /// デバッグ
+            ///_map.SetAStar(_enemyTrafo.position,_map.gridField.grid[_locoGoalPoint.x,_locoGoalPoint.z],_aStar);
             
-            // デバッグ
-            //Debug.Log(_pathTargetCoord);
+            _pathTargetCoord = _aStar.pathStack.Pop().position;
         }
 
+
+        /// <summary>
+        /// 移動を終了させます
+        /// </summary>
+        /// <param name="isExit"></param>
         public void ExitLocomotion(ref bool isExit)
         {
             isExit = false;
-            isStay = false;
 
-            _locoGoalPoint = _enemyCoord;
+            _stayCount = 0;
             _aStar.pathStack.Clear();
         }
+
 
         /// <summary>
         /// エネミーを徘徊させます
         /// </summary>
-        public void Wandering(GridFieldMap map, float moveSpeed, int areaX = 10, int areaZ = 10)
+        public void Wandering(float moveSpeed, int areaX = 10, int areaZ = 10)
         {
             // 徘徊ポイントについたらランダムな位置を徘徊ポイントにする
-            if (LocomotionToAStar(map, moveSpeed))
+            if (LocomotionToAStar(moveSpeed))
             {
-                _locoGoalPoint = map.GetRandomPoint(_enemyCoord, areaX, areaZ);
+                var enemyCoord = _map.gridField.GetGridCoordinate(_enemyTrafo.position);
+                var locoGoalCoord = _map.GetRandomPoint(enemyCoord, areaX, areaZ);
+                
+                EnterLocomotionToAStar(_map.gridField.grid[locoGoalCoord.x,locoGoalCoord.z]);
             }
         }
     }

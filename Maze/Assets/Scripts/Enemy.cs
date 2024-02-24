@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour
     private bool isInit = false;
 
     private FPS fps = new FPS();
+    private EnemyAI ai;
+    private bool isExit = false;
 
     Physics p;
 
@@ -25,6 +27,7 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         enemy = transform;
+        ai = new EnemyAI(enemy, map.map);
     }
 
     private void EnemyMovement()
@@ -42,11 +45,13 @@ public class Enemy : MonoBehaviour
 
         if (isChase)
         {
-            fps.Chase(enemy, player.transform.position, map.map, moveSpeed);
+            ai.StayLocomotionToAStar(player.position,moveSpeed);
+            isExit = true;
         }
         else
         {
-            fps.Wandering(enemy, map.map, moveSpeed, 5, 5);
+            if(isExit)ai.ExitLocomotion(ref isExit);
+            ai.Wandering(moveSpeed);
         }
     }
 

@@ -369,7 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   space: {fileID: 8903238827795536142, guid: 3972cf15063b13a4e9e4ce9e3b362851, type: 3}
   wall: {fileID: 615411715708864080, guid: c520ca19482925040866d623f0e31af7, type: 3}
-  gridWidth: 10
+  gridWidth: 20
   gridDepth: 10
   cellWidth: 10
   cellDepth: 10
@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 475652231}
-  locoSpeed: 10
+  locoSpeed: 30.48
   viewSpeedX: 3
   viewSpeedY: 3
 --- !u!1 &1774264442

@@ -71,7 +71,6 @@ namespace TakeshiLibrary
         /// プレイヤーの視点移動関数(左右視点移動)
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="Xsensityvity"></param>
         /// <returns></returns>
         public static void PlayerViewport(GameObject player, float Ysensityvity = 3f)
         {
@@ -126,6 +125,8 @@ namespace TakeshiLibrary
                 Cursor.lockState = CursorLockMode.None;
             }
         }
+
+
 
 
         /// <summary>
@@ -273,73 +274,6 @@ namespace TakeshiLibrary
 
             return pos == point;
         }
-
-        // enter,stay,exitでわけて
-
-
-        GridFieldAStar aStar;        // AStar
-        Vector3Int targetCoord;      // ターゲットの座標
-        /// <summary>
-        /// エネミーオブジェクトがプレイヤーを追いかけます
-        /// </summary>
-        /// <param name="enemyTrafo">エネミーのトランスフォーム</param>
-        /// <param name="player">追いかける物の位置</param>
-        /// <param name="map">マップ</param>
-        /// <param name="moveSpeed">追いかけるスピード</param>
-        /// <returns>追いついたらtrue</returns>
-        public bool Chase(Transform enemyTrafo, Vector3 player, GridFieldMap map, float moveSpeed = 1)
-        {
-            Vector3Int enemyCoord = map.gridField.GetGridCoordinate(enemyTrafo.position);
-            // aStar初期化
-            if (aStar == null)
-            {
-                aStar = new GridFieldAStar();
-                aStar.AStarPath(map, map.gridField.GetGridCoordinate(enemyTrafo.position), map.gridField.GetGridCoordinate(player));
-                targetCoord = enemyCoord;
-            }
-
-            Vector3 pathTarget = map.gridField.GetVector3Position(targetCoord);
-
-            // ターゲットに追いついたら
-            if (MoveToPoint(enemyTrafo, pathTarget, moveSpeed))
-            {
-                targetCoord = aStar.pathStack.Pop().position;
-            }
-
-            // パススタックがなくなったら新しくパスを作る
-            if (aStar.pathStack.Count == 0)
-            {
-                aStar.AStarPath(map, map.gridField.GetGridCoordinate(enemyTrafo.position), map.gridField.GetGridCoordinate(player));// new は毎回しない
-            }
-
-            ;
-
-            return enemyTrafo.position == player;
-        }
-
-
-        Vector3Int wandPoint;        // 徘徊ポイント
-        /// <summary>
-        /// エネミーを徘徊させます
-        /// </summary>
-        /// 
-        public void Wandering(Transform enemyTrafo,GridFieldMap map,float moveSpeed,int areaX = 10,int areaZ = 10)
-        {
-            Vector3Int enemyCoord = map.gridField.GetGridCoordinate(enemyTrafo.position);
-
-            // 徘徊ポイントを初期化
-            if(wandPoint == Vector3Int.zero)
-            {
-                wandPoint = enemyCoord;
-            }
-
-            // 徘徊ポイントについたらランダムな位置を徘徊ポイントにする
-            if (Chase(enemyTrafo, map.gridField.grid[wandPoint.x, wandPoint.z], map, moveSpeed))
-            {
-                wandPoint = map.GetRandomPoint(enemyCoord, areaX, areaZ);
-            }
-        }
-
 
         /// <summary>
         /// プレイヤーの向きから四方向の向きの Quaternion を返します

@@ -96,7 +96,7 @@ namespace TakeshiLibrary
             }
             else
             {
-                Debug.Log("ゴールを発見しました");
+                //Debug.Log("ゴールを発見しました");
                 //Debug.Log(count);
             }
             // ゴールにたどり着いたセルから順にたどってスタートまでの道のりをスタック

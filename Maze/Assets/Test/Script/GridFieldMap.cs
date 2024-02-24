@@ -228,7 +228,7 @@ namespace TakeshiLibrary
                     lAreaBlock.Add(b);
                 }
             }
-            Debug.Log(lAreaBlock.FindAll(b => b.isSpace == true).Count);
+            //Debug.Log(lAreaBlock.FindAll(b => b.isSpace == true).Count);
 
             return lAreaBlock.FindAll(b => b.isSpace == true)[Random.Range(0, lAreaBlock.FindAll(b => b.isSpace).Count)].coord;
         }

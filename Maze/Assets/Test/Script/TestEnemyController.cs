@@ -20,6 +20,7 @@ public class TestEnemyController : MonoBehaviour
     [SerializeField] Material MT_Blue;
 
     bool isChase;
+    private bool isExit = false;
 
     private FPS fps = new FPS();
     private EnemyAI ai;
@@ -55,15 +56,15 @@ public class TestEnemyController : MonoBehaviour
 
         if (isChase)
         {
-            if (ai.LocomotionToAStar(testMap.map, moveSpeed))
-                Debug.Log("“ž’…‚µ‚Ü‚µ‚½");
+            ai.StayLocomotionToAStar(player.transform.position,moveSpeed);
+            isExit = true;
         }
         else
         {
-            //ai.Wandering(testMap.map, moveSpeed, 5, 5);
+            if (isExit) ai.ExitLocomotion(ref isExit);
+            ai.Wandering(moveSpeed, 10, 10);
         }
 
-        if(Input.GetMouseButtonDown(0)) { ai.EnterLocomotionToAStar(player.transform.position,testMap.map); }
 
 
     }
