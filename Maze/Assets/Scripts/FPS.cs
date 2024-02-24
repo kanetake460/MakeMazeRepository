@@ -10,7 +10,7 @@ namespace TakeshiLibrary
     // 参考サイト
     //https://www.popii33.com/unity-first-person-camera/
     // 
-    public class FPS : MonoBehaviour
+    public class FPS
     {
         Rigidbody rb;
 
@@ -257,15 +257,13 @@ namespace TakeshiLibrary
         /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public bool MoveToPoint(Transform trafo,Vector3 point,float speed = 1)// refけす
+        public bool MoveToPoint(Transform trafo, Vector3 point, float speed = 1)// refけす
         {
             Vector3 pos = trafo.position;
 
             pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
             pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;
             pos.z += pos.z <= point.z ? speed * 0.01f : speed * -0.01f;
-
-            //Mathf.Approximately(speed, 0.0f);
 
             if (pos.x <= point.x + speed * 0.1f && pos.x >= point.x + speed * -0.1f) pos.x = point.x;
             if (pos.y <= point.y + speed * 0.1f && pos.y >= point.y + speed * -0.1f) pos.y = point.y;

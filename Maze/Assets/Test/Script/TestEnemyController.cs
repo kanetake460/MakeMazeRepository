@@ -22,17 +22,23 @@ public class TestEnemyController : MonoBehaviour
     bool isChase;
 
     private FPS fps = new FPS();
+    private EnemyAI ai;
 
     GridFieldAStar aStar;
+
+   
     private void Start()
     {
         enemyTrafo = transform;
+
+        ai = new EnemyAI(enemyTrafo.transform, testMap.map);
     }
 
     private void Awake()
     {
-        
+
     }
+    
 
     void Update()
     {
@@ -49,12 +55,15 @@ public class TestEnemyController : MonoBehaviour
 
         if (isChase)
         {
-            fps.Chase(enemyTrafo, player.transform.position, testMap.map, moveSpeed);
+            if (ai.LocomotionToAStar(testMap.map, moveSpeed))
+                Debug.Log("“ž’…‚µ‚Ü‚µ‚½");
         }
         else
         {
-            fps.Wandering(enemyTrafo, testMap.map, moveSpeed, 5, 5);
+            //ai.Wandering(testMap.map, moveSpeed, 5, 5);
         }
+
+        if(Input.GetMouseButtonDown(0)) { ai.EnterLocomotionToAStar(player.transform.position,testMap.map); }
 
 
     }

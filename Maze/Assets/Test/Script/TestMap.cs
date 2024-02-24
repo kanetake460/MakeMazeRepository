@@ -18,11 +18,15 @@ public class TestMap : MonoBehaviour
     [SerializeField] float cellDepth = 10;
     [SerializeField] float y = 0;
     Vector3 a;
-
-    private void Start()
+    private void Awake()
     {
         gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.bottomLeft);
         map = new GridFieldMap(gridField);
+    }
+
+    private void Start()
+    {
+
 
         a = gridField.grid[0, 0];
 

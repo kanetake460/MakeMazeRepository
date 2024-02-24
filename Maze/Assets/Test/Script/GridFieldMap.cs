@@ -241,7 +241,7 @@ namespace TakeshiLibrary
         /// <param name="goal">探索のゴール地点</param>
         /// <param name="gridField">グリッドフィールド</param>
         /// <param name="pathObj">経路に配置するオブジェクト</param>
-        public void SetAStar(Vector3 start, Vector3 goal, GameObject pathObj, GridFieldAStar aStar)
+        public void SetAStar(Vector3 start, Vector3 goal, GridFieldAStar aStar)
         {
             if (aStar == null)
             {
@@ -250,10 +250,10 @@ namespace TakeshiLibrary
 
             aStar.AStarPath(this, gridField.GetGridCoordinate(start), gridField.GetGridCoordinate(goal));
 
-            while (aStar.pathStack.Count > 0)
+            foreach(GridFieldAStar.CellInfo p in aStar.pathStack)
             {
-                Vector3Int popedInfo = aStar.pathStack.Pop().position;
-                MonoBehaviour.Instantiate(pathObj, gridField.grid[popedInfo.x, popedInfo.z], Quaternion.identity);
+                Debug.DrawLine(gridField.grid[p.position.x, p.position.z], gridField.grid[p.position.x, p.position.z] + Vector3.up, Color.red, 10f);
+
             }
         }
     }

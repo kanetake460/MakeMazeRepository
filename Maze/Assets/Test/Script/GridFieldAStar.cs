@@ -205,6 +205,8 @@ namespace TakeshiLibrary
         /// <param name="cell">スタックするセルの先頭</param>
         private void StackPath(CellInfo cell)
         {
+            openList.Clear();
+            closeList.Clear();
             pathStack.Clear();
             int count = 0;
             CellInfo preCell = cell;

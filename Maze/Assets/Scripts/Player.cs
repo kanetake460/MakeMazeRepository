@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    // 視点スピード
-    private Vector3 latestPos;
+    private Vector3 _latestPos;
 
     /*オブジェクト*/
     [SerializeField] GameObject mainCam;            // プレイヤーの視点カメラ
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        latestPos = transform.position;
+        _latestPos = transform.position;
     }
 
     void Update()
@@ -39,9 +39,9 @@ public class Player : MonoBehaviour
         if (map.mapElements[playerGridPos.x, playerGridPos.z] == Elements.eElementType.None_Element ||
             map.mapElements[playerGridPos.x, playerGridPos.z] == Elements.eElementType.OutRange_Element)
         {
-            transform.position = latestPos;     // ポジションを一フレーム前の位置に固定
+            transform.position = _latestPos;     // ポジションを一フレーム前の位置に固定
         }
-        latestPos = transform.position;         // ポジションを格納
+        _latestPos = transform.position;         // ポジションを格納
 
         // プレイヤーの移動
         FPS.Locomotion(transform, speed);

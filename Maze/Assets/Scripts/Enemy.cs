@@ -25,7 +25,6 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         enemy = transform;
-        p = GetComponent<Physics>();
     }
 
     private void EnemyMovement()
@@ -61,8 +60,8 @@ public class Enemy : MonoBehaviour
             if(!isInit)
             {
                 isInit = true;
-                Vector3Int randCoord = map.map.GetRandomPoint(map.gridField.GetGridCoordinate(enemy.position), map.gridField.gridWidth, map.gridField.gridDepth);
-                transform.position = map.gridField.grid[randCoord.x, randCoord.z];
+                //Vector3Int randCoord = map.map.GetRandomPoint(map.gridField.GetGridCoordinate(enemy.position), map.gridField.gridWidth, map.gridField.gridDepth);
+                //transform.position = map.gridField.grid[randCoord.x, randCoord.z];
             }
             EnemyMovement();
             gameObject.GetComponent<MeshRenderer>().enabled = true;

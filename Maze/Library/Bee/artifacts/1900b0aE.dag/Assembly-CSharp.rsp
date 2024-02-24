@@ -365,6 +365,7 @@
 "Assets/Scripts/Test1.cs"
 "Assets/Scripts/UIManager.cs"
 "Assets/Scripts/WorldGridField.cs"
+"Assets/Test/Script/EnemyAI.cs"
 "Assets/Test/Script/GridFieldAStar.cs"
 "Assets/Test/Script/GridFieldMap.cs"
 "Assets/Test/Script/TestEnemyController.cs"
