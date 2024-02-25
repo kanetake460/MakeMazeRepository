@@ -11,8 +11,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameManager gameManager;       // ゲームマネージャー
     [SerializeField] Animator flagAnim;             // フラグセンサーのアニメーション
     [SerializeField] Animator hamburgerAnim;        // ハンバーガーセンサーのアニメーション
-    [SerializeField] TakeshiLibrary.Compass flagCompass;           // フラグのコンパス
-    [SerializeField] TakeshiLibrary.Compass hamburgerCompass;      // ハンバーガーのコンパス
+    [SerializeField] TakeshiLibrary.CompassUI flagCompass;           // フラグのコンパス
+    [SerializeField] TakeshiLibrary.CompassUI hamburgerCompass;      // ハンバーガーのコンパス
     [SerializeField] GameObject[] HamburgerUI;      // ハンバーガーのUI配列
     [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
     [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト

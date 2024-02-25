@@ -20,7 +20,7 @@ public class TestMap : MonoBehaviour
     Vector3 a;
     private void Awake()
     {
-        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.bottomLeft);
+        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);
         map = new GridFieldMap(gridField);
     }
 
@@ -31,6 +31,7 @@ public class TestMap : MonoBehaviour
         a = gridField.grid[0, 0];
 
         map.SetWallGrid();
+        map.SetWallSurround();
         map.InstanceMapObjects(space, wall);
     }
 

@@ -99,8 +99,9 @@ namespace TakeshiLibrary
                 // エネミーが最後のパスターゲットの位置に来てなかったら
                 if(_enemyTrafo.position != _map.gridField.grid[_pathTargetCoord.x,_pathTargetCoord.z])
                 {
-                    return LocomotionToCoordPoint(_pathTargetCoord, moveSpeed);
+                    LocomotionToCoordPoint(_pathTargetCoord, moveSpeed);
                 }
+                else { return true; }
             }
 
             return false;

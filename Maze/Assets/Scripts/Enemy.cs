@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] SceneManager manager;
+    [SerializeField] SceneManager sceneManager;
     [SerializeField] MakeMap map;
 
     [SerializeField] Transform enemy;
@@ -17,21 +17,29 @@ public class Enemy : MonoBehaviour
     private bool isChase = false;
     private bool isInit = false;
 
-    private FPS fps = new FPS();
+    private FPS fps;
     private EnemyAI ai;
     private bool isExit = false;
 
     Physics p;
 
+    private void Awake()
+    {
+
+    }
 
     private void Start()
     {
         enemy = transform;
-        ai = new EnemyAI(enemy, map.map);
+        fps = new FPS(map.map);
+        ai = new EnemyAI(enemy,map.map);
     }
+
+
 
     private void EnemyMovement()
     {
+
         if (Vector3.Distance(enemy.position, player.position) < 50)
         {
             gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.red;
@@ -52,6 +60,7 @@ public class Enemy : MonoBehaviour
         {
             if(isExit)ai.ExitLocomotion(ref isExit);
             ai.Wandering(moveSpeed);
+            //Debug.Log(moveSpeed);
         }
     }
 
@@ -60,7 +69,7 @@ public class Enemy : MonoBehaviour
     {
         
 
-        if (manager.currentScene == SceneManager.eScenes.Escape_Scene)
+        if (sceneManager.currentScene == SceneManager.eScenes.Escape_Scene)
         {
             if(!isInit)
             {
@@ -75,6 +84,5 @@ public class Enemy : MonoBehaviour
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
-        //p.spher
     }
 }

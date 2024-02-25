@@ -4,6 +4,7 @@ using UnityEngine;
 using TakeshiLibrary;
 using System.IO;
 using System.Linq;
+using System.Drawing;
 
 public class TestEnemyController : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class TestEnemyController : MonoBehaviour
 
     [SerializeField] TestMap testMap;
 
-    [SerializeField] float moveSpeed = 1;
+    [SerializeField] float chaceSpeed = 5;
+    [SerializeField] float wandSpeed = 1;
 
     [SerializeField] Material MT_Red;
     [SerializeField] Material MT_Blue;
@@ -22,7 +24,7 @@ public class TestEnemyController : MonoBehaviour
     bool isChase;
     private bool isExit = false;
 
-    private FPS fps = new FPS();
+    private FPS fps;
     private EnemyAI ai;
 
     GridFieldAStar aStar;
@@ -33,39 +35,56 @@ public class TestEnemyController : MonoBehaviour
         enemyTrafo = transform;
 
         ai = new EnemyAI(enemyTrafo.transform, testMap.map);
+        fps = new FPS(testMap.map);
     }
 
     private void Awake()
     {
 
     }
-    
+
+    private void SearchPlayer()
+    {
+        RaycastHit hit;
+        var point1 = gameObject.transform.position - Vector3.up * 5;//0.5ä|ÇØÇÈÇ±Ç∆Ç≈CapsuleÇ∆ìØÇ∂ëÂÇ´Ç≥ÇÃRayÇ…Ç∑ÇÈ
+        var point2 = gameObject.transform.position + Vector3.up * 5;
+
+        if (Physics.CapsuleCast(point1, point2, 5f, Vector3.forward, out hit,50))
+        {
+            if (hit.collider.tag == "Player")
+            {
+                Debug.Log("ÇÕÇ¡ÇØÇÒÅIÅI");
+                isChase = true;
+            }
+        }
+    }
+
+
+
 
     void Update()
     {
-        if (Vector3.Distance(enemyTrafo.position, player.transform.position) < 50)
-        {
-            gameObject.GetComponent<MeshRenderer>().material = MT_Red;
-            isChase = true;
-        }
-        else
-        {
-            gameObject.GetComponent<MeshRenderer>().material = MT_Blue;
-            isChase = false;
-        }
+        Debug.Log(enemyTrafo.rotation);
+        float dir = Mathf.Atan2(player.transform.position.z, player.transform.position.x) * Mathf.Rad2Deg;
+        enemyTrafo.rotation = Quaternion.Euler(enemyTrafo.rotation.eulerAngles.x, -dir, enemyTrafo.rotation.eulerAngles.z);
 
+
+        //EnemyMovement();
+
+    }
+
+    private void EnemyMovement()
+    {
         if (isChase)
         {
-            ai.StayLocomotionToAStar(player.transform.position,moveSpeed);
+            ai.StayLocomotionToAStar(player.transform.position, chaceSpeed);
             isExit = true;
         }
         else
         {
             if (isExit) ai.ExitLocomotion(ref isExit);
-            ai.Wandering(moveSpeed, 10, 10);
+            ai.Wandering(wandSpeed, 10, 10);
         }
-
-
-
+        SearchPlayer();
     }
 }

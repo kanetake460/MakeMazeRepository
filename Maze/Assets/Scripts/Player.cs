@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     /*クラス参照*/
     [SerializeField] MakeMap map;                   // マップ
     [SerializeField] GameManager gameManager;   // ゲームマネージャー
+    FPS fps;
 
     /*パラメータ*/
     [SerializeField] float speed = 0.1f;                            // 移動スピード
@@ -22,7 +23,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        _latestPos = transform.position;
+        fps = new FPS(map.map);
     }
 
     void Update()
@@ -30,7 +31,8 @@ public class Player : MonoBehaviour
         // FPS視点設定
         FPS.CameraViewport(mainCam, Xsensityvity, minX, maxX);
         FPS.PlayerViewport(gameObject, Ysensityvity);
-        FPS.UpdateCursorLock(cursorLock);
+        fps.CursorLock();
+        //fps.ClampMoveRange(transform);
 
         // プレイヤーのグリッド座標
         Vector3Int playerGridPos = map.gridField.GetGridCoordinate(transform.position);

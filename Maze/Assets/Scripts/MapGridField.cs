@@ -14,10 +14,14 @@ public class MapGridField : MonoBehaviour
     [SerializeField] protected float y = 0;
 
     public GridFieldMap map;
+    private void Awake()
+    {
+        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);
+        map = new GridFieldMap(gridField);
+    }
+
     protected virtual void Start()
     {
         // gridField ÇÃèâä˙âª
-        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);
-        map = new GridFieldMap(gridField);
     }
 }

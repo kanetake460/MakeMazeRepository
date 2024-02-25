@@ -12,7 +12,14 @@ namespace TakeshiLibrary
     // 
     public class FPS
     {
-        Rigidbody rb;
+        private GridFieldMap _map;
+        private Vector3 _latePos;
+        private bool _cursorLock;
+
+        public FPS(GridFieldMap map)
+        {
+            _map = map;
+        }
 
         public enum eFourDirection
         {
@@ -106,27 +113,41 @@ namespace TakeshiLibrary
         /// カーソルをロックします
         /// </summary>
         /// <param name="cursorLock">カーソルロックフラグ</param>
-        public static void UpdateCursorLock(bool cursorLock)
+        public void CursorLock()
         {
             if (Input.GetKeyDown(KeyCode.Escape))   // エスケープキーを押したら
             {
-                cursorLock = false;
+                _cursorLock = false;
             }
-            else if (Input.GetMouseButton(0))       // 右クリック
+            else if (Input.GetMouseButton(0))       // 左クリック
             {
-                cursorLock = true;
+                _cursorLock = true;
             }
-            if (cursorLock)
+            if (_cursorLock)
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
-            else if (!cursorLock)
+            else if (_cursorLock == false)
             {
                 Cursor.lockState = CursorLockMode.None;
             }
         }
 
 
+        /// <summary>
+        /// 与えたトランスフォームが壁ブロックに入らないようにします
+        /// </summary>
+        /// <param name="trafo"></param>
+        public void ClampMoveRange(Transform trafo)
+        {
+            Vector3Int coord = _map.gridField.GetGridCoordinate(trafo.position);
+
+            if (_map.blocks[coord.x,coord.z].isSpace == false)
+            {
+                trafo.position = _latePos;
+            }
+            _latePos = trafo.position;
+        }
 
 
         /// <summary>

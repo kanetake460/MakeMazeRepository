@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 306605202}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -617,7 +617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 245302f626ce06e4fab6fc35deacdacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 2020846673}
+  sceneManager: {fileID: 2020846673}
   map: {fileID: 470737182}
   enemy: {fileID: 306605206}
   player: {fileID: 29439747}
@@ -1297,6 +1297,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 470737182}
+  compassRight: {fileID: 766564793}
+  compassLeft: {fileID: 1321522082}
   playerObj: {fileID: 0}
   flags: 0
   clearFlagNum: 1

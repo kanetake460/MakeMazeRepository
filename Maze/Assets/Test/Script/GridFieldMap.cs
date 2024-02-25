@@ -195,9 +195,30 @@ namespace TakeshiLibrary
             }
         }
 
+        public void SetWallSurround()
+        {
+            for (int x = 0; x < gridField.gridWidth; x++)
+            {
+                for (int z = 0; z < gridField.gridDepth; z++)
+                {
+                    if (x == 0 ||
+                        z == 0 ||
+                        x == gridField.gridWidth - 1 ||
+                        z == gridField.gridDepth - 1)
+                    {
+                        SetWall(x, z, Vector3.left);
+                        SetWall(x, z, Vector3.right);
+                        SetWall(x, z, Vector3.forward);
+                        SetWall(x, z, Vector3.back);
+                        SetWallBlock(x, z);
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
-        /// 与えたグリッド座標がマップないならtrueを返します
+        /// 与えたグリッド座標がマップないならfalseを返します
         /// </summary>
         /// <param name="coord">座標</param>
         /// <returns>グリッドの上ならtrue</returns>

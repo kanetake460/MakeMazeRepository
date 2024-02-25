@@ -54,10 +54,18 @@ public class SceneManager : MonoBehaviour
             case eScenes.Title_Scene:       // タイトルなら
                 titleCanvas.enabled = true;     // タイトルキャンバス見せる
                 break;
+
             case eScenes.Make_Scene:        // ゲームマシーンなら
                 playerController.enabled = true;// プレイヤーコントローラーを動かす
                 UICanvas.SetActive(true);       // UI表示
                 break;
+
+            case eScenes.Escape_Scene:
+                gameManager.ChangeCompass();
+
+
+                break;
+
             case eScenes.Result_Scene:      // リザルトなら
                 resultCanvas.enabled = true;    // リザルトキャンバス見せる
                 UICanvas.SetActive(false);      // UI非表示

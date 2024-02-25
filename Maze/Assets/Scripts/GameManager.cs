@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     /*コンポーネント*/
     public MakeMap map;
+    public TakeshiLibrary.CompassUI compassRight;
+    public TakeshiLibrary.CompassUI compassLeft;
 
     /*ゲームオブジェクト*/
     [SerializeField]GameObject playerObj;
@@ -40,6 +42,11 @@ public class GameManager : MonoBehaviour
         {
             deadCount -= Time.deltaTime;
         }
+    }
+
+    public void ChangeCompass()
+    {
+        compassLeft.targetTag = "enemy";
     }
 
 
