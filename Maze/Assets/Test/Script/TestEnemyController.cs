@@ -26,6 +26,7 @@ public class TestEnemyController : MonoBehaviour
 
     private FPS fps;
     private EnemyAI ai;
+    private TakeshiLibrary.Compass compass;
 
     GridFieldAStar aStar;
 
@@ -36,6 +37,7 @@ public class TestEnemyController : MonoBehaviour
 
         ai = new EnemyAI(enemyTrafo.transform, testMap.map);
         fps = new FPS(testMap.map);
+        compass = new TakeshiLibrary.Compass(enemyTrafo);
     }
 
     private void Awake()
@@ -43,13 +45,24 @@ public class TestEnemyController : MonoBehaviour
 
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = UnityEngine.Color.red;
+        Gizmos.DrawWireCube(transform.position + transform.forward * 10, new Vector3(10, 10, 10));
+    }
+
+
     private void SearchPlayer()
     {
         RaycastHit hit;
-        var point1 = gameObject.transform.position - Vector3.up * 5;//0.5Š|‚¯‚é‚±‚Æ‚ÅCapsule‚Æ“¯‚¶‘å‚«‚³‚ÌRay‚É‚·‚é
-        var point2 = gameObject.transform.position + Vector3.up * 5;
+        var rayHalfExtents = new Vector3(5,10,5);
+        var size = 5;
+        var point = gameObject.transform.position;//0.5Š|‚¯‚é‚±‚Æ‚ÅCapsule‚Æ“¯‚¶‘å‚«‚³‚ÌRay‚É‚·‚é
+        var dir = transform.forward;
 
-        if (Physics.CapsuleCast(point1, point2, 5f, Vector3.forward, out hit,50))
+        Debug.DrawRay(point, dir, UnityEngine.Color.black, 1f);
+
+        if (Physics.BoxCast(point, Vector3.one * size, dir, out hit,Quaternion.identity))
         {
             if (hit.collider.tag == "Player")
             {
@@ -62,15 +75,19 @@ public class TestEnemyController : MonoBehaviour
 
 
 
+    Quaternion rot;
     void Update()
     {
-        Debug.Log(enemyTrafo.rotation);
-        float dir = Mathf.Atan2(player.transform.position.z, player.transform.position.x) * Mathf.Rad2Deg;
-        enemyTrafo.rotation = Quaternion.Euler(enemyTrafo.rotation.eulerAngles.x, -dir, enemyTrafo.rotation.eulerAngles.z);
+
+        //enemyTrafo.rotation = Quaternion.Lerp(rot, compass.GetPointAngle(player.transform.position),0.01f);
 
 
+
+
+        //Debug.Log(compass.GetPointAngle(player.transform.position));
+        compass.TurnTowardToPoint(ai.pathTargetPos);
+        SearchPlayer();
         //EnemyMovement();
-
     }
 
     private void EnemyMovement()

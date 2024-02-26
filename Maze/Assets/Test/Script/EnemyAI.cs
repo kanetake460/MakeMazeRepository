@@ -14,6 +14,10 @@ namespace TakeshiLibrary
         
         private int _stayCount = 0;             // AStarLocomotion‚ÌÄ’Tõ‚Ü‚Å‚ÌƒJƒEƒ“ƒg
 
+        public Vector3 pathTargetPos
+        {
+            get { return _map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z]; }
+        }
 
         public EnemyAI(Transform enemyTrafo,GridFieldMap map)
         {

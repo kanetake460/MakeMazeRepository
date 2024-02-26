@@ -10,14 +10,14 @@ namespace TakeshiLibrary
     /*=====グリッドフィールドを作成する関数=====*/
     // Vector3のクラスを参考に作成しました
     // C:\Users\kanet\AppData\Local\Temp\MetadataAsSource\b33e6428b1fe4c03a5b0b222eb1e9f0b\DecompilationMetadataAsSourceFileProvider\4496430b4e32462b86d5e9f4984747a4\Vector3.cs
-    public class GridField 
+    public class GridField
     {
 
 
-//======変数===========================================================================================================================
- 
+        //======変数===========================================================================================================================
+
         public int gridWidth { get; }               // グリッドの広さ
-        public int gridDepth { get;}               //
+        public int gridDepth { get; }               //
         public int gridHeight { get; }
         public float cellWidth { get; }
         public float cellDepth { get; }
@@ -33,8 +33,8 @@ namespace TakeshiLibrary
 
 
 
-//======読み取り専用変数===============================================================================================================
-        
+        //======読み取り専用変数===============================================================================================================
+
         /*==========グリッドフィールドの角のセルのVector3座標==========*/
         /// <summary>
         /// グリッドのセルの数を返します(読み取り専用)
@@ -65,7 +65,7 @@ namespace TakeshiLibrary
         {
             get
             {
-                return grid[gridWidth - 1,0];
+                return grid[gridWidth - 1, 0];
             }
         }
 
@@ -112,7 +112,7 @@ namespace TakeshiLibrary
         {
             get
             {
-                return　grid[gridWidth - 1, 0] + new Vector3(cellWidth / 2, y, cellDepth / 2 * -1);
+                return grid[gridWidth - 1, 0] + new Vector3(cellWidth / 2, y, cellDepth / 2 * -1);
             }
         }
 
@@ -214,7 +214,7 @@ namespace TakeshiLibrary
         /// <param name="y">グリッドのy座標</param>
         /// <param name="gridAnchor">グリッドのアンカー位置</param>
         /// <returns>GridFieldの初期化</returns>
-        public GridField(int gridWidth = 10, int gridDepth = 10, float cellWidth = 10, float cellDepth = 10, float y = 0 ,eGridAnchor gridAnchor = eGridAnchor.center)
+        public GridField(int gridWidth = 10, int gridDepth = 10, float cellWidth = 10, float cellDepth = 10, float y = 0, eGridAnchor gridAnchor = eGridAnchor.center)
         {
             // グリッドの横幅代入
             this.gridWidth = gridWidth;
@@ -234,7 +234,7 @@ namespace TakeshiLibrary
             // グリッドの高さを代入
             this.y = y;
 
-            if(gridWidth > 100 || gridDepth > 100)
+            if (gridWidth > 100 || gridDepth > 100)
             {
                 Debug.LogError("安全のため広すぎるグリッドは生成できません");
                 Debug.Break();
@@ -259,8 +259,8 @@ namespace TakeshiLibrary
 
 
 
-//======関数===========================================================================================================================
-       
+        //======関数===========================================================================================================================
+
         ///<summary>
         ///シーンウィンドウにグリッドを表示します
         ///</summary>
@@ -317,7 +317,7 @@ namespace TakeshiLibrary
                         pos.z <= grid[x, z].z + cellDepth / 2 &&
                         pos.z >= grid[x, z].z - cellDepth / 2)     // もしあるセルの上にいるなら
                     {
-                        return new Vector3Int(x,(int)y,z);                      // セルの Vector3を返す
+                        return new Vector3Int(x, (int)y, z);                      // セルの Vector3を返す
                     }
                 }
             }
@@ -372,14 +372,14 @@ namespace TakeshiLibrary
 
             return new Vector3Int(x + difference.x, 0, z + difference.z);
         }
-        
+
 
         /// <summary>
         /// 与えたpositionから任意の距離のほかのpositionのVector3座標を調べます
         /// </summary>
         /// <param name="pos">調べたい距離の始点のVecgtor3座標</param>
         /// <param name="difference">始点から終点までの差分</param>
-        public Vector3 GetOtherGridPosition( Vector3 pos, Vector3Int difference)
+        public Vector3 GetOtherGridPosition(Vector3 pos, Vector3Int difference)
         {
             int x = GetGridCoordinate(pos).x;
             int z = GetGridCoordinate(pos).z;
@@ -422,12 +422,48 @@ namespace TakeshiLibrary
                 for (int z = 0; z < gridDepth; z++)
                 {
                     if (GetGridCoordinate(pos) == grid[x, z])
-                    { 
-                        return true; 
+                    {
+                        return true;
                     }
                 }
             }
             return false;
+        }
+
+        private void OnDrawGizmos()
+        {
+            // 中の行
+            for (int z = 1; z < gridDepth; z++)
+            {
+                Vector3 gridLineStart = grid[0, z] + new Vector3(cellWidth / 2 * -1, y, cellDepth / 2 * -1);
+                Vector3 gridLineEnd = grid[gridWidth - 1, z] + new Vector3(cellWidth / 2, y, cellDepth / 2 * -1);
+
+                Gizmos.DrawLine(gridLineStart, gridLineEnd);
+            }
+
+            // 中の列
+            for (int x = 1; x < gridWidth; x++)
+            {
+                Vector3 gridRowStart = grid[x, 0] + new Vector3(cellWidth / 2 * -1, y, cellDepth / 2 * -1);
+                Vector3 gridRowEnd = grid[x, gridDepth - 1] + new Vector3(cellWidth / 2 * -1, y, cellDepth / 2);
+
+                Gizmos.DrawLine(gridRowStart, gridRowEnd);
+            }
+
+            // 端のグリッド線表示
+            // 最初の列
+            Gizmos.DrawLine(bottomLeft, topLeft);
+
+            // 最後の列
+            Gizmos.DrawLine(bottomRight, topRight);
+
+
+            // 最初の行
+            Gizmos.DrawLine(bottomLeft, bottomRight);
+
+            // 最後の行
+            Gizmos.DrawLine(topLeft, topRight);
+
         }
     }
 }

@@ -17,7 +17,6 @@ public class TestMap : MonoBehaviour
     [SerializeField] float cellWidth = 10;
     [SerializeField] float cellDepth = 10;
     [SerializeField] float y = 0;
-    Vector3 a;
     private void Awake()
     {
         gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);
@@ -28,7 +27,6 @@ public class TestMap : MonoBehaviour
     {
 
 
-        a = gridField.grid[0, 0];
 
         map.SetWallGrid();
         map.SetWallSurround();
