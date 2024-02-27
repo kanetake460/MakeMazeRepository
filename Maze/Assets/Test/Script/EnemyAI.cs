@@ -8,6 +8,7 @@ namespace TakeshiLibrary
     {
         private GridFieldAStar _aStar;          // AStar
         private GridFieldMap _map;              // マップ
+        private TakeshiLibrary.Compass _copass;
         
         private Vector3Int _pathTargetCoord;    // 道のりのターゲットの座標
         private Transform _enemyTrafo;          // エネミーのトランスフォーム
@@ -23,6 +24,7 @@ namespace TakeshiLibrary
         {
             _aStar = new GridFieldAStar();
             _map = map;
+            _copass = new Compass(enemyTrafo);
             _enemyTrafo = enemyTrafo;
             _pathTargetCoord = _map.gridField.GetGridCoordinate(_enemyTrafo.position);
         }
@@ -64,6 +66,8 @@ namespace TakeshiLibrary
         {
             Vector3 pos = _enemyTrafo.position;
             Vector3 point = _map.gridField.grid[coord.x, coord.z];
+
+            _copass.TurnTowardToPoint(pathTargetPos);
 
             pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
             pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;

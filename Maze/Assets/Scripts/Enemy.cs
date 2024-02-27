@@ -19,6 +19,8 @@ public class Enemy : MonoBehaviour
 
     private FPS fps;
     private EnemyAI ai;
+    private TakeshiLibrary.Compass compass;
+
     private bool isExit = false;
 
     Physics p;
@@ -33,6 +35,7 @@ public class Enemy : MonoBehaviour
         enemy = transform;
         fps = new FPS(map.map);
         ai = new EnemyAI(enemy,map.map);
+        compass = new TakeshiLibrary.Compass(enemy);
     }
 
 
@@ -42,12 +45,12 @@ public class Enemy : MonoBehaviour
 
         if (Vector3.Distance(enemy.position, player.position) < 50)
         {
-            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.red;
+            //gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.red;
             isChase = true;
         }
         else
         {
-            gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+            //gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.blue;
             isChase = false;
         }
 
@@ -78,11 +81,11 @@ public class Enemy : MonoBehaviour
                 //transform.position = map.gridField.grid[randCoord.x, randCoord.z];
             }
             EnemyMovement();
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
+            //gameObject.GetComponent<MeshRenderer>().enabled = true;
         }
         else
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            //gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 }

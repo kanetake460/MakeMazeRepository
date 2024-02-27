@@ -85,9 +85,9 @@ public class TestEnemyController : MonoBehaviour
 
 
         //Debug.Log(compass.GetPointAngle(player.transform.position));
-        compass.TurnTowardToPoint(ai.pathTargetPos);
+        //compass.TurnTowardToPoint(ai.pathTargetPos);
         SearchPlayer();
-        //EnemyMovement();
+        EnemyMovement();
     }
 
     private void EnemyMovement()
