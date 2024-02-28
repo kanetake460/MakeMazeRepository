@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject[] HamburgerUI;      // ハンバーガーのUI配列
     [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
     [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト
+    [SerializeField] TextMeshProUGUI messageText;   // ゲーム表示するメッセージのテキスト
+    private int messageCount = 0;
 
     /// <summary>
     /// フラグのカウントのテキストを表示します
@@ -53,11 +55,29 @@ public class UIManager : MonoBehaviour
         else// それ以外では非表示にしてカウントを戻します
         {
             deadCountText.enabled = false;
-            gameManager.deadCount = 30;
         }
             deadCountText.text = gameManager.deadCount.ToString("f2");
     }
 
+    private void DisplayGameMessage()
+    {
+        if(messageCount != 0)
+        {
+            messageCount--;
+        }
+        else
+        {
+            messageText.color = Color.clear;
+        }
+
+    }
+
+    public void EnterDisplayGameMessage(string message, Color color, int messageTime = 300)
+    {
+        messageText.text = message;
+        messageText.color = color;
+        messageCount = messageTime;
+    }
 
     void Update()
     {
@@ -66,5 +86,6 @@ public class UIManager : MonoBehaviour
         CountText();
         HamburgerManager();
         CountDead();
+        DisplayGameMessage();
     }
 }

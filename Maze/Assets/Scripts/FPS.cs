@@ -93,11 +93,12 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="player">動かすプレイヤー</param>
         /// <param name="speed">移動スピード</param>
-        public static void Locomotion(Transform player, float speed = 10f)
+        public static void Locomotion(Transform player, float speed = 10f,float dashSpeed = 15,KeyCode dashuKey = KeyCode.LeftShift)
         {
             float x = 0;
             float z = 0;
 
+            if (Input.GetKey(dashuKey)) speed = dashSpeed;
 
             x = Input.GetAxisRaw("Horizontal") * speed;     // 移動入力
             z = Input.GetAxisRaw("Vertical") * speed;       // 移動入力

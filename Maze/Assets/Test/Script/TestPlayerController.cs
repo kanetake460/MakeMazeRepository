@@ -10,7 +10,8 @@ public class TestPlayerController : MonoBehaviour
     [SerializeField] TestMap map;
 
     /*パラメータ*/
-    [SerializeField] float locoSpeed = 0.1f;                    // 移動スピード
+    [SerializeField] float locoSpeed;                    // 移動スピード
+    [SerializeField] float dashSpeed;
     [SerializeField] float viewSpeedX = 3f, viewSpeedY = 3f;    // 視点スピード
     private FPS fps;
 
@@ -24,7 +25,7 @@ public class TestPlayerController : MonoBehaviour
         // FPS視点設定
         FPS.CameraViewport(mainCam, viewSpeedX);
         FPS.PlayerViewport(gameObject, viewSpeedY);
-        FPS.Locomotion(transform, locoSpeed);
+        FPS.Locomotion(transform, locoSpeed,dashSpeed);
         fps.CursorLock();
         fps.ClampMoveRange(transform);
 

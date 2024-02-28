@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 475652234}
   - component: {fileID: 475652233}
   - component: {fileID: 475652232}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 1260217919}
   - component: {fileID: 1260217918}
   - component: {fileID: 1260217923}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -471,7 +471,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCam: {fileID: 475652231}
   map: {fileID: 1259732288}
-  locoSpeed: 30.48
+  locoSpeed: 5
+  dashSpeed: 20
   viewSpeedX: 3
   viewSpeedY: 3
 --- !u!1 &1638920489
@@ -510,6 +511,9 @@ MonoBehaviour:
   wandSpeed: 1
   MT_Red: {fileID: 2100000, guid: 844d8000aff81b544b3be2684daf4116, type: 2}
   MT_Blue: {fileID: 2100000, guid: 546a0b6ffb58cb542881ac98d8ade1bf, type: 2}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!4 &1638920491
 Transform:
   m_ObjectHideFlags: 0
@@ -518,7 +522,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638920489}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -25, y: 0, z: -5}
+  m_LocalPosition: {x: -35.98, y: 0, z: 3.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

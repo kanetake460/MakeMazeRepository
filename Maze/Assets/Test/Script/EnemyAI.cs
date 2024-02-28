@@ -183,5 +183,27 @@ namespace TakeshiLibrary
                 EnterLocomotionToAStar(_map.gridField.grid[locoGoalCoord.x,locoGoalCoord.z]);
             }
         }
+
+        public bool SearchPlayer(LayerMask searchLayer,string playerTag, float wallThickness)
+        {
+            RaycastHit hit;
+
+            Vector3 dir = _enemyTrafo.forward;
+            Vector3 size = Vector3.one * _map.gridField.cellMaxLength / 2;
+            Vector3 point = _enemyTrafo.position;
+            
+            point -= dir * _map.gridField.cellMaxLength;
+            size -= size / wallThickness;
+            float rayDist = _map.gridField.gridMaxLength * _map.gridField.cellMaxLength;
+
+            if (Physics.BoxCast(point, size, dir, out hit, Quaternion.identity, rayDist, searchLayer))
+            {
+                if (hit.collider.CompareTag(playerTag))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

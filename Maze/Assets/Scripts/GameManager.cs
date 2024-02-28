@@ -14,8 +14,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]GameObject playerObj;
 
     /*パラメータ*/
+    public bool clearFlag = false;
     public int flags = 0;           // 現在の集めたフラグの数
-    public int clearFlagNum = 10;   // クリアに必要なフラグの数
+    public int clearFlagNum = 10;   // メイズ完成に必要なフラグの数
     public int hamburgerCount;      // 現在のハンバーガーの数
     public int hamburgerNum;        // ハンバーガーの最大値
     public float deadCount = 30;    // ゲームオーバーカウント
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
     public void ChangeCompass()
     {
         compassLeft.targetTag = "enemy";
+        compassRight.targetTag = "clearFlag";
     }
 
 

@@ -6,13 +6,18 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] SceneManager sceneManager;
+    [SerializeField] GameSceneManager sceneManager;
     [SerializeField] MakeMap map;
+    [SerializeField] AudioManager audioManager;
 
     [SerializeField] Transform enemy;
-    [SerializeField] Transform player;
+    [SerializeField] GameObject playerObj;
+    [SerializeField] LayerMask searchLayer;
+    [SerializeField] string playerTag;
 
-    [SerializeField] float moveSpeed;
+    [SerializeField] float wandSpeed;
+    [SerializeField] float chaseSpeed;
+    [SerializeField] float escapeDist;
 
     private bool isChase = false;
     private bool isInit = false;
@@ -21,14 +26,9 @@ public class Enemy : MonoBehaviour
     private EnemyAI ai;
     private TakeshiLibrary.Compass compass;
 
-    private bool isExit = false;
+    private bool isChaceExit = false;
+    private bool isWandcExit = false;
 
-    Physics p;
-
-    private void Awake()
-    {
-
-    }
 
     private void Start()
     {
@@ -42,50 +42,44 @@ public class Enemy : MonoBehaviour
 
     private void EnemyMovement()
     {
-
-        if (Vector3.Distance(enemy.position, player.position) < 50)
-        {
-            //gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.red;
-            isChase = true;
-        }
-        else
-        {
-            //gameObject.GetComponent<Renderer>().sharedMaterial.color = Color.blue;
-            isChase = false;
-        }
+        if(ai.SearchPlayer(searchLayer,playerTag,1.5f)) isChase = true;
+        HidePlayer();
 
         if (isChase)
         {
-            ai.StayLocomotionToAStar(player.position,moveSpeed);
-            isExit = true;
+            if (isWandcExit) ai.ExitLocomotion(ref isWandcExit);
+            ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed);
+            audioManager.ChaseBGM();
+            isChaceExit = true;
         }
         else
         {
-            if(isExit)ai.ExitLocomotion(ref isExit);
-            ai.Wandering(moveSpeed);
-            //Debug.Log(moveSpeed);
+            if(isChaceExit)ai.ExitLocomotion(ref isChaceExit);
+            ai.Wandering(wandSpeed);
+            audioManager.StopCheseBGM();
+            isWandcExit = true;
+        }
+    }
+
+    private void HidePlayer()
+    {
+        Vector3Int playerCoord = map.gridField.GetGridCoordinate(playerObj.transform.position);
+        if(map.mapElements[playerCoord.x,playerCoord.z] == Elements.eElementType.Room_Element)
+        {
+            isChase = false;
         }
     }
 
 
     private void Update()
     {
-        
-
-        if (sceneManager.currentScene == SceneManager.eScenes.Escape_Scene)
+        if (sceneManager.currentScene == GameSceneManager.eScenes.Escape_Scene)
         {
             if(!isInit)
             {
                 isInit = true;
-                //Vector3Int randCoord = map.map.GetRandomPoint(map.gridField.GetGridCoordinate(enemy.position), map.gridField.gridWidth, map.gridField.gridDepth);
-                //transform.position = map.gridField.grid[randCoord.x, randCoord.z];
             }
             EnemyMovement();
-            //gameObject.GetComponent<MeshRenderer>().enabled = true;
-        }
-        else
-        {
-            //gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 }

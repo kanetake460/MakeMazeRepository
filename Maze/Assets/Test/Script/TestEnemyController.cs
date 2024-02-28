@@ -15,18 +15,23 @@ public class TestEnemyController : MonoBehaviour
 
     [SerializeField] TestMap testMap;
 
+
     [SerializeField] float chaceSpeed = 5;
     [SerializeField] float wandSpeed = 1;
 
     [SerializeField] Material MT_Red;
     [SerializeField] Material MT_Blue;
 
+    [SerializeField] LayerMask layerMask;
+
     bool isChase;
-    private bool isExit = false;
+    private bool isChaceExit = false;
+    private bool isWandExit = false;
 
     private FPS fps;
     private EnemyAI ai;
     private TakeshiLibrary.Compass compass;
+
 
     GridFieldAStar aStar;
 
@@ -42,66 +47,33 @@ public class TestEnemyController : MonoBehaviour
 
     private void Awake()
     {
-
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = UnityEngine.Color.red;
-        Gizmos.DrawWireCube(transform.position + transform.forward * 10, new Vector3(10, 10, 10));
     }
 
 
-    private void SearchPlayer()
-    {
-        RaycastHit hit;
-        var rayHalfExtents = new Vector3(5,10,5);
-        var size = 5;
-        var point = gameObject.transform.position;//0.5Š|‚¯‚é‚±‚Æ‚ÅCapsule‚Æ“¯‚¶‘å‚«‚³‚ÌRay‚É‚·‚é
-        var dir = transform.forward;
-
-        Debug.DrawRay(point, dir, UnityEngine.Color.black, 1f);
-
-        if (Physics.BoxCast(point, Vector3.one * size, dir, out hit,Quaternion.identity))
-        {
-            if (hit.collider.tag == "Player")
-            {
-                Debug.Log("‚Í‚Á‚¯‚ñII");
-                isChase = true;
-            }
-        }
-    }
-
-
-
-
-    Quaternion rot;
     void Update()
     {
+        //ai.SearchPlayer(layerMask, player.tag, 1.5f);
 
-        //enemyTrafo.rotation = Quaternion.Lerp(rot, compass.GetPointAngle(player.transform.position),0.01f);
-
-
-
-
-        //Debug.Log(compass.GetPointAngle(player.transform.position));
-        //compass.TurnTowardToPoint(ai.pathTargetPos);
-        SearchPlayer();
         EnemyMovement();
     }
 
     private void EnemyMovement()
     {
+        if (ai.SearchPlayer(layerMask,player.tag,1.5f)) isChase = true;
+
+        if (Vector3.Distance(enemyTrafo.position,player.transform.position) > 50 ) isChase = false;
+
         if (isChase)
         {
+            if (isWandExit) ai.ExitLocomotion(ref isWandExit);
             ai.StayLocomotionToAStar(player.transform.position, chaceSpeed);
-            isExit = true;
+            isChaceExit = true;
         }
         else
         {
-            if (isExit) ai.ExitLocomotion(ref isExit);
+            if (isChaceExit) ai.ExitLocomotion(ref isChaceExit);
             ai.Wandering(wandSpeed, 10, 10);
+            isWandExit = true;
         }
-        SearchPlayer();
     }
 }

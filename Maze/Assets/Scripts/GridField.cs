@@ -35,7 +35,6 @@ namespace TakeshiLibrary
 
         //======読み取り専用変数===============================================================================================================
 
-        /*==========グリッドフィールドの角のセルのVector3座標==========*/
         /// <summary>
         /// グリッドのセルの数を返します(読み取り専用)
         /// </summary>
@@ -47,6 +46,54 @@ namespace TakeshiLibrary
             }
         }
 
+        /// <summary>
+        /// グリッドの幅と奥行の最も長い方を返します。
+        /// </summary>
+        public int gridMaxLength
+        {
+            get
+            {
+                return Mathf.Max(gridWidth, gridDepth);
+            }
+        }
+        
+        /// <summary>
+        /// グリッドの幅と奥行の最も短い方を返します。
+        /// </summary>
+        public int gridMinLength
+        {
+            get
+            {
+                return Mathf.Min(gridWidth, gridDepth);
+            }
+        }
+
+        /// <summary>
+        /// セルの幅と奥行の最も長い方を返します。
+        /// </summary>
+        public float cellMaxLength
+        {
+            get
+            {
+                return Mathf.Max(cellWidth, cellDepth);
+            }
+        }
+        
+        
+        /// <summary>
+        /// セルの幅と奥行の最も長い方を返します。
+        /// </summary>
+        public float cellMinLength
+        {
+            get
+            {
+                return Mathf.Min(cellWidth, cellDepth);
+            }
+        }
+
+
+
+        /*==========グリッドフィールドの角のセルのVector3座標==========*/
         /// <summary>
         ///グリッドの左下のセルの座標を返します。(読み取り専用)
         /// </summary>

@@ -16,6 +16,8 @@ public class MakeMap : MapGridField
     [SerializeField] GameObject red;
     [SerializeField] GameObject blue;
 
+    [SerializeField] UIManager UIManager;
+
     /*ブロック*/
     [SerializeField] Section section;           // セクション
     [SerializeField] Elements startElements;    // スタートエレメント
@@ -203,7 +205,7 @@ public class MakeMap : MapGridField
             // 生成できなかったのでエレメントをNoneに戻す
             mapElements = elements1.RestoreElementType(mapElements, elements1.seedElementCoord, elements1.branchElementCoord);
         }
-        Debug.Log("どこにも置けませんでした");
+        UIManager.EnterDisplayGameMessage("そこでは道を開けません！", Color.red);
         return false;
     }
 
