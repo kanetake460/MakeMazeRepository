@@ -96,13 +96,23 @@ namespace TakeshiLibrary
 
 
         /// <summary>
-        /// 指定した座標のブロック、向きを壁に設定します
+        /// 指定した座標を壁ブロックに設定します
         /// </summary>
         /// <param name="x">xグリッド座標</param>
         /// <param name="z">zグリッド座標</param>
         public void SetWallBlock(int x, int z)
         {
             blocks[x, z].isSpace = false;
+        }
+        
+        /// <summary>
+        /// 指定したブロックを壁ブロックに設定します
+        /// </summary>
+        /// <param name="x">xグリッド座標</param>
+        /// <param name="z">zグリッド座標</param>
+        public void SetWallBlock(Block block)
+        {
+            block.isSpace = false;
         }
 
 
@@ -120,9 +130,22 @@ namespace TakeshiLibrary
             else if (dir == Vector3.left) blocks[x, z].leftWall = true;
         }
 
+        /// <summary>
+        /// 指定したブロックの、向きを壁に設定します
+        /// </summary>
+        /// <param name="block">設定したいブロック</param>
+        /// <param name="dir">壁を入れる向き</param>
+        public void SetWall(Block block, Vector3 dir)
+        {
+            if (dir == Vector3.forward) block.fowardWall = true;
+            else if (dir == Vector3.right) block.rightWall = true;
+            else if (dir == Vector3.back) block.backWall = true;
+            else if (dir == Vector3.left) block.leftWall = true;
+        }
+
 
         /// <summary>
-        /// すべての向きの壁を設定します
+        /// 与えた座標のすべての向きの壁を設定します
         /// </summary>
         /// <param name="x">xグリッド座標</param>
         /// <param name="z">zグリッド座標</param>
@@ -130,12 +153,31 @@ namespace TakeshiLibrary
         /// <param name="right">右壁</param>
         /// <param name="back">後壁</param>
         /// <param name="left">左壁</param>
-        public void SetWalls(int x, int z, bool foward = false, bool right = false, bool back = false, bool left = false)
+        public void SetWalls(int x, int z, bool foward = true, bool right = true, bool back = true, bool left = true,bool isSpace = false)
         {
             blocks[x, z].fowardWall = foward;
             blocks[x, z].rightWall = right;
             blocks[x, z].backWall = back;
             blocks[x, z].leftWall = left;
+            blocks[x, z].isSpace = isSpace;
+        }
+
+        /// <summary>
+        /// あたえたブロックのすべての向きの壁を設定します
+        /// デフォルト引数では壁があります
+        /// </summary>
+        /// <param name="back">ブロック</param>
+        /// <param name="foward">前壁</param>
+        /// <param name="right">右壁</param>
+        /// <param name="back">後壁</param>
+        /// <param name="left">左壁</param>
+        public void SetWalls(Block block, bool foward = true, bool right = true, bool back = true, bool left = true, bool isSpace = false)
+        {
+            block.fowardWall = foward;
+            block.rightWall = right;
+            block.backWall = back;
+            block.leftWall = left;
+            block.isSpace = isSpace;
         }
 
 
@@ -153,6 +195,19 @@ namespace TakeshiLibrary
             else if (dir == Vector3.left) blocks[x, z].leftWall = false;
         }
 
+        /// <summary>
+        /// 指定したブロック、向きの壁をなくします
+        /// </summary>
+        /// <param name="block">ブロック</param>
+        /// <param name="dir">壁を入れる向き</param>
+        public void BreakWall(Block block, Vector3 dir)
+        {
+            if (dir == Vector3.forward) block.fowardWall = false;
+            else if (dir == Vector3.right) block.rightWall = false;
+            else if (dir == Vector3.back) block.backWall = false;
+            else if (dir == Vector3.left) block.leftWall = false;
+        }
+
 
         /// <summary>
         /// マップのオブジェクトを生成します
@@ -166,8 +221,34 @@ namespace TakeshiLibrary
             {
                 for (int z = 0; z < gridField.gridDepth; z++)
                 {
-                    if (blocks[x, z].isSpace) MonoBehaviour.Instantiate(space, gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
-                    else if (blocks[x, z].isSpace == false) MonoBehaviour.Instantiate(wall, gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z] + new Vector3(0, 5, 0), Quaternion.identity);
+                    if (blocks[x, z].isSpace)
+                    {
+                        GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                        plane.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
+                    }
+                    else if (blocks[x, z].isSpace == false)
+                    {
+                        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        cube.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
+                        cube.transform.localScale = new Vector3(gridField.cellWidth, gridField.cellMaxLength, gridField.cellDepth);
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// マップのすべてのブロックを壁に設定します
+        /// </summary>
+        public void SetWallAll()
+        {
+            // 壁を設定
+            for (int x = 0; x < gridField.gridWidth; x++)
+            {
+                for (int z = 0; z < gridField.gridDepth; z++)
+                {
+                        SetWalls(x, z);
+                        SetWallBlock(x, z);
                 }
             }
         }
@@ -185,16 +266,16 @@ namespace TakeshiLibrary
                 {
                     if (x % 2 == 1 && z % 2 == 1)
                     {
-                        SetWall(x, z, Vector3.left);
-                        SetWall(x, z, Vector3.right);
-                        SetWall(x, z, Vector3.forward);
-                        SetWall(x, z, Vector3.back);
+                        SetWalls(x, z);
                         SetWallBlock(x, z);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// マップを囲むように壁を設定します
+        /// </summary>
         public void SetWallSurround()
         {
             for (int x = 0; x < gridField.gridWidth; x++)
@@ -206,10 +287,7 @@ namespace TakeshiLibrary
                         x == gridField.gridWidth - 1 ||
                         z == gridField.gridDepth - 1)
                     {
-                        SetWall(x, z, Vector3.left);
-                        SetWall(x, z, Vector3.right);
-                        SetWall(x, z, Vector3.forward);
-                        SetWall(x, z, Vector3.back);
+                        SetWalls(x, z);
                         SetWallBlock(x, z);
                     }
                 }

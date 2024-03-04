@@ -27,14 +27,13 @@ public class TestMap : MonoBehaviour
     {
 
 
-
-        map.SetWallGrid();
-        map.SetWallSurround();
-        map.InstanceMapObjects(space, wall);
+        //map.SetWallGrid();
+        //map.SetWallSurround();
+        //map.InstanceMapObjects(space, wall);
     }
 
     void Update()
     {
-        gridField.DrowGrid();
+        //gridField.DrowGrid();
     }
 }

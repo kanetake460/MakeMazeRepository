@@ -13,7 +13,7 @@ public class TestEnemyController : MonoBehaviour
     private Transform enemyTrafo;
     [SerializeField] GameObject player;
 
-    [SerializeField] TestMap testMap;
+    [SerializeField] MapGridField testMap;
 
 
     [SerializeField] float chaceSpeed = 5;

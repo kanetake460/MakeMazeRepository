@@ -33,9 +33,8 @@ public class MakeMap : MapGridField
     int instanceCount2 = 3;
     int instanceCount3 = 6;
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
 
         // mapElements ‚Ì‰Šú‰»
         mapElements = new Elements.eElementType[gridWidth, gridDepth];

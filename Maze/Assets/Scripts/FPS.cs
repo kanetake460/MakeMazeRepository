@@ -182,25 +182,25 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="rot">ÉvÉåÉCÉÑÅ[ÇÃå¸Ç´</param>
         /// <returns>Vector3ÇÃå¸Ç´</returns>
-        public static Vector3 GetVector3FourDirection(Vector3 rot)
+        public static Vector3Int GetVector3FourDirection(Vector3 rot)
         {
             eFourDirection fourDirection = GetFourDirection(rot);
 
             if (fourDirection == eFourDirection.left)
             {
-                return Vector3.left;
+                return Vector3Int.left;
             }
             else if (fourDirection == eFourDirection.right)
             {
-                return Vector3.right;
+                return Vector3Int.right;
             }
             else if (fourDirection == eFourDirection.bottom)
             {
-                return Vector3.back;
+                return Vector3Int.back;
             }
             else
             {
-                return Vector3.forward;
+                return Vector3Int.forward;
             }
         }
 

@@ -5,7 +5,7 @@ using TakeshiLibrary;
 using UnityEngine;
 using static TakeshiLibrary.FPS;
 
-public class Section : MapGridField
+public class Section : MonoBehaviour
 {
     [EnumIndex(typeof(eMapSections)), SerializeField] public GameObject[] sections;
     [SerializeField] MakeMap map;
@@ -14,29 +14,33 @@ public class Section : MapGridField
     // 左下から設定しています
 
     // === T ======================================
-    protected static readonly Vector3Int[] T_Top_Branch =
+    public static readonly Vector3Int[] T_Top_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0, 1),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 1,0, 1)
     };
 
-    protected static readonly Vector3Int[] T_Bottom_Branch =
+    public static readonly Vector3Int[] T_Bottom_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0,-1),
         new Vector3Int( 0,0,-1),
         new Vector3Int(-1,0,-1)
     };
 
-    protected static readonly Vector3Int[] T_Left_Branch = 
+    public static readonly Vector3Int[] T_Left_Branch = 
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0,-1),
         new Vector3Int(-1,0, 0),
         new Vector3Int(-1,0, 1)
     };
 
-    protected static readonly Vector3Int[] T_Right_Branch = new Vector3Int[3]
+    public static readonly Vector3Int[] T_Right_Branch =
     {                    
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0, 1),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 1,0,-1)
@@ -44,29 +48,33 @@ public class Section : MapGridField
 
 
     // === I ======================================
-    protected static readonly Vector3Int[] I_Top_Branch =
+    public static readonly Vector3Int[] I_Top_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 0,0, 2),
         new Vector3Int( 0,0, 3)
     };
 
-    protected static readonly Vector3Int[] I_Bottom_Branch = 
+    public static readonly Vector3Int[] I_Bottom_Branch = 
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0,-1),
         new Vector3Int( 0,0,-2),
         new Vector3Int( 0,0,-3)
     };
 
-    protected static readonly Vector3Int[] I_Left_Branch = 
+    public static readonly Vector3Int[] I_Left_Branch = 
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0, 0),
         new Vector3Int(-2,0, 0),
         new Vector3Int(-3,0, 0)
     };
 
-    protected static readonly Vector3Int[] I_Right_Branch = 
+    public static readonly Vector3Int[] I_Right_Branch = 
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 2,0, 0),
         new Vector3Int( 3,0, 0)
@@ -74,29 +82,33 @@ public class Section : MapGridField
 
 
     // === O ======================================
-    protected static readonly Vector3Int[] O_Top_Branch = 
+    public static readonly Vector3Int[] O_Top_Branch = 
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0, 0),
         new Vector3Int(-1,0, 1),
         new Vector3Int( 0,0, 1)
     };
 
-    protected static readonly Vector3Int[] O_Bottom_Branch =
+    public static readonly Vector3Int[] O_Bottom_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 1,0,-1),
         new Vector3Int( 0,0,-1)
     };
 
-    protected static readonly Vector3Int[] O_Left_Branch = 
+    public static readonly Vector3Int[] O_Left_Branch = 
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0,-1),
         new Vector3Int(-1,0,-1),
         new Vector3Int(-1,0, 0)
     };
 
-    protected static readonly Vector3Int[] O_Right_Branch = 
+    public static readonly Vector3Int[] O_Right_Branch = 
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 1,0, 1),
         new Vector3Int( 1,0, 0)
@@ -104,29 +116,33 @@ public class Section : MapGridField
 
 
     // === L ======================================
-    protected static readonly Vector3Int[] L_Top_Branch =
+    public static readonly Vector3Int[] L_Top_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 0,0, 2),
         new Vector3Int( 1,0, 0)
     };
 
-    protected static readonly Vector3Int[] L_Bottom_Branch =
+    public static readonly Vector3Int[] L_Bottom_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0,-1),
         new Vector3Int( 0,0,-2),
         new Vector3Int(-1,0, 0)
     };
 
-    protected static readonly Vector3Int[] L_Left_Branch =
+    public static readonly Vector3Int[] L_Left_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0, 0),
         new Vector3Int(-2,0, 0),
         new Vector3Int( 0,0, 1)
     };
 
-    protected static readonly Vector3Int[] L_Right_Branch =
+    public static readonly Vector3Int[] L_Right_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 2,0, 0),
         new Vector3Int( 0,0,-1)
@@ -134,29 +150,33 @@ public class Section : MapGridField
 
 
     // === J ======================================
-    protected static readonly Vector3Int[] J_Top_Branch =
+    public static readonly Vector3Int[] J_Top_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0, 0),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 0,0, 2)
     };
 
-    protected static readonly Vector3Int[] J_Bottom_Branch =
+    public static readonly Vector3Int[] J_Bottom_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 0,0,-1),
         new Vector3Int( 0,0,-2)
     };
 
-    protected static readonly Vector3Int[] J_Left_Branch =
+    public static readonly Vector3Int[] J_Left_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0,-1),
         new Vector3Int(-1,0, 0),
         new Vector3Int(-2,0, 0)
     };
 
-    protected static readonly Vector3Int[] J_Right_Branch =
+    public static readonly Vector3Int[] J_Right_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 2,0, 0)
@@ -164,29 +184,33 @@ public class Section : MapGridField
 
 
     // === S ======================================
-    protected static readonly Vector3Int[] S_Top_Branch =
+    public static readonly Vector3Int[] S_Top_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0, 0),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 1,0, 1)
     };
 
-    protected static readonly Vector3Int[] S_Bottom_Branch =
+    public static readonly Vector3Int[] S_Bottom_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 0,0,-1),
         new Vector3Int(-1,0,-1)
     };
 
-    protected static readonly Vector3Int[] S_Left_Branch =
+    public static readonly Vector3Int[] S_Left_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0,-1),
         new Vector3Int(-1,0, 0),
         new Vector3Int(-1,0, 1)
     };
 
-    protected static readonly Vector3Int[] S_Right_Branch =
+    public static readonly Vector3Int[] S_Right_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 1,0,-1)
@@ -194,29 +218,33 @@ public class Section : MapGridField
 
 
     // === Z ======================================
-    protected static readonly Vector3Int[] Z_Top_Branch =
+    public static readonly Vector3Int[] Z_Top_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0, 1),
         new Vector3Int( 0,0, 1),
         new Vector3Int( 1,0, 0)
     };
 
-    protected static readonly Vector3Int[] Z_Bottom_Branch =
+    public static readonly Vector3Int[] Z_Bottom_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0,-1),
         new Vector3Int( 0,0,-1),
         new Vector3Int(-1,0, 0)
     };
 
-    protected static readonly Vector3Int[] Z_Left_Branch =
+    public static readonly Vector3Int[] Z_Left_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int(-1,0,-1),
         new Vector3Int(-1,0, 0),
         new Vector3Int( 0,0, 1)
     };
 
-    protected static readonly Vector3Int[] Z_Right_Branch =
+    public static readonly Vector3Int[] Z_Right_Branch =
     {
+        new Vector3Int( 0,0, 0),
         new Vector3Int( 1,0, 1),
         new Vector3Int( 1,0, 0),
         new Vector3Int( 0,0,-1)
@@ -237,15 +265,13 @@ public class Section : MapGridField
 
     public eMapSections[] mapSection = new eMapSections[7];    // セクション1
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
 
         // mapSection の初期化、シャッフル
             for (int j = 0; j < sections.Length; j++)
             {
             mapSection[j] = (eMapSections)Enum.ToObject(typeof(eMapSections), j);
-            //mapSection[j] = eMapSections.J_Section;
             }
         Algorithm.Shuffle(mapSection);
     }
