@@ -42,12 +42,13 @@ public class MapGridField : MonoBehaviour
     private void Start()
     {
         InitMap(pos);
-        map.InstanceMapObjects(space, wall);
+        map.InstanceMapObjects();
     }
 
     private void Update()
     {
-        gridField.DrowGrid();   
+        gridField.DrowGrid();
+        map.ActiveMapWallObject();
     }
 
 

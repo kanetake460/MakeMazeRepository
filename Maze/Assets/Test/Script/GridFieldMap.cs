@@ -27,6 +27,7 @@ namespace TakeshiLibrary
             public bool rightWall { get; set; } = false;
             public bool backWall { get; set; } = false;
             public bool leftWall { get; set; } = false;
+            public GameObject mapWallObj { get; set; }
 
 
             /// <summary>
@@ -215,27 +216,45 @@ namespace TakeshiLibrary
         /// <param name="space">spaceのオブジェクト</param>
         /// <param name="wall">wallのオブジェクト</param>
         /// <param name="gf">gridField</param>
-        public void InstanceMapObjects(GameObject space, GameObject wall)
+        public void InstanceMapObjects()
         {
             for (int x = 0; x < gridField.gridWidth; x++)
             {
                 for (int z = 0; z < gridField.gridDepth; z++)
                 {
-                    if (blocks[x, z].isSpace)
-                    {
-                        GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                        plane.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
-                    }
-                    else if (blocks[x, z].isSpace == false)
-                    {
-                        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        cube.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
-                        cube.transform.localScale = new Vector3(gridField.cellWidth, gridField.cellMaxLength, gridField.cellDepth);
-                    }
+                    GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    plane.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
+
+                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    blocks[x, z].mapWallObj = cube;
+                    blocks[x, z].mapWallObj.name = new string(x + "," + z);
+                    cube.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
+                    cube.transform.localScale = new Vector3(gridField.cellWidth, gridField.cellMaxLength, gridField.cellDepth);
                 }
             }
         }
 
+
+        /// <summary>
+        /// マップの壁オブジェクトのアクティブを管理します
+        /// </summary>
+        public void ActiveMapWallObject()
+        {
+            for (int x = 0; x < gridField.gridWidth; x++)
+            {
+                for (int z = 0; z < gridField.gridDepth; z++)
+                {
+                    Debug.Log(blocks[x,z].mapWallObj == null);
+                    blocks[x, z].mapWallObj.SetActive(!blocks[x, z].isSpace);
+                }
+            }
+
+
+                    foreach (Block b in blocks)
+            {
+
+            }
+        }
 
         /// <summary>
         /// マップのすべてのブロックを壁に設定します
