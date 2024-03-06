@@ -248,12 +248,6 @@ namespace TakeshiLibrary
                     blocks[x, z].mapWallObj.SetActive(!blocks[x, z].isSpace);
                 }
             }
-
-
-                    foreach (Block b in blocks)
-            {
-
-            }
         }
 
         /// <summary>

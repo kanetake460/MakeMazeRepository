@@ -6,7 +6,7 @@ using TakeshiLibrary;
 public class GameManager : MonoBehaviour
 {
     /*コンポーネント*/
-    public MakeMap map;
+    public MapGridField map;
     public TakeshiLibrary.CompassUI compassRight;
     public TakeshiLibrary.CompassUI compassLeft;
 

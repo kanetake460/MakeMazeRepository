@@ -7,7 +7,7 @@ using UnityEngine;
 public class RoomGenerator : MonoBehaviour
 {
     /*オブジェクト参照*/
-    [SerializeField] MakeMap map;                                   // マップ
+    [SerializeField] MapGridField map;                                   // マップ
     [SerializeField] GameManager gameManager;                   // ゲームマネージャー
     [SerializeField] GameObject roomPrefab;                     // 部屋のプレハブ
     [SerializeField] Vector3Int roomSizeMin = new Vector3Int(); // 部屋のサイズの最小値
@@ -38,7 +38,7 @@ public class RoomGenerator : MonoBehaviour
                 {
                     for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
                     {
-                            map.mapElements[randomCoord.x + x, randomCoord.z + z] = Elements.eElementType.Room_Element;
+                            //map.mapElements[randomCoord.x + x, randomCoord.z + z] = Elements.eElementType.Room_Element;
                     }
                 }
 
@@ -84,10 +84,10 @@ public class RoomGenerator : MonoBehaviour
         {
             for (int z = roomSizeMin.z; z <= roomSizeMax.z; z++)
             {
-                if (map.mapElements[instanceCoord.x + x, instanceCoord.z + z] == Elements.eElementType.None_Element)
-                {
-                    trueCount++;
-                }
+                //if (map.mapElements[instanceCoord.x + x, instanceCoord.z + z] == Elements.eElementType.None_Element)
+                //{
+                //    trueCount++;
+                //}
             }
         }
         // すべての部屋がNoneかどうか

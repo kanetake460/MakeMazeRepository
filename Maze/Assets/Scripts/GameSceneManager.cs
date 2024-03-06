@@ -9,7 +9,7 @@ using System.Linq;
 public class GameSceneManager : MonoBehaviour
 {
     /*オブジェクト参照*/
-    [SerializeField] Player playerController;   // プレイヤーコントローラー
+    [SerializeField] TestPlayerController playerController;   // プレイヤーコントローラー
     [SerializeField] GameManager gameManager;   // ゲームマネージャー
     [SerializeField] GameObject UICanvas;       // UIキャンバス
     [SerializeField] Canvas titleCanvas;        // タイトルキャンバス
@@ -111,7 +111,7 @@ public class GameSceneManager : MonoBehaviour
         if (gameManager.flags >= gameManager.clearFlagNum)
         {
             currentScene = eScenes.Escape_Scene;
-            gameManager.map.CreateMaze();
+            //gameManager.map.CreateMaze();
             GameClear();
             GameOver();
         }

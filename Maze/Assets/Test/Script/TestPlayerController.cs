@@ -12,6 +12,9 @@ public class TestPlayerController : MonoBehaviour
     private Vector3Int playerCoord;
     private Vector3Int playerPrevious;
 
+
+    private Stack<Vector3Int[]> sectionStack = new Stack<Vector3Int[]>();
+
     /*パラメータ*/
     [SerializeField] float locoSpeed;                    // 移動スピード
     [SerializeField] float dashSpeed;
@@ -46,9 +49,10 @@ public class TestPlayerController : MonoBehaviour
         if(Input.GetMouseButtonDown(1)) 
         {
             Debug.Log("a");
-            OpenSectionPrevious(playerCoord,playerPrevious,Section.I_Top_Branch);
+            //OpenSectionPrevious(playerCoord,playerPrevious,SectionTable.T.Top);
         }
     }
+
 
     /// <summary>
     /// 指定した向きのひとつ前のグリッド座標をシードとしてオープンします
@@ -59,28 +63,11 @@ public class TestPlayerController : MonoBehaviour
         map.OpenSection(prevCoord,sectionCoords);
     }
 
-    /// <summary>
-    /// 向きに対応するひとつ前のグリッド座標を返します
-    /// </summary>
-    /// <param name="fourDirection">向き</param>
-    /// <returns>向いている方向の一つ前のグリッド座標</returns>
-    public static Vector3Int GetPreviousCoordinate(FPS.eFourDirection fourDirection)
+
+    private void InitList()
     {
-        switch (fourDirection)
-        {
-            case FPS.eFourDirection.top:
-                return Vector3Int.forward;
-
-            case FPS.eFourDirection.bottom:
-                return Vector3Int.back;
-
-            case FPS.eFourDirection.left:
-                return Vector3Int.left;
-
-            case FPS.eFourDirection.right:
-                return Vector3Int.right;
-        }
-        return Vector3Int.zero;
+        //sectionStack.Push();
+        //SectionTable.T
     }
 
 }

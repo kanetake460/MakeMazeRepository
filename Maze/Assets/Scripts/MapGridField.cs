@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TakeshiLibrary;
 using UnityEngine;
 
@@ -15,8 +16,6 @@ using UnityEngine;
 public class MapGridField : MonoBehaviour
 {
     /*ゲームオブジェクト*/
-    [SerializeField] GameObject space;
-    [SerializeField] GameObject wall;
 
     /*パラメータ*/
     [SerializeField] Vector3Int pos;
@@ -61,7 +60,8 @@ public class MapGridField : MonoBehaviour
         map.SetWallAll();
         //map.SetWallGrid();
 
-        OpenSection(startSeed, Section.O_Bottom_Branch);
+        Debug.Log(SectionTable.T.Top[0]);
+        OpenSection(startSeed, SectionTable.T.Top);
     }
 
 
@@ -72,10 +72,11 @@ public class MapGridField : MonoBehaviour
     /// <param name="sectionCoord">開きたいセクションの種類</param>
     public void OpenSection(Vector3Int seedCoord,Vector3Int[] sectionCoord)
     {
-        foreach(Vector3Int coord in sectionCoord)
+
+        foreach (Vector3Int coord in sectionCoord)
         {
             Vector3Int element = seedCoord + coord;
-            map.blocks[element.x,element.z].isSpace = true;
+            map.blocks[element.x, element.z].isSpace = true;
         }
     }
 }
