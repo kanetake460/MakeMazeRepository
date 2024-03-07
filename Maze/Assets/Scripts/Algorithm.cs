@@ -34,6 +34,7 @@ namespace TakeshiLibrary
             }
         }
 
+
         public static void Swap<T>(T lhs, T rhs)
         {
             T swap = lhs;
@@ -62,6 +63,7 @@ namespace TakeshiLibrary
             }
             return true;
         }
+
 
     }
 }

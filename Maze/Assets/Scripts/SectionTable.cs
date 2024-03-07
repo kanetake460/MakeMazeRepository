@@ -9,14 +9,31 @@ public class SectionTable
 {
     [EnumIndex(typeof(eMapSections)), SerializeField] public GameObject[] sections;
     
-    public class Sections
+    public class Section
     {
-        public Vector3Int[] Top;
-        public Vector3Int[] Left;
-        public Vector3Int[] Right;
-        public Vector3Int[] Bottom;
+        public Vector3Int[] Top { get; }
+        public Vector3Int[] Left { get; }
+        public Vector3Int[] Right { get; }
+        public Vector3Int[] Bottom { get; }
 
-        public Sections(Vector3Int[] top, Vector3Int[] left, Vector3Int[] right, Vector3Int[] bottom)
+        /// <summary>
+        /// 与えられたVector3Intの向きからセクションの向きを返します。
+        /// </summary>
+        /// <param name="dir">向き</param>
+        /// <returns>引数に対応する向きのセクション</returns>
+        public Vector3Int[] GetDirectionSection(Vector3Int dir)
+        {
+            if (dir == Vector3Int.forward)
+                return Top;
+            else if (dir == Vector3Int.left)
+                return Left;
+            else if (dir == Vector3Int.right)
+                return Right;
+            else
+                return Bottom;
+        }
+
+        public Section(Vector3Int[] top, Vector3Int[] left, Vector3Int[] right, Vector3Int[] bottom)
         {
             Top = top;
             Left = left;
@@ -266,13 +283,13 @@ public class SectionTable
         new Vector3Int( 0,0,-1)
     };
 
-    public static readonly Sections T = new Sections(T_Top, T_Left, T_Right, T_Bottom);
-    public static readonly Sections I = new Sections(I_Top, I_Left, I_Right, I_Bottom);
-    public static readonly Sections O = new Sections(O_Top, O_Left, O_Right, O_Bottom);
-    public static readonly Sections L = new Sections(L_Top, L_Left, L_Right, L_Bottom);
-    public static readonly Sections J = new Sections(J_Top, J_Left, J_Right, J_Bottom);
-    public static readonly Sections S = new Sections(S_Top, S_Left, S_Right, S_Bottom);
-    public static readonly Sections Z = new Sections(Z_Top, Z_Left, Z_Right, Z_Bottom);
+    public static readonly Section T = new Section(T_Top, T_Left, T_Right, T_Bottom);
+    public static readonly Section I = new Section(I_Top, I_Left, I_Right, I_Bottom);
+    public static readonly Section O = new Section(O_Top, O_Left, O_Right, O_Bottom);
+    public static readonly Section L = new Section(L_Top, L_Left, L_Right, L_Bottom);
+    public static readonly Section J = new Section(J_Top, J_Left, J_Right, J_Bottom);
+    public static readonly Section S = new Section(S_Top, S_Left, S_Right, S_Bottom);
+    public static readonly Section Z = new Section(Z_Top, Z_Left, Z_Right, Z_Bottom);
 
 
     /*セクションの列挙*/

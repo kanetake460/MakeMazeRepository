@@ -204,6 +204,34 @@ namespace TakeshiLibrary
             }
         }
 
+        public static Stack<Vector3Int> RandomVector3DirectionStack()
+        {
+            Stack<Vector3Int> dirStack = new Stack<Vector3Int>();
+
+            dirStack.Push(Vector3Int.left);
+            dirStack.Push(Vector3Int.right);
+            dirStack.Push(Vector3Int.forward);
+            dirStack.Push(Vector3Int.back);
+
+            Algorithm.Shuffle(dirStack.ToArray());
+
+            return dirStack;
+        }
+
+        public static Vector3Int GetRandomVector3FourDirection()
+        {
+            int rand = Random.RandomRange(0, 4);
+
+            if (rand == 0)
+                return Vector3Int.left;
+            else if (rand == 1)
+                return Vector3Int.right;
+            else if (rand == 2)
+                return Vector3Int.forward;
+            else
+                return Vector3Int.back;
+        }
+
 
         /// <summary>
         /// —×‚ÌŒü‚«‚ð•Ô‚µ‚Ü‚·

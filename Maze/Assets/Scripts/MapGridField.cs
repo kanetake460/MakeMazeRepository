@@ -58,9 +58,7 @@ public class MapGridField : MonoBehaviour
     public void InitMap(Vector3Int startSeed)
     {
         map.SetWallAll();
-        //map.SetWallGrid();
 
-        Debug.Log(SectionTable.T.Top[0]);
         OpenSection(startSeed, SectionTable.T.Top);
     }
 
@@ -72,12 +70,30 @@ public class MapGridField : MonoBehaviour
     /// <param name="sectionCoord">開きたいセクションの種類</param>
     public void OpenSection(Vector3Int seedCoord,Vector3Int[] sectionCoord)
     {
-
         foreach (Vector3Int coord in sectionCoord)
         {
             Vector3Int element = seedCoord + coord;
             map.blocks[element.x, element.z].isSpace = true;
         }
+    }
+
+
+    /// <summary>
+    /// 与えたセクションが置けるかどうか確認します
+    /// </summary>
+    /// <param name="sectionCoord">セクション</param>
+    /// <returns>置けるかどうか true：置ける</returns>
+    public bool CheckAbleOpen(Vector3Int seedCoord,Vector3Int[] sectionCoord)
+    {
+        foreach (Vector3Int coord in sectionCoord)
+        {
+            Vector3Int element = seedCoord + coord;
+            if (map.blocks[element.x, element.z].isSpace)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
 

@@ -244,7 +244,6 @@ namespace TakeshiLibrary
             {
                 for (int z = 0; z < gridField.gridDepth; z++)
                 {
-                    Debug.Log(blocks[x,z].mapWallObj == null);
                     blocks[x, z].mapWallObj.SetActive(!blocks[x, z].isSpace);
                 }
             }
