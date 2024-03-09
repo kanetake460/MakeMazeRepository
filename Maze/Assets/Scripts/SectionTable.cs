@@ -292,6 +292,40 @@ public class SectionTable
     public static readonly Section Z = new Section(Z_Top, Z_Left, Z_Right, Z_Bottom);
 
 
+    /// <summary>
+    /// ランダムにセクションを返します
+    /// </summary>
+    public static Section randSection 
+    {
+        get
+        {
+            int rand = UnityEngine.Random.Range(0,7);
+            switch (rand)
+            {
+                case 0:
+                    return T;
+
+                case 1:
+                    return I;
+
+                case 2:
+                    return O;
+
+                case 3:
+                    return L;
+
+                case 4:
+                    return J;
+
+                case 5:
+                    return S;
+
+                default:
+                    return Z;
+            }
+        }
+    }
+
     /*セクションの列挙*/
     public enum eMapSections
     {

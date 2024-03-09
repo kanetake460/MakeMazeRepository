@@ -48,9 +48,60 @@ public class TestPlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            InitStack();
-            Test(playerCoord, playerPrevious);
+            //InitStack();
+            //OpenSectionPrevious(playerCoord,playerPrevious,sectionQueue.Peek());
+            //Test(playerCoord, playerPrevious);
+            OpenSectionContinue(3, 3);
+
         }
+    }
+
+
+    public bool OpenSectionContinue(int continueCount , int branchIndx)
+    {
+        Stack<Vector3Int> seedCoord = new Stack<Vector3Int>();
+        Stack<Vector3Int[]> sectionCoords = new Stack<Vector3Int[]>();
+
+        // プレイヤーの向きの情報をプッシュ
+        seedCoord.Push(playerCoord + playerPrevious);
+        sectionCoords.Push(SectionTable.randSection.GetDirectionSection(playerPrevious));
+
+        for (int i = 0; i < continueCount; i++)
+        {
+            Stack<Vector3Int> randDirStack = FPS.RandomVector3DirectionStack();
+
+            // 全部の方向を試すためのwhile
+            while (true)
+            {
+                // もし、置けなかった場合は
+                if (!map.CheckAbleOpen(seedCoord.Peek(), sectionCoords.Peek()))
+                {
+                    // 調べる方向がない場合はどこにも置けないので探索終了
+                    if (randDirStack.Count <= 0)
+                    {
+                        // すべてをクローズ
+                        while (seedCoord.Count > 0)
+                        {
+                            seedCoord.Pop();
+                            sectionCoords.Pop();
+                            map.CloseSection(seedCoord.Pop(), sectionCoords.Pop());
+                        }
+                        return false;
+                    }
+                    // まだ調べる方向があるならいったんセクションをポップして、
+                    // べつの方向をプッシュし、もう一度
+                    sectionCoords.Pop();
+                    sectionCoords.Push(SectionTable.randSection.GetDirectionSection(randDirStack.Pop()));
+                    
+                    continue;
+                }
+                // ひとつ前のセクションからランダムな方向の情報をだして、プッシュ
+                seedCoord.Push(playerCoord + sectionCoords.Peek()[branchIndx]);
+                sectionCoords.Push(SectionTable.randSection.GetDirectionSection(randDirStack.Pop()));
+                break;
+            }
+        }
+        return true;
     }
 
 
@@ -63,7 +114,7 @@ public class TestPlayerController : MonoBehaviour
         
         // プレイヤーの向きの情報をプッシュ
         seedCoord.Push(playerCoord + plalyerPrevious);
-        sectionCoords.Push(sectionQueue.Peek().GetDirectionSection(playerPrevious));
+        sectionCoords.Push(SectionTable.randSection.GetDirectionSection(playerPrevious));
         
         // チェック一回目
         if (map.CheckAbleOpen(seedCoord.Peek(), sectionCoords.Peek()))
@@ -77,7 +128,7 @@ public class TestPlayerController : MonoBehaviour
                 // ランダムな向きの情報をプッシュ
                 Vector3Int randDir = randDirStack.Pop();
                 seedCoord.Push(playerCoord + sectionCoords.Peek()[1] + randDir);
-                sectionCoords.Push(sectionQueue.ToArray()[1].GetDirectionSection(randDir));
+                sectionCoords.Push(SectionTable.randSection.GetDirectionSection(randDir));
 
                 Debug.Log(seedCoord.Peek());
                 Debug.Log(sectionCoords.Peek()[1]);
@@ -95,7 +146,7 @@ public class TestPlayerController : MonoBehaviour
                         // ランダムな向きの情報をプッシュ
                         randDir = randDirStack.Pop();
                         seedCoord.Push(playerCoord + sectionCoords.Peek()[3] + randDir);
-                        sectionCoords.Push(sectionQueue.ToArray()[2].GetDirectionSection(randDir));
+                        sectionCoords.Push(SectionTable.randSection.GetDirectionSection(randDir));
 
                         // チェック三回目
                         if(map.CheckAbleOpen(seedCoord.Peek(),sectionCoords.Peek()))
@@ -123,11 +174,16 @@ public class TestPlayerController : MonoBehaviour
     /// <summary>
     /// 指定した向きのひとつ前のグリッド座標をシードとして対応した向きのセクションでオープンします
     /// </summary>
-    public void OpenSectionPrevious(Vector3Int branchCoord, Vector3Int dir, SectionTable.Section section)
+    public bool OpenSectionPrevious(Vector3Int branchCoord, Vector3Int dir, SectionTable.Section section)
     {
         Vector3Int[] sectionCoords = section.GetDirectionSection(dir);
         Vector3Int prevCoord = branchCoord + dir;
-        map.OpenSection(prevCoord, sectionCoords);
+        if (map.CheckAbleOpen(prevCoord, sectionCoords))
+        {
+            map.OpenSection(prevCoord, sectionQueue.Dequeue().GetDirectionSection(dir));
+            return true;
+        }
+        return false;
     }
 
 
@@ -206,22 +262,22 @@ public class TestPlayerController : MonoBehaviour
     //    }
     //}
 
-    /// <summary>
-    /// sectionStackの中身を入れなおして、シャッフルします
-    /// </summary>
-    private void InitStack()
-    {
-        if (sectionQueue.Count <= 0)
-        {
-            sectionQueue.Enqueue(SectionTable.T);
-            sectionQueue.Enqueue(SectionTable.O);
-            sectionQueue.Enqueue(SectionTable.I);
-            sectionQueue.Enqueue(SectionTable.L);
-            sectionQueue.Enqueue(SectionTable.J);
-            sectionQueue.Enqueue(SectionTable.S);
-            sectionQueue.Enqueue(SectionTable.Z);
+    ///// <summary>
+    ///// sectionStackの中身を入れなおして、シャッフルします
+    ///// </summary>
+    //private void InitStack(Queue<SectionTable.Section> queue)
+    //{
+    //    if (queue.Count <= 0)
+    //    {
+    //        queue.Enqueue(SectionTable.T);
+    //        queue.Enqueue(SectionTable.O);
+    //        queue.Enqueue(SectionTable.I);
+    //        queue.Enqueue(SectionTable.L);
+    //        queue.Enqueue(SectionTable.J);
+    //        queue.Enqueue(SectionTable.S);
+    //        queue.Enqueue(SectionTable.Z);
 
-            Algorithm.Shuffle(sectionQueue.ToArray());
-        }
-    }
+    //        Algorithm.Shuffle(sectionQueue.ToArray());
+    //    }
+    //}
 }

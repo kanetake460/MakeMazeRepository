@@ -34,7 +34,7 @@ public class MapGridField : MonoBehaviour
 
     private void Awake()
     {
-        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);
+        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.bottomLeft);
         map = new GridFieldMap(gridField);
     }
 
@@ -77,6 +77,20 @@ public class MapGridField : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 与えたセクションの形にシードの位置をあたえた座標からオープンしていきます
+    /// </summary>
+    /// <param name="seedCoord">開くセクションのシードの位置</param>
+    /// <param name="sectionCoord">開きたいセクションの種類</param>
+    public void CloseSection(Vector3Int seedCoord, Vector3Int[] sectionCoord)
+    {
+        foreach (Vector3Int coord in sectionCoord)
+        {
+            Vector3Int element = seedCoord + coord;
+            map.blocks[element.x, element.z].isSpace = false;
+        }
+    }
+
 
     /// <summary>
     /// 与えたセクションが置けるかどうか確認します
@@ -94,6 +108,23 @@ public class MapGridField : MonoBehaviour
             }
         }
         return true;
+    }
+
+
+    /// <summary>
+    /// 与えたセクションが置けるかどうか確認し、オープンします
+    /// </summary>
+    /// <param name="seedCoord">セクションのシード座標</param>
+    /// <param name="sectionCoords">セクション</param>
+    /// <returns>オープンしたかどうか true：置いた</returns>
+    public bool CheckOpenSection(Vector3Int seedCoord, Vector3Int[] sectionCoords)
+    {
+        if(CheckAbleOpen(seedCoord, sectionCoords))
+        {
+            OpenSection(seedCoord, sectionCoords);
+            return true;
+        }
+        return false;
     }
 }
 
