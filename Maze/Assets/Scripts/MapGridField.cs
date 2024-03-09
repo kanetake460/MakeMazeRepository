@@ -97,7 +97,7 @@ public class MapGridField : MonoBehaviour
     /// </summary>
     /// <param name="sectionCoord">セクション</param>
     /// <returns>置けるかどうか true：置ける</returns>
-    public bool CheckAbleOpen(Vector3Int seedCoord,Vector3Int[] sectionCoord)
+    public bool CheckAbleOpen(Vector3Int seedCoord, Vector3Int[] sectionCoord)
     {
         foreach (Vector3Int coord in sectionCoord)
         {
@@ -111,20 +111,20 @@ public class MapGridField : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// 与えたセクションが置けるかどうか確認し、オープンします
-    /// </summary>
-    /// <param name="seedCoord">セクションのシード座標</param>
-    /// <param name="sectionCoords">セクション</param>
-    /// <returns>オープンしたかどうか true：置いた</returns>
-    public bool CheckOpenSection(Vector3Int seedCoord, Vector3Int[] sectionCoords)
-    {
-        if(CheckAbleOpen(seedCoord, sectionCoords))
-        {
-            OpenSection(seedCoord, sectionCoords);
-            return true;
-        }
-        return false;
-    }
+    ///// <summary>
+    ///// 与えたセクションが置けるかどうか確認し、オープンします
+    ///// </summary>
+    ///// <param name="seedCoord">セクションのシード座標</param>
+    ///// <param name="sectionCoords">セクション</param>
+    ///// <returns>オープンしたかどうか true：置いた</returns>
+    //public bool CheckOpenSection(Vector3Int seedCoord, Vector3Int[] sectionCoords)
+    //{
+    //    if(CheckAbleOpen(seedCoord, sectionCoords))
+    //    {
+    //        OpenSection(seedCoord, sectionCoords);
+    //        return true;
+    //    }
+    //    return false;
+    //}
 }
 

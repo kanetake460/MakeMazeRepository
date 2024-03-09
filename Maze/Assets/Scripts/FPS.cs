@@ -213,8 +213,11 @@ namespace TakeshiLibrary
             dirStack.Push(Vector3Int.forward);
             dirStack.Push(Vector3Int.back);
 
-            Algorithm.Shuffle(dirStack.ToArray());
-
+            Algorithm.ShuffleStack(ref dirStack);
+            Debug.Log(dirStack.Pop());
+            Debug.Log(dirStack.Pop());
+            Debug.Log(dirStack.Pop());
+            Debug.Log(dirStack.Pop());
             return dirStack;
         }
 

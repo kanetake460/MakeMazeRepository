@@ -12,7 +12,6 @@ namespace TakeshiLibrary
             for (int i = 0; i < arry.Length; i++)
             {
                 rand = Random.Range(0, arry.Length);
-                //Swap(arry[i], arry[rand]);
                 T swap = arry[i];
                 arry[i] = arry[rand];
                 arry[rand] = swap;
@@ -31,6 +30,18 @@ namespace TakeshiLibrary
                     arry[i,j] = arry[i,rand];
                     arry[i,rand] = swap;
                 }
+            }
+        }
+
+        public static void ShuffleStack<T>(ref Stack<T> stack)
+        {
+            int rand;
+            for (int i = 0; i < stack.Count; i++)
+            {
+                rand = Random.Range(0, stack.Count);
+                var swap = stack.ToArray()[i];
+                stack.ToArray()[i] = stack.ToArray()[i];
+                stack.ToArray()[rand] = swap;
             }
         }
 
