@@ -204,20 +204,26 @@ namespace TakeshiLibrary
             }
         }
 
+        /// <summary>
+        /// Vector3Intの全方向がランダムで入ったスタックを返します
+        /// </summary>
+        /// <returns></returns>
         public static Stack<Vector3Int> RandomVector3DirectionStack()
         {
             Stack<Vector3Int> dirStack = new Stack<Vector3Int>();
+            Vector3Int[] randDir =
+                {
+                    Vector3Int.left,
+                    Vector3Int.right,
+                    Vector3Int.forward,
+                    Vector3Int.back
+                };
+            Algorithm.Shuffle(randDir);
 
-            dirStack.Push(Vector3Int.left);
-            dirStack.Push(Vector3Int.right);
-            dirStack.Push(Vector3Int.forward);
-            dirStack.Push(Vector3Int.back);
-
-            Algorithm.ShuffleStack(ref dirStack);
-            Debug.Log(dirStack.Pop());
-            Debug.Log(dirStack.Pop());
-            Debug.Log(dirStack.Pop());
-            Debug.Log(dirStack.Pop());
+            foreach(Vector3Int dir in randDir)
+            {
+                dirStack.Push(dir);
+            }
             return dirStack;
         }
 

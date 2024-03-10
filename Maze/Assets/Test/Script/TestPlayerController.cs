@@ -41,6 +41,7 @@ public class TestPlayerController : MonoBehaviour
         PlayerAction1();
     }
 
+    [SerializeField] int idx;
     /// <summary>
     /// 右クリックしたときのアクション
     /// </summary>
@@ -50,39 +51,56 @@ public class TestPlayerController : MonoBehaviour
         {
             //InitStack();
             //OpenSectionPrevious(playerCoord,playerPrevious,sectionQueue.Peek());
-            //Test(playerCoord, playerPrevious);
-            OpenAbleOpenAround(new Vector3Int(20,0,20), SectionTable.I);
-
+            //OpenAroundContinue(new Vector3Int(20,0,20), SectionTable.I);
+            OpenBranchingSection(playerCoord,playerPrevious, SectionTable.randSection,idx);
+            map.map.ActiveMapWallObject();
         }
     }
 
 
-    public bool OpenSectionContinue(int continueCount , int branchIndx)
+    /// <summary>
+    /// プレイヤーの前にセクションをオープンし、そのセクションの
+    /// 指定したブランチから、ランダムな方向にセクションを生成します。
+    /// </summary>
+    /// <param name="branchCoord">プレイヤーの座標</param>
+    /// <param name="dir">プレイヤーの向き</param>
+    /// <param name="section">オープンするセクション</param>
+    /// <param name="branchIndx">二つ目をオープンするブランチのインデックス</param>
+    /// <returns>オープンできたかどうか</returns>
+    private bool OpenBranchingSection(Vector3Int branchCoord,Vector3Int dir,SectionTable.Section section,int branchIndx)
     {
-        Stack<Vector3Int> seedCoord = new Stack<Vector3Int>();
-        //Stack<Vector3Int[]> sectionCoords = new Stack<Vector3Int[]>();
-        Stack<SectionTable.Section> sections = new Stack<SectionTable.Section>();
+        OpenSectionPrevious(branchCoord, dir, section);
 
-        // プレイヤーの向きの情報をプッシュ
-        seedCoord.Push(playerCoord + playerPrevious);
-        //sectionCoords.Push(SectionTable.randSection.GetDirectionSection(playerPrevious));
-        sections.Push(SectionTable.randSection);
-
-        //if (OpenSectionPrevious(seedCoord.Peek(),playerPrevious,sections.Peek()))
-        {
-            Debug.Log("そこでは開けない");
-            return false;
-        }
-
-        for (int i = 0; i < continueCount; i++)
-        {
-            //OpenAbleOpenAround();
-        }
-        return true;
+        Vector3Int[] branchCoords = section.GetDirectionSection(dir);
+        return OpenAround(branchCoords[branchIndx] + branchCoord + dir, SectionTable.randSection);
+        
     }
+
+    private bool OpenAround(Vector3Int branchCoord, SectionTable.Section section)
+    {
+        Stack<Vector3Int> randDirStack = FPS.RandomVector3DirectionStack();
+        Debug.Log(randDirStack.Count);
+
+        // 全部の方向を試すためのwhile
+        while (true)
+        {
+            Vector3Int confDir = randDirStack.Pop();
+            if (CheckSectionPrevious(branchCoord, confDir, section))
+            {
+                OpenSectionPrevious(branchCoord, confDir, section);
+                return true;
+            }
+            if (randDirStack.Count <= 0)
+            {
+
+                return false;
+            }
+        }
+    }
+
 
     // ※再起関数
-    private bool OpenAbleOpenAround(Vector3Int seedCoord, SectionTable.Section section)
+    private bool OpenAroundContinue(Vector3Int seedCoord, SectionTable.Section section)
     {
         Stack<Vector3Int> randDirStack = FPS.RandomVector3DirectionStack();
         Debug.Log(randDirStack.Count);
@@ -94,8 +112,9 @@ public class TestPlayerController : MonoBehaviour
             Vector3Int confDir = randDirStack.Pop();
             if(CheckSectionPrevious(seedCoord,confDir,section ))
             {
+                SectionTable.Section rand = SectionTable.randSection;
                 OpenSectionPrevious(seedCoord,confDir,section);
-                OpenAbleOpenAround(seedCoord + section.GetDirectionSection(confDir)[3], SectionTable.randSection);
+                OpenAroundContinue(seedCoord + section.GetDirectionSection(confDir)[3], rand);
                 return true;
             }
             if(randDirStack.Count <= 0) 
@@ -106,70 +125,6 @@ public class TestPlayerController : MonoBehaviour
         }
     }
 
-
-    //public bool Test(Vector3Int playerCoord, Vector3Int plalyerPrevious)
-    //{
-    //    Stack<Vector3Int> seedCoord = new Stack<Vector3Int>();
-    //    Stack<Vector3Int[]> sectionCoords = new Stack<Vector3Int[]>();
-        
-    //    // プレイヤーの向きの情報をプッシュ
-    //    seedCoord.Push(playerCoord + plalyerPrevious);
-    //    sectionCoords.Push(SectionTable.randSection.GetDirectionSection(playerPrevious));
-        
-    //    // チェック一回目
-    //    if (map.CheckAbleOpen(seedCoord.Peek(), sectionCoords.Peek()))
-    //    {
-    //        // 全方向をランダム名順番で格納したスタックを作成
-    //        Stack<Vector3Int> randDirStack = FPS.RandomVector3DirectionStack();
-
-    //        // スタックが空じゃないなら
-    //        while (randDirStack.Count != 0)
-    //        {
-    //            // ランダムな向きの情報をプッシュ
-    //            Vector3Int randDir = randDirStack.Pop();
-    //            seedCoord.Push(playerCoord + sectionCoords.Peek()[1] + randDir);
-    //            sectionCoords.Push(SectionTable.randSection.GetDirectionSection(randDir));
-
-    //            Debug.Log(seedCoord.Peek());
-    //            Debug.Log(sectionCoords.Peek()[1]);
-    //            Debug.Log(seedCoord.Peek() + sectionCoords.Peek()[1]);
-    //            //Debug.Log(sectionCoords.Peek()[1]);
-    //            // チェック二回目
-    //            if (map.CheckAbleOpen(seedCoord.Peek(),sectionCoords.Peek()))
-    //            {
-    //                // 全方向をランダム名順番で格納したスタックを初期化
-    //                randDirStack = FPS.RandomVector3DirectionStack();
-
-    //                // スタックが空じゃないなら
-    //                while (randDirStack.Count != 0)
-    //                {
-    //                    // ランダムな向きの情報をプッシュ
-    //                    randDir = randDirStack.Pop();
-    //                    seedCoord.Push(playerCoord + sectionCoords.Peek()[3] + randDir);
-    //                    sectionCoords.Push(SectionTable.randSection.GetDirectionSection(randDir));
-
-    //                    // チェック三回目
-    //                    if(map.CheckAbleOpen(seedCoord.Peek(),sectionCoords.Peek()))
-    //                    {
-    //                        // すべてクリアしたら、スタックしてきたランダムな向きの情報で
-    //                        // オープンしていく
-    //                        map.OpenSection(seedCoord.Pop(),sectionCoords.Pop());
-    //                        map.OpenSection(seedCoord.Pop(),sectionCoords.Pop());
-    //                        map.OpenSection(seedCoord.Pop(),sectionCoords.Pop());
-    //                        return true;
-    //                    }
-    //                    // 三回目のチェックでオープンできなかったら、ランダムな向きの情報をポップ
-    //                    seedCoord.Pop();
-    //                    sectionCoords.Pop();
-    //                }
-    //            }
-    //            // 二回目のチェックでオープンできなかったら、ランダムな向きの情報をポップ
-    //            seedCoord.Pop();
-    //            sectionCoords.Pop();
-    //        }
-    //    }
-    //    return false;
-    //}
 
     /// <summary>
     /// 指定した向きのひとつ前のグリッド座標をシードとして対応した向きのセクションでオープンします

@@ -33,19 +33,6 @@ namespace TakeshiLibrary
             }
         }
 
-        public static void ShuffleStack<T>(ref Stack<T> stack)
-        {
-            int rand;
-            for (int i = 0; i < stack.Count; i++)
-            {
-                rand = Random.Range(0, stack.Count);
-                var swap = stack.ToArray()[i];
-                stack.ToArray()[i] = stack.ToArray()[i];
-                stack.ToArray()[rand] = swap;
-            }
-        }
-
-
         public static void Swap<T>(T lhs, T rhs)
         {
             T swap = lhs;

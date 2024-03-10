@@ -42,12 +42,13 @@ public class MapGridField : MonoBehaviour
     {
         InitMap(pos);
         map.InstanceMapObjects();
+        map.ActiveMapWallObject();
+
     }
 
     private void Update()
     {
         gridField.DrowGrid();
-        map.ActiveMapWallObject();
     }
 
 
@@ -60,6 +61,7 @@ public class MapGridField : MonoBehaviour
         map.SetWallAll();
 
         OpenSection(startSeed, SectionTable.T.Top);
+
     }
 
 
