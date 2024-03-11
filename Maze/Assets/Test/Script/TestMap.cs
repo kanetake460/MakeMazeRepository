@@ -16,7 +16,7 @@ public class TestMap : MonoBehaviour
     [SerializeField] int gridDepth = 10;
     [SerializeField] float cellWidth = 10;
     [SerializeField] float cellDepth = 10;
-    [SerializeField] float y = 0;
+    [SerializeField] int y = 0;
     private void Awake()
     {
         gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);

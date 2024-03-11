@@ -599,6 +599,7 @@ MonoBehaviour:
   dashSpeed: 20
   viewSpeedX: 3
   viewSpeedY: 3
+  idx: 3
 --- !u!1 &1638920489
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,16 +21,18 @@ public class MapGridField : MonoBehaviour
     [SerializeField] Vector3Int pos;
 
     /*グリッド設定*/
-    
     [SerializeField] protected int gridWidth = 20;
     [SerializeField] protected int gridDepth = 10;
     [SerializeField] protected float cellWidth = 10;
     [SerializeField] protected float cellDepth = 10;
-    [SerializeField] protected float y = 0;
+    [SerializeField] protected int y = 0;
 
     /*マップ*/
     public GridField gridField;
     public GridFieldMap map;
+
+    /*マップ情報*/
+    private List<Vector3Int> _roomBlockList = new List<Vector3Int>();
 
     private void Awake()
     {
@@ -60,6 +62,10 @@ public class MapGridField : MonoBehaviour
     {
         map.SetWallAll();
 
+        for(int i = 0; i < gridWidth; i++) 
+        {
+            RoomGenerator(2);
+        }
         OpenSection(startSeed, SectionTable.T.Top);
 
     }
@@ -112,21 +118,44 @@ public class MapGridField : MonoBehaviour
         return true;
     }
 
+    private bool CheckRoomGenerate(Vector3Int generateCoord, int roomSize)
+    {
+        for (int x = generateCoord.x - roomSize; x <= generateCoord.x + roomSize; x++)
+        {
+            for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
+            {
+                Vector3Int confCoord = new Vector3Int(x, map.gridField.y, z);
+                if (!map.CheckMap(confCoord))
+                {
+                    Debug.Log("生成できませんでした");
+                    return false;
+                }
+                if (map.blocks[x,z].isSpace)
+                {
+                    Debug.Log("生成できませんでした");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-    ///// <summary>
-    ///// 与えたセクションが置けるかどうか確認し、オープンします
-    ///// </summary>
-    ///// <param name="seedCoord">セクションのシード座標</param>
-    ///// <param name="sectionCoords">セクション</param>
-    ///// <returns>オープンしたかどうか true：置いた</returns>
-    //public bool CheckOpenSection(Vector3Int seedCoord, Vector3Int[] sectionCoords)
-    //{
-    //    if(CheckAbleOpen(seedCoord, sectionCoords))
-    //    {
-    //        OpenSection(seedCoord, sectionCoords);
-    //        return true;
-    //    }
-    //    return false;
-    //}
+
+    public void RoomGenerator(int roomSize)
+    {
+        Vector3Int generateCoord = map.gridField.randomGridCoord;
+
+        if (!CheckRoomGenerate(generateCoord, roomSize))
+            return;
+
+        for (int x = generateCoord.x - roomSize; x <= generateCoord.x + roomSize; x++)
+        {
+            for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
+            {
+                _roomBlockList.Add(new Vector3Int(x, map.gridField.y, z));
+                map.blocks[x, z].isSpace = true;
+            }
+        }
+    }
 }
 

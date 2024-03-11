@@ -21,7 +21,7 @@ namespace TakeshiLibrary
         public int gridHeight { get; }
         public float cellWidth { get; }
         public float cellDepth { get; }
-        public float y { get; }
+        public int y { get; }
         public eGridAnchor gridAnchor { get; }              // グリッドのアンカー
         public Vector3[,] grid { get; } = new Vector3[100, 100];     // グリッドのセルの配置Vector3の二次元配列
 
@@ -226,7 +226,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッド座標のランダムな位置を返します(読み取り専用)
         /// </summary>
-        public Vector3 randomGrid
+        public Vector3 randomGridPos
         {
             get
             {
@@ -261,7 +261,7 @@ namespace TakeshiLibrary
         /// <param name="y">グリッドのy座標</param>
         /// <param name="gridAnchor">グリッドのアンカー位置</param>
         /// <returns>GridFieldの初期化</returns>
-        public GridField(int gridWidth = 10, int gridDepth = 10, float cellWidth = 10, float cellDepth = 10, float y = 0, eGridAnchor gridAnchor = eGridAnchor.center)
+        public GridField(int gridWidth = 10, int gridDepth = 10, float cellWidth = 10, float cellDepth = 10, int y = 0, eGridAnchor gridAnchor = eGridAnchor.center)
         {
             // グリッドの横幅代入
             this.gridWidth = gridWidth;
@@ -462,13 +462,32 @@ namespace TakeshiLibrary
         /// 与えた posistion がグリッドの上にいるかどうか調べます
         /// </summary>
         /// <param name="pos">調べたいポジション</pragma>
-        public bool CheckOnGrid(Vector3 pos)
+        public bool CheckOnGridPos(Vector3 pos)
         {
             for (int x = 0; x < gridWidth; x++)
             {
                 for (int z = 0; z < gridDepth; z++)
                 {
                     if (GetGridCoordinate(pos) == grid[x, z])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 与えたグリッド座標がグリッドの上にいるかどうか調べます
+        /// </summary>
+        /// <param name="pos">調べたいポジション</pragma>
+        public bool CheckOnGridCoord(Vector3Int Coord)
+        {
+            for (int x = 0; x < gridWidth; x++)
+            {
+                for (int z = 0; z < gridDepth; z++)
+                {
+                    if (Coord == new Vector3Int(x,y,z))
                     {
                         return true;
                     }
