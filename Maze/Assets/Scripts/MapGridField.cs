@@ -16,9 +16,19 @@ using UnityEngine;
 public class MapGridField : MonoBehaviour
 {
     /*ゲームオブジェクト*/
+    [SerializeField] GameObject flagObj;
+    [SerializeField] GameObject hamburgerObj;
+
+    /*座標*/
+    private Vector3Int _startCoord;
 
     /*パラメータ*/
-    [SerializeField] Vector3Int pos;
+    [SerializeField, Min(0)] int hamburgerNum;
+    [SerializeField, Min(0)] int flagNum;
+
+    [SerializeField, Min(0)] int hamburgerRoomSize;
+    [SerializeField, Min(0)] int flagRoomSize;
+    [SerializeField, Min(0)] int startRoomSize;
 
     /*グリッド設定*/
     [SerializeField] protected int gridWidth = 20;
@@ -36,15 +46,14 @@ public class MapGridField : MonoBehaviour
 
     private void Awake()
     {
-        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.bottomLeft);
+        gridField = new GridField(gridWidth, gridDepth, cellWidth, cellDepth, y, GridField.eGridAnchor.center);
         map = new GridFieldMap(gridField);
     }
 
     private void Start()
     {
-        InitMap(pos);
-        map.InstanceMapObjects();
-        map.ActiveMapWallObject();
+        InitMap(_startCoord);
+
 
     }
 
@@ -60,14 +69,34 @@ public class MapGridField : MonoBehaviour
     /// <param name="startSeed">スタート地点</param>
     public void InitMap(Vector3Int startSeed)
     {
+
+        _startCoord = map.gridField.middleGrid;
+
         map.SetWallAll();
 
-        for(int i = 0; i < gridWidth; i++) 
-        {
-            RoomGenerator(2);
-        }
-        OpenSection(startSeed, SectionTable.T.Top);
+        RoomGenerator(map.gridField.middleGrid, 3);
+        GenerateRooms(hamburgerNum, hamburgerRoomSize, hamburgerObj);
+        GenerateRooms(flagNum, flagRoomSize, flagObj);
 
+        map.InstanceMapObjects();
+        map.ActiveMapWallObject();
+    }
+
+
+    /// <summary>
+    /// マップにハンバーガ部屋と、旗部屋を生成します
+    /// </summary>
+    /// <param name="hamburgerRoomSize">ハンバーガー部屋のサイズ</param>
+    /// <param name="flagRoomSize">旗部屋のサイズ</param>
+    private void GenerateRooms(int roomNum, int roomSize ,GameObject obj)
+    {
+        for (int i = 0; i < roomNum; i++)
+        {
+            Vector3Int randCoord = map.gridField.randomGridCoord;
+
+            RoomGenerator(randCoord, roomSize);
+            Instantiate(obj, map.gridField.grid[randCoord.x,randCoord.z],Quaternion.identity);
+        }
     }
 
 
@@ -118,6 +147,13 @@ public class MapGridField : MonoBehaviour
         return true;
     }
 
+
+    /// <summary>
+    /// 部屋が生成できるかどうか確認します
+    /// </summary>
+    /// <param name="generateCoord">生成する座標</param>
+    /// <param name="roomSize">生成する部屋のサイズ</param>
+    /// <returns>できるかどうか</returns>
     private bool CheckRoomGenerate(Vector3Int generateCoord, int roomSize)
     {
         for (int x = generateCoord.x - roomSize; x <= generateCoord.x + roomSize; x++)
@@ -141,10 +177,14 @@ public class MapGridField : MonoBehaviour
     }
 
 
-    public void RoomGenerator(int roomSize)
+    /// <summary>
+    /// 部屋を生成します
+    /// </summary>
+    /// <param name="generateCoord">生成する座標</param>
+    /// <param name="roomSize">生成する部屋のサイズ</param>
+    public void RoomGenerator(Vector3Int generateCoord, int roomSize)
     {
-        Vector3Int generateCoord = map.gridField.randomGridCoord;
-
+        // 生成できるか確認できなかったらリターン
         if (!CheckRoomGenerate(generateCoord, roomSize))
             return;
 
@@ -152,6 +192,7 @@ public class MapGridField : MonoBehaviour
         {
             for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
             {
+                // ルームリストに追加
                 _roomBlockList.Add(new Vector3Int(x, map.gridField.y, z));
                 map.blocks[x, z].isSpace = true;
             }

@@ -223,6 +223,20 @@ namespace TakeshiLibrary
             }
         }
 
+
+        /*=========グリッドフィールドの中心Vector3座標===========*/
+        /// <summary>
+        /// グリッドの真ん中の localPosition を返します(読み取り専用)
+        /// </summary>
+        public Vector3Int middleGrid
+        {
+            get
+            {
+                return new Vector3Int(gridWidth / 2, y, gridDepth / 2);
+            }
+        }
+
+        /*=========ランダム===========*/
         /// <summary>
         /// グリッド座標のランダムな位置を返します(読み取り専用)
         /// </summary>

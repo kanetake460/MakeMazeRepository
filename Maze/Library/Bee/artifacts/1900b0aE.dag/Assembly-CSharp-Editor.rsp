@@ -364,6 +364,7 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Model/Reflex Shader 2/Editor/RSInspector.cs"
 "Assets/Model/Sunao Shader/Editor/SunaoShaderGUI.cs"
+"Assets/Scripts/Editor/BehaviourEditor.cs"
 "Assets/Toon/Editor/CopyMaterialParameter.cs"
 "Assets/Toon/Editor/RemoveUnusedMaterialProperties.cs"
 "Assets/Toon/Editor/RemoveUnusedShaderKeywordsFromUTS2Material.cs"

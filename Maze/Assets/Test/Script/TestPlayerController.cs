@@ -42,7 +42,6 @@ public class TestPlayerController : MonoBehaviour
         PlayerAction1();
     }
 
-    [SerializeField] int idx;
     /// <summary>
     /// 右クリックしたときのアクション
     /// </summary>
@@ -52,7 +51,7 @@ public class TestPlayerController : MonoBehaviour
         {
             InitStack(_sectionStack1);
             InitStack(_sectionStack2);
-            if(OpenBranchingSection(playerCoord,playerPrevious, _sectionStack1.Peek(),idx))
+            if(OpenBranchingSection(playerCoord,playerPrevious, _sectionStack1.Peek()))
                 _sectionStack1.Pop();
             map.map.ActiveMapWallObject();
         }
@@ -68,7 +67,7 @@ public class TestPlayerController : MonoBehaviour
     /// <param name="section">オープンするセクション</param>
     /// <param name="branchIndx">二つ目をオープンするブランチのインデックス</param>
     /// <returns>オープンできたかどうか</returns>
-    private bool OpenBranchingSection(Vector3Int branchCoord,Vector3Int dir,SectionTable.Section section,int branchIndx)
+    private bool OpenBranchingSection(Vector3Int branchCoord,Vector3Int dir,SectionTable.Section section,int branchIndx = 3)
     {
         // 一つ目がオープンできるかチェック
         if (!CheckSectionPrevious(branchCoord, dir, section)) 
