@@ -80,6 +80,7 @@ namespace TakeshiLibrary
             {
                 count++;
 
+                Debug.Log(openList.Count);
                 // リストの中から総コストが最も低いものを格納
                 minCell = openList.OrderBy(x => x.sumCost).First();
 
@@ -117,6 +118,7 @@ namespace TakeshiLibrary
             startCell.sumCost = startCell.cost + startCell.heuristicCost;
 
             openList.Add(startCell);
+            Debug.Log(startCell);
         }
 
 

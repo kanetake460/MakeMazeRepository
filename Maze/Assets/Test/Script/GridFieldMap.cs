@@ -216,7 +216,7 @@ namespace TakeshiLibrary
         /// <param name="space">spaceのオブジェクト</param>
         /// <param name="wall">wallのオブジェクト</param>
         /// <param name="gf">gridField</param>
-        public void InstanceMapObjects()
+        public void InstanceMapObjects(float scaleY = 10)
         {
             for (int x = 0; x < gridField.gridWidth; x++)
             {
@@ -229,7 +229,7 @@ namespace TakeshiLibrary
                     blocks[x, z].mapWallObj = cube;
                     blocks[x, z].mapWallObj.name = new string(x + "," + z);
                     cube.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
-                    cube.transform.localScale = new Vector3(gridField.cellWidth, gridField.cellMaxLength, gridField.cellDepth);
+                    cube.transform.localScale = new Vector3(gridField.cellWidth, scaleY, gridField.cellDepth);
                 }
             }
         }

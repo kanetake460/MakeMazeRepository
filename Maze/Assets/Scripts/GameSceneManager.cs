@@ -39,7 +39,6 @@ public class GameSceneManager : MonoBehaviour
     private void Update()
     {
         SceneManagement();
-        EscapeTime();
     }
 
     /// <summary>
@@ -58,7 +57,7 @@ public class GameSceneManager : MonoBehaviour
                 titleCanvas.enabled = true;     // タイトルキャンバス見せる
                 break;
 
-            case eScenes.Make_Scene:        // ゲームマシーンなら
+            case eScenes.Make_Scene:        // ゲームシーンなら
                 Cursor.lockState = CursorLockMode.Locked;
                 playerController.enabled = true;// プレイヤーコントローラーを動かす
                 UICanvas.SetActive(true);       // UI表示
@@ -66,8 +65,6 @@ public class GameSceneManager : MonoBehaviour
 
             case eScenes.Escape_Scene:
                 Cursor.lockState = CursorLockMode.Locked;
-                gameManager.ChangeCompass();
-                enemyCollider.All(e => e.enabled = true);
                 break;
 
             case eScenes.Result_Scene:      // リザルトなら
@@ -87,6 +84,9 @@ public class GameSceneManager : MonoBehaviour
         currentScene = eScenes.Make_Scene;
     }
 
+    /// <summary>
+    /// ゲームをリスタートします
+    /// </summary>
     public void RestartButton() 
     {
        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -95,39 +95,29 @@ public class GameSceneManager : MonoBehaviour
     /// <summary>
     /// ゲームのクリア判定を行います
     /// </summary>
-    private void GameClear()
+    public void GameClear()
     {
-        // 旗がすべて集まったら
-        if (gameManager.clearFlag == true)
-        {
-            Debug.Log("ゲームクリアー！");
-            currentScene = eScenes.Result_Scene;
-            resultText.text = "GameClear";
-        }
+        currentScene = eScenes.Result_Scene;
+        resultText.text = "GameClear";
     }
 
-    private void EscapeTime()
+
+    /// <summary>
+    /// エスケープシーンに変更します
+    /// </summary>
+    public void EscapeTime()
     {
-        if (gameManager.flags >= gameManager.clearFlagNum)
-        {
-            currentScene = eScenes.Escape_Scene;
-            //gameManager.map.CreateMaze();
-            GameClear();
-            GameOver();
-        }
+        enemyCollider.All(e => e.enabled = true);
+        currentScene = eScenes.Escape_Scene;
     }
 
     /// <summary>
     /// ゲームオーバー判定を行います
     /// </summary>
-    private void GameOver()
+    public void GameOver()
     {
-        // ゲームオーバーカウントが0になったら
-        if (gameManager.deadCount <= 0)
-        {
-            currentScene = eScenes.Result_Scene;
-            resultText.text = "GameOver";
-        }
+        currentScene = eScenes.Result_Scene;
+        resultText.text = "GameOver";
     }
 }
 

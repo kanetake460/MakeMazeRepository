@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     /*オブジェクト参照*/
-    [SerializeField] GameManager gameManager;       // ゲームマネージャー
     [SerializeField] Animator flagAnim;             // フラグセンサーのアニメーション
     [SerializeField] Animator hamburgerAnim;        // ハンバーガーセンサーのアニメーション
     [SerializeField] TakeshiLibrary.CompassUI flagCompass;           // フラグのコンパス
@@ -17,53 +16,56 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
     [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト
     [SerializeField] TextMeshProUGUI messageText;   // ゲーム表示するメッセージのテキスト
-    private int messageCount = 0;
+    public static int _messageCount = 0;
 
     /// <summary>
     /// フラグのカウントのテキストを表示します
     /// </summary>
-    public void CountText()
+    public void TextFlagCount(int flagCount, int flagNum)
     {
-        flagCountText.text = gameManager.flags + " / " + gameManager.clearFlagNum;
+        flagCountText.text = flagCount + " / " + flagNum;
     }
 
     /// <summary>
     /// ハンバーガーのUIの表示を管理します
     /// </summary>
-    public void HamburgerManager()
+    /// <param name="hamburgerCount">ハンバーガーカウント</param>
+    /// <param name="hamburgerNum">ハンバーガー最大数</param>
+    public void HamburgerManager(int hamburgerNum, int hamburgerCount)
     {
-        for(int i = 0; i < gameManager.hamburgerNum; i++) 
+        for(int i = 0; i < hamburgerNum; i++) 
         {
             HamburgerUI[i].SetActive(false);
         }
-        for(int i = 0;i < gameManager.hamburgerCount; i++)
+        for(int i = 0;i < hamburgerCount; i++)
         {
             HamburgerUI[i].SetActive(true);
         }
     }
 
+
     /// <summary>
     /// ゲームオーバーカウントを表示します
     /// </summary>
-    public void CountDead()
+    public void CountDead(float count,float num)
     {
-        // ハンバーガーがなくなったらカウントを開始
-        if (gameManager.hamburgerCount <= 0)
-        {
-            deadCountText.enabled = true;
-        }
-        else// それ以外では非表示にしてカウントを戻します
+        deadCountText.enabled = true;
+        deadCountText.text = count.ToString("f2");
+        if(count == num)
         {
             deadCountText.enabled = false;
         }
-            deadCountText.text = gameManager.deadCount.ToString("f2");
     }
 
+
+    /// <summary>
+    /// ゲームメッセージを表示します
+    /// </summary>
     private void DisplayGameMessage()
     {
-        if(messageCount != 0)
+        if(_messageCount != 0)
         {
-            messageCount--;
+            _messageCount--;
         }
         else
         {
@@ -72,20 +74,24 @@ public class UIManager : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// 表示するゲームメッセ－ジをせっていします
+    /// </summary>
+    /// <param name="message">メッセージ</param>
+    /// <param name="color">色</param>
+    /// <param name="messageTime">表示する時間</param>
     public void EnterDisplayGameMessage(string message, Color color, int messageTime = 300)
     {
         messageText.text = message;
         messageText.color = color;
-        messageCount = messageTime;
+        _messageCount = messageTime;
     }
 
     void Update()
     {
         flagAnim.SetFloat("CompassRotation",flagCompass.distance);
         hamburgerAnim.SetFloat("CompassRotation",hamburgerCompass.distance);
-        CountText();
-        HamburgerManager();
-        CountDead();
         DisplayGameMessage();
     }
 }

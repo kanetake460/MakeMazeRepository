@@ -6,6 +6,9 @@ using System.Linq;
 
 public class TestPlayerController : MonoBehaviour
 {
+    [SerializeField] GameManager gameManager;
+    [SerializeField] UIManager uiManager;
+
     [SerializeField] GameObject mainCam;
 
     [SerializeField] MapGridField map;
@@ -15,6 +18,8 @@ public class TestPlayerController : MonoBehaviour
 
     private Stack<SectionTable.Section> _sectionStack1 = new Stack<SectionTable.Section>();
     private Stack<SectionTable.Section> _sectionStack2 = new Stack<SectionTable.Section>();
+
+    private GameObject _triggerObj;
 
     /*パラメータ*/
     [SerializeField] float locoSpeed;                    // 移動スピード
@@ -39,23 +44,71 @@ public class TestPlayerController : MonoBehaviour
         fps.CursorLock();
         fps.ClampMoveRange(transform);
 
+        PlayerAction0();
         PlayerAction1();
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        _triggerObj = other.gameObject;
+
+        switch (other.tag)
+        {
+            case "flag":
+                uiManager.EnterDisplayGameMessage("右クリック！！",Color.black,10);
+                break;
+
+            case "hamburger":
+                Debug.Log("右クリック！！");
+                uiManager.EnterDisplayGameMessage("右クリック！！", Color.black, 10);
+
+                break;
+
+            case "goal":
+                uiManager.EnterDisplayGameMessage("右クリック！！", Color.yellow, 10);
+
+                break;
+            case "enemy":
+                gameManager.clearFlag = false;
+                break;
+
+
+        }
+
+    }
+
+    /// <summary>
+    /// 左クリックしたときのアクション
+    /// </summary>
+    private void PlayerAction0()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            InitStack(_sectionStack1);
+            InitStack(_sectionStack2);
+            if (OpenBranchingSection(playerCoord, playerPrevious, _sectionStack1.Peek()))
+                _sectionStack1.Pop();
+            else
+            {
+                uiManager.EnterDisplayGameMessage("そこでは開けません！！",Color.red,100);
+            }
+            map.map.ActiveMapWallObject();
+        }
+    }
+
 
     /// <summary>
     /// 右クリックしたときのアクション
     /// </summary>
     private void PlayerAction1()
     {
-        if (Input.GetMouseButtonDown(1))
+        if(Input.GetMouseButtonDown(1))
         {
-            InitStack(_sectionStack1);
-            InitStack(_sectionStack2);
-            if(OpenBranchingSection(playerCoord,playerPrevious, _sectionStack1.Peek()))
-                _sectionStack1.Pop();
-            map.map.ActiveMapWallObject();
+            gameManager.CheckInObj(_triggerObj);
         }
     }
+
+
 
 
     /// <summary>

@@ -152,11 +152,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54344076f53f7704db14ea94c2b4bddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flagObj: {fileID: 0}
+  hamburgerObj: {fileID: 0}
+  hamburgerNum: 0
+  flagNum: 0
+  hamburgerRoomSize: 0
+  flagRoomSize: 0
+  startRoomSize: 0
   gridWidth: 100
   gridDepth: 100
   cellWidth: 10
   cellDepth: 10
   y: 0
+  blockHeight: 15
 --- !u!4 &447553972
 Transform:
   m_ObjectHideFlags: 0
@@ -592,6 +600,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef9d9b785be46c947a6512d75b636b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  uiManager: {fileID: 0}
   mainCam: {fileID: 475652231}
   map: {fileID: 447553971}
   locoSpeed: 5
@@ -614,7 +624,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1638920490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,7 +655,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638920489}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -35.98, y: 0, z: 3.37}
+  m_LocalPosition: {x: -14.7, y: 0, z: 3.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -352,6 +352,7 @@
 "Assets/Scripts/AudioManager.cs"
 "Assets/Scripts/CompassUI.cs"
 "Assets/Scripts/CreateMap.cs"
+"Assets/Scripts/Enemy.cs"
 "Assets/Scripts/EnumIndexAttribute.cs"
 "Assets/Scripts/Flag.cs"
 "Assets/Scripts/FPS.cs"

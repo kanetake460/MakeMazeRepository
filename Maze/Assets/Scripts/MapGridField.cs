@@ -42,6 +42,7 @@ public class MapGridField : MonoBehaviour
     public GridFieldMap map;
 
     /*マップ情報*/
+    [SerializeField] float blockHeight;
     private List<Vector3Int> _roomBlockList = new List<Vector3Int>();
 
     private void Awake()
@@ -52,9 +53,7 @@ public class MapGridField : MonoBehaviour
 
     private void Start()
     {
-        InitMap(_startCoord);
-
-
+        InitMap();
     }
 
     private void Update()
@@ -67,7 +66,7 @@ public class MapGridField : MonoBehaviour
     /// マップを初期化します
     /// </summary>
     /// <param name="startSeed">スタート地点</param>
-    public void InitMap(Vector3Int startSeed)
+    public void InitMap()
     {
 
         _startCoord = map.gridField.middleGrid;
@@ -78,7 +77,7 @@ public class MapGridField : MonoBehaviour
         GenerateRooms(hamburgerNum, hamburgerRoomSize, hamburgerObj);
         GenerateRooms(flagNum, flagRoomSize, flagObj);
 
-        map.InstanceMapObjects();
+        map.InstanceMapObjects(blockHeight);
         map.ActiveMapWallObject();
     }
 
@@ -86,15 +85,21 @@ public class MapGridField : MonoBehaviour
     /// <summary>
     /// マップにハンバーガ部屋と、旗部屋を生成します
     /// </summary>
-    /// <param name="hamburgerRoomSize">ハンバーガー部屋のサイズ</param>
-    /// <param name="flagRoomSize">旗部屋のサイズ</param>
+    /// <param name="roomNum">ハンバーガー部屋のサイズ</param>
+    /// <param name="roomSize">旗部屋のサイズ</param>
     private void GenerateRooms(int roomNum, int roomSize ,GameObject obj)
     {
         for (int i = 0; i < roomNum; i++)
         {
-            Vector3Int randCoord = map.gridField.randomGridCoord;
-
+            Vector3Int randCoord;
+            while (true)
+            {
+                randCoord = map.gridField.randomGridCoord;
+                if (CheckRoomGenerate(randCoord, roomSize))
+                    break; 
+            }
             RoomGenerator(randCoord, roomSize);
+
             Instantiate(obj, map.gridField.grid[randCoord.x,randCoord.z],Quaternion.identity);
         }
     }
@@ -194,7 +199,7 @@ public class MapGridField : MonoBehaviour
             {
                 // ルームリストに追加
                 _roomBlockList.Add(new Vector3Int(x, map.gridField.y, z));
-                map.blocks[x, z].isSpace = true;
+                map.SetWalls(x,z,false,false,false,false,true);
             }
         }
     }
