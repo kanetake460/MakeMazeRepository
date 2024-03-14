@@ -415,6 +415,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d44efd360a297f6489613c65422fd2bc, type: 3}
+--- !u!1 &1167550313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1167550315}
+  - component: {fileID: 1167550314}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1167550314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167550313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc03354a6774bbf46a289adb6e95759b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Clips_SE: []
+  Clips_BGM:
+  - {fileID: 8300000, guid: 513313d4ee7f37a4ab54cc3c6a478403, type: 3}
+  Volume_SE: 0.5
+  Volume_BGM: 1
+--- !u!4 &1167550315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167550313}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.660845, y: 25.417234, z: -16.986107}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1175761244 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7d19edb603922054f9154abff20ef114, type: 3}
@@ -637,16 +686,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bfc59c441a4bdf46959c20a005cb18c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathObj: {fileID: 4985950377011335953, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
-  player: {fileID: 1260217917}
-  testMap: {fileID: 447553971}
-  chaceSpeed: 5
-  wandSpeed: 1
-  MT_Red: {fileID: 2100000, guid: 844d8000aff81b544b3be2684daf4116, type: 2}
-  MT_Blue: {fileID: 2100000, guid: 546a0b6ffb58cb542881ac98d8ade1bf, type: 2}
+  chaceSpeed: 15
+  wandSpeed: 5
+  searchRaySize: 10
   layerMask:
     serializedVersion: 2
     m_Bits: 8
+  MT_Red: {fileID: 2100000, guid: 844d8000aff81b544b3be2684daf4116, type: 2}
+  MT_Blue: {fileID: 2100000, guid: 546a0b6ffb58cb542881ac98d8ade1bf, type: 2}
+  pathObj: {fileID: 4985950377011335953, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
+  player: {fileID: 1260217917}
+  testMap: {fileID: 447553971}
 --- !u!4 &1638920491
 Transform:
   m_ObjectHideFlags: 0

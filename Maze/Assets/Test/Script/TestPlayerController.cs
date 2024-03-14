@@ -46,6 +46,7 @@ public class TestPlayerController : MonoBehaviour
 
         PlayerAction0();
         PlayerAction1();
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -59,7 +60,6 @@ public class TestPlayerController : MonoBehaviour
                 break;
 
             case "hamburger":
-                Debug.Log("右クリック！！");
                 uiManager.EnterDisplayGameMessage("右クリック！！", Color.black, 10);
 
                 break;
@@ -74,7 +74,11 @@ public class TestPlayerController : MonoBehaviour
 
 
         }
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        _triggerObj = null;
     }
 
     /// <summary>
@@ -104,6 +108,7 @@ public class TestPlayerController : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(1))
         {
+            Debug.Log("ゲット！");
             gameManager.CheckInObj(_triggerObj);
         }
     }

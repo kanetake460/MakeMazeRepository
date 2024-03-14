@@ -16,8 +16,8 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField] Canvas resultCanvas;       // リザルトキャンバス
     [SerializeField] TextMeshProUGUI resultText;// リザルトテキスト
 
-    [SerializeField] GameObject ClearFlag;
-    [SerializeField] BoxCollider[] enemyCollider;
+    [SerializeField] GameObject clearFlag;
+    [SerializeField] GameObject[] enemys;
     public enum eScenes
     {
         Title_Scene,    // タイトルシーン
@@ -82,6 +82,7 @@ public class GameSceneManager : MonoBehaviour
     public void StartButton()
     {
         currentScene = eScenes.Make_Scene;
+
     }
 
     /// <summary>
@@ -107,7 +108,11 @@ public class GameSceneManager : MonoBehaviour
     /// </summary>
     public void EscapeTime()
     {
-        enemyCollider.All(e => e.enabled = true);
+        clearFlag.SetActive(true);
+        for (int i = 0; i < enemys.Length; i++)
+        {
+            enemys[i].SetActive(true);
+        }
         currentScene = eScenes.Escape_Scene;
     }
 

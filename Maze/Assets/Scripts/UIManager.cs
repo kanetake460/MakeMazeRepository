@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using TakeshiLibrary;
 using UnityEngine.UI;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -87,6 +88,7 @@ public class UIManager : MonoBehaviour
         messageText.color = color;
         _messageCount = messageTime;
     }
+
 
     void Update()
     {

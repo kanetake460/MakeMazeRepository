@@ -236,6 +236,21 @@ namespace TakeshiLibrary
 
 
         /// <summary>
+        /// レイヤーマスクを設定します
+        /// </summary>
+        /// <param name="layer">レイヤー</param>
+        public void SetLayerMapObject(string layerName)
+        {
+            for (int x = 0; x < gridField.gridWidth; x++)
+            {
+                for (int z = 0; z < gridField.gridDepth; z++)
+                {
+                    blocks[x,z].mapWallObj.layer = LayerMask.NameToLayer(layerName);
+                }
+            }
+        }
+
+        /// <summary>
         /// マップの壁オブジェクトのアクティブを管理します
         /// </summary>
         public void ActiveMapWallObject()

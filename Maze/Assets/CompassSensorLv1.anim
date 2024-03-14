@@ -216,7 +216,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: PlaySE_SensorLv1
+    functionName: PlaySE_2Type
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -6,18 +6,23 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("パラメータ")]
+    [SerializeField] float wandSpeed;
+    [SerializeField] float chaseSpeed;
+    [SerializeField] float escapeDist;
+    [SerializeField] int aStarCount;
+
+    [Header("コンポーネント")]
     [SerializeField] GameSceneManager sceneManager;
     [SerializeField] MapGridField map;
     [SerializeField] AudioManager audioManager;
 
-    [SerializeField] Transform enemy;
+    [Header("設定")]
     [SerializeField] GameObject playerObj;
     [SerializeField] LayerMask searchLayer;
     [SerializeField] string playerTag;
 
-    [SerializeField] float wandSpeed;
-    [SerializeField] float chaseSpeed;
-    [SerializeField] float escapeDist;
+    private Transform _enemy;
 
     private bool _isChase = false;
     private bool _isInit = false;
@@ -32,31 +37,31 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        enemy = transform;
+        _enemy = transform;
         fps = new FPS(map.map);
-        ai = new EnemyAI(enemy,map.map);
-        compass = new TakeshiLibrary.Compass(enemy);
+        ai = new EnemyAI(_enemy,map.map);
+        compass = new TakeshiLibrary.Compass(_enemy);
     }
 
 
 
     private void EnemyMovement()
     {
-        if(ai.SearchPlayer(searchLayer,playerTag,1.5f)) _isChase = true;
+        if(ai.SearchPlayer(searchLayer,playerTag,5)) _isChase = true;
 
         if (_isChase)
         {
-            Debug.Log("chase");
+            AudioManager.PlayBGM("MaxWell");
             if (isWandcExit) ai.ExitLocomotion(ref isWandcExit);
-            ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed);
+            ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed,aStarCount);
             isChaceExit = true;
         }
         else
         {
+            AudioManager.StopBGM();
             Debug.Log("wandering");
             if(isChaceExit)ai.ExitLocomotion(ref isChaceExit);
             ai.Wandering(wandSpeed);
-            //audioManager.StopBGM();
             isWandcExit = true;
         }
     }

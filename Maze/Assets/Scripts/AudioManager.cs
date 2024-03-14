@@ -1,26 +1,54 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+/// <summary>
+/// オーディオソースのディクショナリ
+/// </summary>
+[Serializable]
+public class AudioSourceDictionary
+{
+    public string key;
+    public AudioSource value;
+}
+
+/// <summary>
+/// オーディオクリップのディクショナリ
+/// </summary>
+[Serializable]
+public class AudioClipDictionary
+{
+    public string key;
+    public AudioClip value;
+}
+
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager instance;
+
+    [Header("オーディオソース")]
+    [SerializeField]
+    List<AudioSourceDictionary> audioSourceDictionary = new List<AudioSourceDictionary>();
+    static Dictionary<string, AudioSource> audioSourceDic = new Dictionary<string, AudioSource>();
+
     [Header("クリップ")]
-    [SerializeField] 
-    AudioClip[] Clips_SE;
-    [SerializeField] 
-    AudioClip[] Clips_BGM;
+    [SerializeField] List<AudioClipDictionary> SE_ClipDictionary = new List<AudioClipDictionary>();
+    static Dictionary<string,AudioClip> _DicSE = new Dictionary<string, AudioClip>();
+    
+    [SerializeField] List<AudioClipDictionary> BGM_ClipDictionary = new List<AudioClipDictionary>();
+    static Dictionary<string, AudioClip> _DicBGM = new Dictionary<string, AudioClip>();
+
 
     [Header("音量")]
     [SerializeField,Range(0f, 1f)]
-    float Volume_SE;
+    float Volume_SE = 0.5f;
     [SerializeField, Range(0f, 1f)]
-    float Volume_BGM;
+    float Volume_BGM = 0.5f;
 
-    static AudioClip[] _se;
     static AudioClip _selectedSE;
-    static AudioClip[] _bgm;
     static AudioClip _selectedBGM;
 
     static int _seCount;
@@ -28,10 +56,22 @@ public class AudioManager : MonoBehaviour
     static AudioSource _BGMAudioSource;
     static AudioSource _SEAudioSource;
 
+    static Animator anim;
+
     
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        anim = GetComponent<Animator>();
         if (_BGMAudioSource == null)
             _BGMAudioSource = gameObject.AddComponent<AudioSource>();
         if (_SEAudioSource  == null)
@@ -41,8 +81,18 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        _se = Clips_SE;
-        _bgm = Clips_BGM;
+        foreach(var source in audioSourceDictionary)
+        {
+            audioSourceDic[source.key] = source.value;
+        }
+        foreach(var clip in SE_ClipDictionary)
+        {
+            _DicSE[clip.key] = clip.value;
+        }
+        foreach (var clip in BGM_ClipDictionary)
+        {
+            _DicBGM[clip.key] = clip.value;
+        }
     }
 
     private void Update()
@@ -51,15 +101,14 @@ public class AudioManager : MonoBehaviour
         SetVolumeBGM(Volume_SE);
 
         PlaySEContinue();
-        if (Input.GetKeyDown(KeyCode.P))
-            PlaySEStart(0,5);
+
     }
 
     /// <summary>
     /// SEの音量を設定します
     /// </summary>
     /// <param name="volume">音量（0～1）</param>
-    static void SetVolumeSE(float volume)
+    public static void SetVolumeSE(float volume)
     {
         _BGMAudioSource.volume = volume;
     }
@@ -68,7 +117,7 @@ public class AudioManager : MonoBehaviour
     /// BGMの音量を設定します
     /// </summary>
     /// <param name="volume">音量（0～1）</param>
-    static void SetVolumeBGM(float volume)
+    public static void SetVolumeBGM(float volume)
     {
         _SEAudioSource.volume = volume;
     }
@@ -86,26 +135,41 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    static void PlaySEStart(int clipIndx,int count = 1)
+    public static void PlaySEStart(string clipKey,int count = 1)
     {
         _seCount = count;
-        _selectedSE = _se[clipIndx];
+        _selectedSE = _DicSE[clipKey];
     }
 
 
-    public void PlayBGM(int clipIndx)
+    public static void PlayOneShot(string clipKey)
     {
-        _SEAudioSource.clip = Clips_BGM[clipIndx];
-        _SEAudioSource.UnPause();
+        Debug.Log(_DicSE.Count);
+        _SEAudioSource.PlayOneShot(_DicSE[clipKey]);
     }
-
-    public void RePlayBGM()
+    public static void PlayOneShot(string clipKey,AudioSource audioSource)
     {
-
+        audioSource.PlayOneShot(_DicSE[clipKey]);
     }
 
-    public void StopBGM()
+
+    public static void PlayBGM(string clipIndx)
     {
-        _SEAudioSource.Pause();
+        if(_BGMAudioSource.isPlaying == false)
+        {
+            _BGMAudioSource.clip = _DicBGM[clipIndx];
+            _BGMAudioSource.Play();
+        }
     }
+
+    public static void RePlayBGM()
+    {
+        _BGMAudioSource.UnPause();
+    }
+
+    public static void StopBGM()
+    {
+        _BGMAudioSource.Pause();
+    }
+
 }

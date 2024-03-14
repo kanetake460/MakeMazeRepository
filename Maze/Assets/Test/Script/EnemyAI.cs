@@ -159,7 +159,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// 移動を終了させます
         /// </summary>
-        /// <param name="isExit"></param>
+        /// <param name="isExit">終了したかどうか</param>
         public void ExitLocomotion(ref bool isExit)
         {
             isExit = false;
@@ -184,18 +184,25 @@ namespace TakeshiLibrary
             }
         }
 
-        public bool SearchPlayer(LayerMask searchLayer,string playerTag, float wallThickness)
+
+        /// <summary>
+        /// レイキャストにより、プレイヤーを探します
+        /// </summary>
+        /// <param name="searchLayer">プレイヤーと壁のレイヤー</param>
+        /// <param name="playerTag">プレイヤーのタグ</param>
+        /// <param name="wallThickness">レイキャストの大きさ（）セルの横幅から引く値</param>
+        /// <returns>みつかったかどうかtrue：発見</returns>
+        public bool SearchPlayer(LayerMask searchLayer,string playerTag, float raySize = 10)
         {
             RaycastHit hit;
 
             Vector3 dir = _enemyTrafo.forward;
-            Vector3 size = Vector3.one * _map.gridField.cellMaxLength / 2;
+            Vector3 size = Vector3.one * raySize / 2;
             Vector3 point = _enemyTrafo.position;
             
             point -= dir * _map.gridField.cellMaxLength;
-            size -= size / wallThickness;
             float rayDist = _map.gridField.gridMaxLength * _map.gridField.cellMaxLength;
-
+            Debug.Log(rayDist);
             if (Physics.BoxCast(point, size, dir, out hit, Quaternion.identity, rayDist, searchLayer))
             {
                 if (hit.collider.CompareTag(playerTag))

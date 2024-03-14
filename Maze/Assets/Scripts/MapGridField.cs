@@ -15,14 +15,11 @@ using UnityEngine;
 
 public class MapGridField : MonoBehaviour
 {
-    /*ゲームオブジェクト*/
+    [Header("ゲームオブジェクト")]
     [SerializeField] GameObject flagObj;
     [SerializeField] GameObject hamburgerObj;
 
-    /*座標*/
-    private Vector3Int _startCoord;
-
-    /*パラメータ*/
+    [Header("パラメーター")]
     [SerializeField, Min(0)] int hamburgerNum;
     [SerializeField, Min(0)] int flagNum;
 
@@ -30,19 +27,21 @@ public class MapGridField : MonoBehaviour
     [SerializeField, Min(0)] int flagRoomSize;
     [SerializeField, Min(0)] int startRoomSize;
 
-    /*グリッド設定*/
+    [Header("マップ設定")]
     [SerializeField] protected int gridWidth = 20;
     [SerializeField] protected int gridDepth = 10;
     [SerializeField] protected float cellWidth = 10;
     [SerializeField] protected float cellDepth = 10;
     [SerializeField] protected int y = 0;
+    [SerializeField] float blockHeight;
+    [SerializeField] string layerName;
 
-    /*マップ*/
+
+    [Header("コンポーネント")]
     public GridField gridField;
     public GridFieldMap map;
 
     /*マップ情報*/
-    [SerializeField] float blockHeight;
     private List<Vector3Int> _roomBlockList = new List<Vector3Int>();
 
     private void Awake()
@@ -69,7 +68,6 @@ public class MapGridField : MonoBehaviour
     public void InitMap()
     {
 
-        _startCoord = map.gridField.middleGrid;
 
         map.SetWallAll();
 
@@ -78,6 +76,7 @@ public class MapGridField : MonoBehaviour
         GenerateRooms(flagNum, flagRoomSize, flagObj);
 
         map.InstanceMapObjects(blockHeight);
+        map.SetLayerMapObject(layerName);
         map.ActiveMapWallObject();
     }
 
@@ -115,7 +114,7 @@ public class MapGridField : MonoBehaviour
         foreach (Vector3Int coord in sectionCoord)
         {
             Vector3Int element = seedCoord + coord;
-            map.blocks[element.x, element.z].isSpace = true;
+            map.SetWalls(element.x, element.z, false,false,false,false,true);
         }
     }
 
@@ -129,7 +128,7 @@ public class MapGridField : MonoBehaviour
         foreach (Vector3Int coord in sectionCoord)
         {
             Vector3Int element = seedCoord + coord;
-            map.blocks[element.x, element.z].isSpace = false;
+            map.SetWalls(element.x, element.z, true, true, true, true, false);
         }
     }
 
