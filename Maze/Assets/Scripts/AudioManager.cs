@@ -153,12 +153,21 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    public static void PlayBGM(string clipIndx)
+    public static void PlayBGM(string clipKey)
     {
         if(_BGMAudioSource.isPlaying == false)
         {
-            _BGMAudioSource.clip = _DicBGM[clipIndx];
+            _BGMAudioSource.clip = _DicBGM[clipKey];
             _BGMAudioSource.Play();
+        }
+    }
+    public static void PlayBGM(string clipKey,AudioSource audioSource)
+    {
+        if (audioSource.isPlaying == false)
+        {
+            audioSource.clip = _DicBGM[clipKey];
+            audioSource.Play();
+            Debug.Log(audioSource.isPlaying);
         }
     }
 
@@ -167,9 +176,9 @@ public class AudioManager : MonoBehaviour
         _BGMAudioSource.UnPause();
     }
 
-    public static void StopBGM()
-    {
-        _BGMAudioSource.Pause();
-    }
+    public static void StopBGM() { _BGMAudioSource.Pause(); }
+    public static void StopBGM(AudioSource audioSource) { audioSource.Pause(); }
+        
+
 
 }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using TakeshiLibrary;
 using UnityEngine;
 
@@ -42,7 +41,7 @@ public class MapGridField : MonoBehaviour
     public GridFieldMap map;
 
     /*マップ情報*/
-    private List<Vector3Int> _roomBlockList = new List<Vector3Int>();
+    public List<Vector3Int> roomBlockList { get; } = new List<Vector3Int>();
 
     private void Awake()
     {
@@ -70,13 +69,13 @@ public class MapGridField : MonoBehaviour
 
 
         map.SetWallAll();
+        map.InstanceMapObjects(blockHeight);
+        map.SetLayerMapObject(layerName);
 
         RoomGenerator(map.gridField.middleGrid, 3);
         GenerateRooms(hamburgerNum, hamburgerRoomSize, hamburgerObj);
         GenerateRooms(flagNum, flagRoomSize, flagObj);
 
-        map.InstanceMapObjects(blockHeight);
-        map.SetLayerMapObject(layerName);
         map.ActiveMapWallObject();
     }
 
@@ -100,6 +99,7 @@ public class MapGridField : MonoBehaviour
             RoomGenerator(randCoord, roomSize);
 
             Instantiate(obj, map.gridField.grid[randCoord.x,randCoord.z],Quaternion.identity);
+
         }
     }
 
@@ -197,8 +197,10 @@ public class MapGridField : MonoBehaviour
             for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
             {
                 // ルームリストに追加
-                _roomBlockList.Add(new Vector3Int(x, map.gridField.y, z));
+                roomBlockList.Add(new Vector3Int(x, map.gridField.y, z));
                 map.SetWalls(x,z,false,false,false,false,true);
+                map.SetPlaneColor(new Vector3Int(x, gridField.y, z), Color.blue);
+
             }
         }
     }

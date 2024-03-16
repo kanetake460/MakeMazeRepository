@@ -29,6 +29,8 @@ namespace TakeshiLibrary
             public bool leftWall { get; set; } = false;
             public GameObject mapWallObj { get; set; }
 
+            public GameObject mapPlaneObj { get; set; }
+
 
             /// <summary>
             /// ブロックに情報を入れるコンストラクタ
@@ -224,6 +226,7 @@ namespace TakeshiLibrary
                 {
                     GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     plane.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
+                    blocks[x, z].mapPlaneObj = plane;
 
                     GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     blocks[x, z].mapWallObj = cube;
@@ -236,9 +239,9 @@ namespace TakeshiLibrary
 
 
         /// <summary>
-        /// レイヤーマスクを設定します
+        /// 壁オブジェクトのレイヤーマスクを設定します
         /// </summary>
-        /// <param name="layer">レイヤー</param>
+        /// <param name="layerName">レイヤー</param>
         public void SetLayerMapObject(string layerName)
         {
             for (int x = 0; x < gridField.gridWidth; x++)
@@ -248,6 +251,22 @@ namespace TakeshiLibrary
                     blocks[x,z].mapWallObj.layer = LayerMask.NameToLayer(layerName);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// プレーンオブジェクトの色を変えます
+        /// </summary>
+        /// <param name="coord">プレーンの座標</param>
+        /// <param name="color">色</param>
+        public void SetPlaneColor(Vector3Int coord,Color color)
+        {
+            blocks[coord.x, coord.z].mapPlaneObj.GetComponent<Renderer>().material.color = color;
+        }
+
+        public void SetWallTexture(Vector3Int coord,Texture texrure)
+        {
+            blocks[coord.x, coord.z].mapWallObj.GetComponent<Renderer>().material.mainTexture = texrure;
         }
 
         /// <summary>

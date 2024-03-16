@@ -6,25 +6,23 @@ using System.Linq;
 
 public class TestPlayerController : MonoBehaviour
 {
-    [SerializeField] GameManager gameManager;
-    [SerializeField] UIManager uiManager;
-
-    [SerializeField] GameObject mainCam;
-
-    [SerializeField] MapGridField map;
-
-    private Vector3Int playerCoord;
-    private Vector3Int playerPrevious;
-
-    private Stack<SectionTable.Section> _sectionStack1 = new Stack<SectionTable.Section>();
-    private Stack<SectionTable.Section> _sectionStack2 = new Stack<SectionTable.Section>();
-
-    private GameObject _triggerObj;
-
-    /*パラメータ*/
+    [Header("パラメーター")]
     [SerializeField] float locoSpeed;                    // 移動スピード
     [SerializeField] float dashSpeed;
     [SerializeField] float viewSpeedX = 3f, viewSpeedY = 3f;    // 視点スピード
+    private Vector3Int playerCoord;
+    private Vector3Int playerPrevious;
+    private Stack<SectionTable.Section> _sectionStack1 = new Stack<SectionTable.Section>();
+    private Stack<SectionTable.Section> _sectionStack2 = new Stack<SectionTable.Section>();
+
+    [Header("参照")]
+    [SerializeField] GameObject mainCam;
+
+    [Header("コンポーネント")]
+    [SerializeField] GameManager gameManager;
+    [SerializeField] UIManager uiManager;
+    [SerializeField] MapGridField map;
+    private GameObject _triggerObj;
     private FPS fps;
 
     private void Start()
@@ -64,7 +62,7 @@ public class TestPlayerController : MonoBehaviour
 
                 break;
 
-            case "goal":
+            case "clearFlag":
                 uiManager.EnterDisplayGameMessage("右クリック！！", Color.yellow, 10);
 
                 break;
@@ -91,10 +89,13 @@ public class TestPlayerController : MonoBehaviour
             InitStack(_sectionStack1);
             InitStack(_sectionStack2);
             if (OpenBranchingSection(playerCoord, playerPrevious, _sectionStack1.Peek()))
+            {
+                gameManager.hamburgerCount--;
                 _sectionStack1.Pop();
+            }
             else
             {
-                uiManager.EnterDisplayGameMessage("そこでは開けません！！",Color.red,100);
+                uiManager.EnterDisplayGameMessage("そこでは開けません！！", Color.red, 100);
             }
             map.map.ActiveMapWallObject();
         }

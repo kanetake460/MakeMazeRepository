@@ -120,7 +120,6 @@ namespace TakeshiLibrary
         /// 最短経路で目的地まで動かし続けます。
         /// </summary>
         /// <param name="goalPos">追いかける物の位置</param>
-        /// <param name="map">マップ</param>
         /// <param name="aStarCount">再探索を行う間隔</param>
         /// <param name="moveSpeed">追いかけるスピード</param>
         /// <returns>追いついたらtrue</returns>
@@ -149,9 +148,6 @@ namespace TakeshiLibrary
             // パスを作って、エネミーのいる場所を最初の場所にする
             _aStar.AStarPath(_map, enemyCoord, locoGoalCoord);
 
-            /// デバッグ
-            ///_map.SetAStar(_enemyTrafo.position,_map.gridField.grid[_locoGoalPoint.x,_locoGoalPoint.z],_aStar);
-            
             _pathTargetCoord = _aStar.pathStack.Pop().position;
         }
 
@@ -190,7 +186,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="searchLayer">プレイヤーと壁のレイヤー</param>
         /// <param name="playerTag">プレイヤーのタグ</param>
-        /// <param name="wallThickness">レイキャストの大きさ（）セルの横幅から引く値</param>
+        /// <param name="raySize">レイキャストの大きさ（）セルの横幅から引く値</param>
         /// <returns>みつかったかどうかtrue：発見</returns>
         public bool SearchPlayer(LayerMask searchLayer,string playerTag, float raySize = 10)
         {
@@ -202,7 +198,6 @@ namespace TakeshiLibrary
             
             point -= dir * _map.gridField.cellMaxLength;
             float rayDist = _map.gridField.gridMaxLength * _map.gridField.cellMaxLength;
-            Debug.Log(rayDist);
             if (Physics.BoxCast(point, size, dir, out hit, Quaternion.identity, rayDist, searchLayer))
             {
                 if (hit.collider.CompareTag(playerTag))

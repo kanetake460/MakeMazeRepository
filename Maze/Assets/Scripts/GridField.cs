@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,6 +12,50 @@ namespace TakeshiLibrary
     /*=====グリッドフィールドを作成する関数=====*/
     // Vector3のクラスを参考に作成しました
     // C:\Users\kanet\AppData\Local\Temp\MetadataAsSource\b33e6428b1fe4c03a5b0b222eb1e9f0b\DecompilationMetadataAsSourceFileProvider\4496430b4e32462b86d5e9f4984747a4\Vector3.cs
+    
+    public struct Coord
+    {
+        public int x;
+        public int z;
+
+        private static readonly Coord zeroCoord;
+
+        public int this[int index]
+        {
+            get
+            {
+                return index switch
+                {
+                    0 => x,
+                    1 => z,
+                    _ => throw new IndexOutOfRangeException("Invalid Coord index!"),
+                };
+            }
+            set
+            {
+                switch (index)
+                {
+                    case 0:
+                        x = value;
+                        break;
+                    case 1:
+                        z = value;
+                        break;
+                    default:
+                        throw new IndexOutOfRangeException("Invalid Coord index!");
+                }
+            }
+        }
+
+        public Coord(int x,int z)
+        {
+            this.x = x;
+            this.z = z;
+        }
+
+
+    }
+    
     public class GridField
     {
 
@@ -244,8 +290,8 @@ namespace TakeshiLibrary
         {
             get
             {
-                int randX = Random.Range(0, gridWidth);
-                int randZ = Random.Range(0, gridDepth);
+                int randX = UnityEngine.Random.Range(0, gridWidth);
+                int randZ = UnityEngine.Random.Range(0, gridDepth);
                 return grid[randX, randZ];
             }
         }
@@ -257,8 +303,8 @@ namespace TakeshiLibrary
         {
             get
             {
-                int randX = Random.Range(0, gridWidth);
-                int randZ = Random.Range(0, gridDepth);
+                int randX = UnityEngine.Random.Range(0, gridWidth);
+                int randZ = UnityEngine.Random.Range(0, gridDepth);
                 return new Vector3Int(randX, 0, randZ);
             }
         }

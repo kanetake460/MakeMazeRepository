@@ -7,23 +7,23 @@ using static GameSceneManager;
 
 public class GameManager : MonoBehaviour
 {
-    /*コンポーネント*/
+    [Header("コンポーネント")]
     public MapGridField map;
-    public TakeshiLibrary.CompassUI compassRight;
-    public TakeshiLibrary.CompassUI compassLeft;
+    [SerializeField] TakeshiLibrary.CompassUI compassRight;
+    [SerializeField] TakeshiLibrary.CompassUI compassLeft;
     [SerializeField] GameSceneManager sceneManager;
     [SerializeField] UIManager uiManager;
 
     /*ゲームオブジェクト*/
     [SerializeField]GameObject playerObj;
 
-    /*パラメータ*/
-    public bool? clearFlag = null;          // クリアしたかどうか
-
-    [SerializeField] int flagNum;      // メイズ完成に必要なフラグの数
-    [SerializeField] int hamburgerNum;      // ハンバーガーの最大値
-    [SerializeField] int deadNum;
-    private int _hamburgerCount = 5;             // 現在のハンバーガーの数
+    [Header("パラメーター")]
+    [SerializeField] int flagNum;       // メイズ完成に必要なフラグの数
+    [SerializeField] int hamburgerNum;  // ハンバーガーの最大値
+    [SerializeField] int deadNum;       // ゲームオーバーカウントの値
+    [SerializeField] int hamburgerIncrease; // ハンバーガーの増量値
+    [HideInInspector] public bool? clearFlag = null;          // クリアしたかどうか
+    [SerializeField,HideInInspector] public int hamburgerCount = 5;             // 現在のハンバーガーの数
     private int _flagCount = 0;              // 現在の集めたフラグの数
     private float _deadCount = 30;           // ゲームオーバーカウント
 
@@ -33,9 +33,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void HamburgerClamp()
     {
-        if(_hamburgerCount > hamburgerNum)
+        if(hamburgerCount > hamburgerNum)
         {
-            _hamburgerCount = hamburgerNum;
+            hamburgerCount = hamburgerNum;
         }
     }
 
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CountDead()
     {
-        if (_hamburgerCount <= 0)
+        if (hamburgerCount <= 0)
         {
             _deadCount -= Time.deltaTime;
         }
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case "hamburger":
-                _hamburgerCount++;
+                hamburgerCount += hamburgerIncrease;
                 break;
 
             case "goal":
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
         HamburgerClamp();
         CountDead();
         Escape();
-        uiManager.HamburgerManager(hamburgerNum,_hamburgerCount);
+        uiManager.HamburgerManager(hamburgerNum,hamburgerCount);
         uiManager.TextFlagCount(_flagCount,flagNum);
 
         if(clearFlag == true)

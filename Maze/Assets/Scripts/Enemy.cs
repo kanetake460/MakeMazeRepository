@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     [Header("コンポーネント")]
     [SerializeField] GameSceneManager sceneManager;
     [SerializeField] MapGridField map;
-    [SerializeField] AudioManager audioManager;
+   private AudioSource audioSource;
 
     [Header("設定")]
     [SerializeField] GameObject playerObj;
@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
         fps = new FPS(map.map);
         ai = new EnemyAI(_enemy,map.map);
         compass = new TakeshiLibrary.Compass(_enemy);
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
 
@@ -51,14 +52,14 @@ public class Enemy : MonoBehaviour
 
         if (_isChase)
         {
-            AudioManager.PlayBGM("MaxWell");
+            AudioManager.PlayBGM("MaxWell",audioSource);
             if (isWandcExit) ai.ExitLocomotion(ref isWandcExit);
             ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed,aStarCount);
             isChaceExit = true;
         }
         else
         {
-            AudioManager.StopBGM();
+            AudioManager.StopBGM(audioSource);
             Debug.Log("wandering");
             if(isChaceExit)ai.ExitLocomotion(ref isChaceExit);
             ai.Wandering(wandSpeed);
@@ -66,14 +67,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    //private void HidePlayer()
-    //{
-    //    Vector3Int playerCoord = map.gridField.GetGridCoordinate(playerObj.transform.position);
-    //    if(map.mapElements[playerCoord.x,playerCoord.z] == Elements.eElementType.Room_Element)
-    //    {
-    //        isChase = false;
-    //    }
-    //}
+    private void HidePlayer()
+    {
+        Vector3Int playerCoord = map.gridField.GetGridCoordinate(playerObj.transform.position);
+        if (map.roomBlockList.Contains(playerCoord))
+        {
+            _isChase = false;
+        }
+    }
 
 
     private void Update()
@@ -85,6 +86,7 @@ public class Enemy : MonoBehaviour
                 _isInit = true;
             }
             EnemyMovement();
+            HidePlayer();
         }
     }
 }
