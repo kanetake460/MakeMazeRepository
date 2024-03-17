@@ -10,8 +10,8 @@ public class TestPlayerController : MonoBehaviour
     [SerializeField] float locoSpeed;                    // 移動スピード
     [SerializeField] float dashSpeed;
     [SerializeField] float viewSpeedX = 3f, viewSpeedY = 3f;    // 視点スピード
-    private Vector3Int playerCoord;
-    private Vector3Int playerPrevious;
+    private Coord playerCoord;
+    private Coord playerPrevious;
     private Stack<SectionTable.Section> _sectionStack1 = new Stack<SectionTable.Section>();
     private Stack<SectionTable.Section> _sectionStack2 = new Stack<SectionTable.Section>();
 
@@ -35,6 +35,7 @@ public class TestPlayerController : MonoBehaviour
         playerCoord = map.gridField.GetGridCoordinate(transform.position);
         playerPrevious = FPS.GetVector3FourDirection(transform.rotation.eulerAngles);
 
+
         // FPS視点設定
         FPS.CameraViewport(mainCam, viewSpeedX);
         FPS.PlayerViewport(gameObject, viewSpeedY);
@@ -45,6 +46,11 @@ public class TestPlayerController : MonoBehaviour
         PlayerAction0();
         PlayerAction1();
 
+    }
+
+    private void FixedUpdate()
+    {
+        _triggerObj = null;
     }
 
     private void OnTriggerStay(Collider other)
@@ -76,7 +82,6 @@ public class TestPlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        _triggerObj = null;
     }
 
     /// <summary>
@@ -90,7 +95,7 @@ public class TestPlayerController : MonoBehaviour
             InitStack(_sectionStack2);
             if (OpenBranchingSection(playerCoord, playerPrevious, _sectionStack1.Peek()))
             {
-                gameManager.hamburgerCount--;
+                //gameManager.hamburgerCount--;
                 _sectionStack1.Pop();
             }
             else
@@ -117,6 +122,8 @@ public class TestPlayerController : MonoBehaviour
 
 
 
+
+
     /// <summary>
     /// プレイヤーの前にセクションをオープンし、そのセクションの
     /// 指定したブランチから、ランダムな方向にセクションを生成します。
@@ -126,7 +133,7 @@ public class TestPlayerController : MonoBehaviour
     /// <param name="section">オープンするセクション</param>
     /// <param name="branchIndx">二つ目をオープンするブランチのインデックス</param>
     /// <returns>オープンできたかどうか</returns>
-    private bool OpenBranchingSection(Vector3Int branchCoord,Vector3Int dir,SectionTable.Section section,int branchIndx = 3)
+    private bool OpenBranchingSection(Coord branchCoord, Coord dir,SectionTable.Section section,int branchIndx = 3)
     {
         // 一つ目がオープンできるかチェック
         if (!CheckSectionPrevious(branchCoord, dir, section)) 
@@ -136,9 +143,9 @@ public class TestPlayerController : MonoBehaviour
         }
         // 一つ目オープン
         OpenSectionPrevious(branchCoord, dir, section);
-        
+
         // 一つ目のセクションのブランチ座標
-        Vector3Int[] branchCoords = section.GetDirectionSection(dir);
+        Coord[] branchCoords = section.GetDirectionSection(dir);
 
         // 一つ目の指定されたブランチ座標からランダムに
         // 二つ目のセクションをオープン
@@ -163,15 +170,15 @@ public class TestPlayerController : MonoBehaviour
     /// <param name="branchCoord">オープンするブランチ座標</param>
     /// <param name="section"></param>
     /// <returns>オープンできたかどうか</returns>
-    private bool OpenAround(Vector3Int branchCoord, SectionTable.Section section)
+    private bool OpenAround(Coord branchCoord, SectionTable.Section section)
     {
         // ランダムな方向のスタック
-        Stack<Vector3Int> randDirStack = FPS.RandomVector3DirectionStack();
+        Stack<Coord> randDirStack = FPS.RandomVector3DirectionStack();
 
         // 全部の方向を試すためのwhile
         while (true)
         {
-            Vector3Int confDir = randDirStack.Pop();
+            Coord confDir = randDirStack.Pop();
             if (CheckSectionPrevious(branchCoord, confDir, section))
             {
                 OpenSectionPrevious(branchCoord, confDir, section);
@@ -193,16 +200,16 @@ public class TestPlayerController : MonoBehaviour
     /// <param name="branchCoord">一つ目のセクションのブランチ座標</param>
     /// <param name="section">一つ目のセクション</param>
     /// <returns>オープンできたかどうか</returns>
-    private bool OpenAroundContinue(Vector3Int branchCoord, SectionTable.Section section)
+    private bool OpenAroundContinue(Coord branchCoord, SectionTable.Section section)
     {
-        Stack<Vector3Int> randDirStack = FPS.RandomVector3DirectionStack();
+        Stack<Coord> randDirStack = FPS.RandomVector3DirectionStack();
         Debug.Log(randDirStack.Count);
 
         // オープンできるか確認していく
         // できなかった場合は方向を変えてループする
         while (true)
         {
-            Vector3Int confDir = randDirStack.Pop();
+            Coord confDir = randDirStack.Pop();
             
             // オープンできるか確認
             if(CheckSectionPrevious(branchCoord,confDir,section ))
@@ -229,10 +236,10 @@ public class TestPlayerController : MonoBehaviour
     /// <param name="branchCoord">オープンするセクションの一つ後ろの座標</param>
     /// <param name="dir">向き</param>
     /// <param name="section">セクション</param>
-    public void OpenSectionPrevious(Vector3Int branchCoord, Vector3Int dir, SectionTable.Section section)
+    public void OpenSectionPrevious(Coord branchCoord, Coord dir, SectionTable.Section section)
     {
-        Vector3Int[] sectionCoords = section.GetDirectionSection(dir);
-        Vector3Int prevCoord = branchCoord + dir;
+        Coord[] sectionCoords = section.GetDirectionSection(dir);
+        Coord prevCoord = branchCoord + dir;
         map.OpenSection(prevCoord, sectionCoords);
     }
 
@@ -244,10 +251,10 @@ public class TestPlayerController : MonoBehaviour
     /// <param name="dir">向き</param>
     /// <param name="section">セクション</param>
     /// <returns>オープンできるかどうか true：できる</returns>
-    public bool CheckSectionPrevious(Vector3Int branchCoord, Vector3Int dir, SectionTable.Section section)
+    public bool CheckSectionPrevious(Coord branchCoord, Coord dir, SectionTable.Section section)
     {
-        Vector3Int[] sectionCoords = section.GetDirectionSection(dir);
-        Vector3Int prevCoord = branchCoord + dir;
+        Coord[] sectionCoords = section.GetDirectionSection(dir);
+        Coord prevCoord = branchCoord + dir;
         return map.CheckAbleOpen(prevCoord,sectionCoords);
     }
 

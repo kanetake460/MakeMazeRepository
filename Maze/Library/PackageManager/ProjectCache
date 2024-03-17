@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638444766404950177
-    m_Hash: 1511999676
+      ticks: 638461482424727367
+    m_Hash: 877663997
   m_LockFileStatus:
     m_FilePath: C:/Users/owner/Desktop/MazeRepository/Maze/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638444766405035219
-    m_Hash: 442616742
+      ticks: 638461482424737362
+    m_Hash: 704509015
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -114,6 +114,7 @@ m_ResolvedPackages:
     - 2.1.0-preview.6
     - 2.1.0
     - 2.2.0
+    - 2.3.1
     compatible:
     - 2.0.3
     - 2.0.4
@@ -124,6 +125,7 @@ m_ResolvedPackages:
     - 2.1.0-preview.6
     - 2.1.0
     - 2.2.0
+    - 2.3.1
     verified: 2.0.7
   dependencies: []
   resolvedDependencies: []
@@ -313,6 +315,7 @@ m_ResolvedPackages:
     - 3.0.25
     - 3.0.26
     - 3.0.27
+    - 3.0.28
     compatible:
     - 3.0.18
     - 3.0.20
@@ -322,7 +325,8 @@ m_ResolvedPackages:
     - 3.0.25
     - 3.0.26
     - 3.0.27
-    verified: 3.0.27
+    - 3.0.28
+    verified: 3.0.28
   dependencies:
   - name: com.unity.ext.nunit
     version: 1.0.6
@@ -1207,10 +1211,12 @@ m_ResolvedPackages:
     - 1.8.0
     - 1.9.0
     - 1.9.1
+    - 1.9.2
     compatible:
     - 1.8.0
     - 1.9.0
     - 1.9.1
+    - 1.9.2
     verified: 1.8.0
   dependencies:
   - name: com.unity.ugui

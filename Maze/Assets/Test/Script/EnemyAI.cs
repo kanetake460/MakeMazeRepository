@@ -10,7 +10,7 @@ namespace TakeshiLibrary
         private GridFieldMap _map;              // マップ
         private TakeshiLibrary.Compass _copass;
         
-        private Vector3Int _pathTargetCoord;    // 道のりのターゲットの座標
+        private Coord _pathTargetCoord;    // 道のりのターゲットの座標
         private Transform _enemyTrafo;          // エネミーのトランスフォーム
         
         private int _stayCount = 0;             // AStarLocomotionの再探索までのカウント
@@ -62,21 +62,23 @@ namespace TakeshiLibrary
         /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public bool LocomotionToCoordPoint(Vector3Int coord, float speed = 1)
+        public bool LocomotionToCoordPoint(Coord coord, float speed = 1)
         {
             Vector3 pos = _enemyTrafo.position;
             Vector3 point = _map.gridField.grid[coord.x, coord.z];
 
+            Vector3 direction = (point - pos).normalized;
+
+
             _copass.TurnTowardToPoint(pathTargetPos);
 
-            pos.x += pos.x <= point.x ? speed * 0.01f : speed * -0.01f;
-            pos.y += pos.y <= point.y ? speed * 0.01f : speed * -0.01f;
-            pos.z += pos.z <= point.z ? speed * 0.01f : speed * -0.01f;
+            pos += direction * speed * Time.deltaTime;
 
-            if (pos.x <= point.x + speed * 0.1f && pos.x >= point.x + speed * -0.1f) pos.x = point.x;
-            if (pos.y <= point.y + speed * 0.1f && pos.y >= point.y + speed * -0.1f) pos.y = point.y;
-            if (pos.z <= point.z + speed * 0.1f && pos.z >= point.z + speed * -0.1f) pos.z = point.z;
+            if(Vector3.Distance(point,pos) < 0.1f)
+            {
+                pos = point;
 
+            }
             _enemyTrafo.position = pos;
 
             return pos == point;
@@ -146,8 +148,8 @@ namespace TakeshiLibrary
             var locoGoalCoord = _map.gridField.GetGridCoordinate(goalPos);
 
             // パスを作って、エネミーのいる場所を最初の場所にする
-            _aStar.AStarPath(_map, enemyCoord, locoGoalCoord);
-
+            if(!_aStar.AStarPath(_map, enemyCoord, locoGoalCoord))
+            Debug.Log(_aStar.pathStack.Count);
             _pathTargetCoord = _aStar.pathStack.Pop().position;
         }
 
@@ -177,6 +179,23 @@ namespace TakeshiLibrary
                 var locoGoalCoord = _map.GetRandomPoint(enemyCoord, areaX, areaZ);
                 
                 EnterLocomotionToAStar(_map.gridField.grid[locoGoalCoord.x,locoGoalCoord.z]);
+            }
+        }
+
+
+        /// <summary>
+        /// エネミーを徘徊させます
+        /// </summary>
+        public void CustomWandering(float moveSpeed,List<Coord> exceptionCoordList, int areaX = 10, int areaZ = 10)
+        {
+            // 徘徊ポイントについたらランダムな位置を徘徊ポイントにする
+            if (LocomotionToAStar(moveSpeed))
+            {
+                var enemyCoord = _map.gridField.GetGridCoordinate(_enemyTrafo.position);
+                var locoGoalCoord = _map.GetCustomRandomPoint(enemyCoord,exceptionCoordList, areaX, areaZ);
+
+                _map.SetPlaneColor(locoGoalCoord,Color.green);
+                EnterLocomotionToAStar(_map.gridField.grid[locoGoalCoord.x, locoGoalCoord.z]);
             }
         }
 

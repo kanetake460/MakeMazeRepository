@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int deadNum;       // ゲームオーバーカウントの値
     [SerializeField] int hamburgerIncrease; // ハンバーガーの増量値
     [HideInInspector] public bool? clearFlag = null;          // クリアしたかどうか
-    [SerializeField,HideInInspector] public int hamburgerCount = 5;             // 現在のハンバーガーの数
+    [SerializeField] public int hamburgerCount = 5;             // 現在のハンバーガーの数
     private int _flagCount = 0;              // 現在の集めたフラグの数
     private float _deadCount = 30;           // ゲームオーバーカウント
 
@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviour
     /// <param name="obj"></param>
     public void CheckInObj(GameObject obj)
     {
+        if (obj == null)
+            return;
         string tag = obj.tag;
         obj.SetActive(false);
 

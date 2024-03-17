@@ -48,32 +48,33 @@ public class Enemy : MonoBehaviour
 
     private void EnemyMovement()
     {
-        if(ai.SearchPlayer(searchLayer,playerTag,5)) _isChase = true;
 
         if (_isChase)
         {
             AudioManager.PlayBGM("MaxWell",audioSource);
             if (isWandcExit) ai.ExitLocomotion(ref isWandcExit);
-            ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed,aStarCount);
+            ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed,10);
             isChaceExit = true;
         }
         else
         {
             AudioManager.StopBGM(audioSource);
-            Debug.Log("wandering");
+            //Debug.Log("wandering");
             if(isChaceExit)ai.ExitLocomotion(ref isChaceExit);
-            ai.Wandering(wandSpeed);
+            ai.CustomWandering(wandSpeed,map.roomBlockList,5,5);
             isWandcExit = true;
         }
     }
 
     private void HidePlayer()
     {
-        Vector3Int playerCoord = map.gridField.GetGridCoordinate(playerObj.transform.position);
+        Coord playerCoord = map.gridField.GetGridCoordinate(playerObj.transform.position);
         if (map.roomBlockList.Contains(playerCoord))
         {
             _isChase = false;
+            GetComponent<BoxCollider>().enabled = false;
         }
+        else GetComponent<BoxCollider>().enabled = true;
     }
 
 
@@ -85,8 +86,10 @@ public class Enemy : MonoBehaviour
             {
                 _isInit = true;
             }
-            EnemyMovement();
+            if (ai.SearchPlayer(searchLayer, playerTag, 5)) _isChase = true;
             HidePlayer();
+            
+            EnemyMovement();
         }
     }
 }

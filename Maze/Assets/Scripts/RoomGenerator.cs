@@ -10,8 +10,8 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField] MapGridField map;                                   // マップ
     [SerializeField] GameManager gameManager;                   // ゲームマネージャー
     [SerializeField] GameObject roomPrefab;                     // 部屋のプレハブ
-    [SerializeField] Vector3Int roomSizeMin = new Vector3Int(); // 部屋のサイズの最小値
-    [SerializeField] Vector3Int roomSizeMax = new Vector3Int(); // 部屋のサイズの最大値
+    [SerializeField] Coord roomSizeMin = new Coord(); // 部屋のサイズの最小値
+    [SerializeField] Coord roomSizeMax = new Coord(); // 部屋のサイズの最大値
     private int roomCount = 0;                                  // 生成のためのカウント
     [SerializeField] int roomNum = 10;                          // 生成する部屋の数
 
@@ -25,7 +25,7 @@ public class RoomGenerator : MonoBehaviour
         while (true)
         {
             // ランダムなグリッド座標
-            Vector3Int randomCoord = map.gridField.randomGridCoord;
+            Coord randomCoord = map.gridField.randomGridCoord;
 
             // チェック
             if(CheckInstanceRoom(randomCoord,roomSizeMin,roomSizeMax))
@@ -67,7 +67,7 @@ public class RoomGenerator : MonoBehaviour
     /// <param name="roomSizeMin">部屋の最小値</param>
     /// <param name="roomSizeMax">部屋の最大値</param>
     /// <returns>部屋のすべてのエレメントがNoneかどうか</returns>
-    private bool CheckInstanceRoom(Vector3Int instanceCoord,Vector3Int roomSizeMin,Vector3Int roomSizeMax)
+    private bool CheckInstanceRoom(Coord instanceCoord, Coord roomSizeMin, Coord roomSizeMax)
     {
         // もし、グリッドの端じゃなければ(部屋の生成で配列外になる可能性があるため)
         if (instanceCoord.x <= 3 ||

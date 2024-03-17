@@ -34,6 +34,7 @@ public class MapGridField : MonoBehaviour
     [SerializeField] protected int y = 0;
     [SerializeField] float blockHeight;
     [SerializeField] string layerName;
+    [SerializeField] Texture texture;
 
 
     [Header("コンポーネント")]
@@ -41,7 +42,7 @@ public class MapGridField : MonoBehaviour
     public GridFieldMap map;
 
     /*マップ情報*/
-    public List<Vector3Int> roomBlockList { get; } = new List<Vector3Int>();
+    public List<Coord> roomBlockList { get; } = new List<Coord>();
 
     private void Awake()
     {
@@ -72,10 +73,11 @@ public class MapGridField : MonoBehaviour
         map.InstanceMapObjects(blockHeight);
         map.SetLayerMapObject(layerName);
 
-        RoomGenerator(map.gridField.middleGrid, 3);
+        RoomGenerator(map.gridField.middleGrid, 1);
         GenerateRooms(hamburgerNum, hamburgerRoomSize, hamburgerObj);
         GenerateRooms(flagNum, flagRoomSize, flagObj);
 
+        map.SetWallTextureAll(texture);
         map.ActiveMapWallObject();
     }
 
@@ -89,7 +91,7 @@ public class MapGridField : MonoBehaviour
     {
         for (int i = 0; i < roomNum; i++)
         {
-            Vector3Int randCoord;
+            Coord randCoord;
             while (true)
             {
                 randCoord = map.gridField.randomGridCoord;
@@ -109,11 +111,11 @@ public class MapGridField : MonoBehaviour
     /// </summary>
     /// <param name="seedCoord">開くセクションのシードの位置</param>
     /// <param name="sectionCoord">開きたいセクションの種類</param>
-    public void OpenSection(Vector3Int seedCoord,Vector3Int[] sectionCoord)
+    public void OpenSection(Coord seedCoord, Coord[] sectionCoord)
     {
-        foreach (Vector3Int coord in sectionCoord)
+        foreach (Coord coord in sectionCoord)
         {
-            Vector3Int element = seedCoord + coord;
+            Coord element = seedCoord + coord;
             map.SetWalls(element.x, element.z, false,false,false,false,true);
         }
     }
@@ -123,11 +125,11 @@ public class MapGridField : MonoBehaviour
     /// </summary>
     /// <param name="seedCoord">開くセクションのシードの位置</param>
     /// <param name="sectionCoord">開きたいセクションの種類</param>
-    public void CloseSection(Vector3Int seedCoord, Vector3Int[] sectionCoord)
+    public void CloseSection(Coord seedCoord, Coord[] sectionCoord)
     {
-        foreach (Vector3Int coord in sectionCoord)
+        foreach (Coord coord in sectionCoord)
         {
-            Vector3Int element = seedCoord + coord;
+            Coord element = seedCoord + coord;
             map.SetWalls(element.x, element.z, true, true, true, true, false);
         }
     }
@@ -138,11 +140,11 @@ public class MapGridField : MonoBehaviour
     /// </summary>
     /// <param name="sectionCoord">セクション</param>
     /// <returns>置けるかどうか true：置ける</returns>
-    public bool CheckAbleOpen(Vector3Int seedCoord, Vector3Int[] sectionCoord)
+    public bool CheckAbleOpen(Coord seedCoord, Coord[] sectionCoord)
     {
-        foreach (Vector3Int coord in sectionCoord)
+        foreach (Coord coord in sectionCoord)
         {
-            Vector3Int element = seedCoord + coord;
+            Coord element = seedCoord + coord;
             if (map.blocks[element.x, element.z].isSpace)
             {
                 return false;
@@ -158,13 +160,13 @@ public class MapGridField : MonoBehaviour
     /// <param name="generateCoord">生成する座標</param>
     /// <param name="roomSize">生成する部屋のサイズ</param>
     /// <returns>できるかどうか</returns>
-    private bool CheckRoomGenerate(Vector3Int generateCoord, int roomSize)
+    private bool CheckRoomGenerate(Coord generateCoord, int roomSize)
     {
         for (int x = generateCoord.x - roomSize; x <= generateCoord.x + roomSize; x++)
         {
             for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
             {
-                Vector3Int confCoord = new Vector3Int(x, map.gridField.y, z);
+                Coord confCoord = new Coord(x, z);
                 if (!map.CheckMap(confCoord))
                 {
                     Debug.Log("生成できませんでした");
@@ -186,7 +188,7 @@ public class MapGridField : MonoBehaviour
     /// </summary>
     /// <param name="generateCoord">生成する座標</param>
     /// <param name="roomSize">生成する部屋のサイズ</param>
-    public void RoomGenerator(Vector3Int generateCoord, int roomSize)
+    public void RoomGenerator(Coord generateCoord, int roomSize)
     {
         // 生成できるか確認できなかったらリターン
         if (!CheckRoomGenerate(generateCoord, roomSize))
@@ -197,9 +199,9 @@ public class MapGridField : MonoBehaviour
             for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
             {
                 // ルームリストに追加
-                roomBlockList.Add(new Vector3Int(x, map.gridField.y, z));
+                roomBlockList.Add(new Coord(x, z));
                 map.SetWalls(x,z,false,false,false,false,true);
-                map.SetPlaneColor(new Vector3Int(x, gridField.y, z), Color.blue);
+                map.SetPlaneColor(new Coord(x, z), Color.blue);
 
             }
         }

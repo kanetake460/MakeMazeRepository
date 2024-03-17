@@ -20,7 +20,7 @@ namespace TakeshiLibrary
         /// </summary>
         public class CellInfo
         {
-            public Vector3Int position { get; set; }       // 親セルのグリッド座標
+            public Coord position { get; set; }       // 親セルのグリッド座標
             private float _cost;
             public float cost {
                 get
@@ -45,8 +45,8 @@ namespace TakeshiLibrary
         public Stack<CellInfo> pathStack { get; } = new Stack<CellInfo>();
         private List<CellInfo> openList = new List<CellInfo>();
         private List<CellInfo> closeList = new List<CellInfo>();
-        private Vector3Int goal;
-        private Vector3Int start;
+        private Coord goal;
+        private Coord start;
         private readonly int m_searchLimit = 1000;
 
         /// <summary>
@@ -64,14 +64,18 @@ namespace TakeshiLibrary
         /// <summary>
         /// 経路を探索します
         /// </summary>
-        public void AStarPath(GridFieldMap map, Vector3Int position, Vector3Int targetPos)
+        /// <param name="map"></param>
+        /// <param name="position"></param>
+        /// <param name="targetPos"></param>
+        /// <returns>ゴールを発見したかどうか true：探索成功</returns>
+        public bool AStarPath(GridFieldMap map, Coord position, Coord targetPos)
         {
             m_Map = map;
             start = position;
             goal = targetPos;
 
             // スタート地点のセルを入れる
-            AddSatrtCell();
+            openList.Add(GetSatrtCell());
 
             int count = 0;
             CellInfo minCell = new CellInfo();
@@ -80,7 +84,6 @@ namespace TakeshiLibrary
             {
                 count++;
 
-                Debug.Log(openList.Count);
                 // リストの中から総コストが最も低いものを格納
                 minCell = openList.OrderBy(x => x.sumCost).First();
 
@@ -93,32 +96,32 @@ namespace TakeshiLibrary
 
             if (count >= m_searchLimit)
             {
+                pathStack.Push(GetSatrtCell());
                 Debug.Log("ゴールが見つからないまま探索が中断されました");
+                return false;
             }
             else
             {
-                //Debug.Log("ゴールを発見しました");
-                //Debug.Log(count);
+                // ゴールにたどり着いたセルから順にたどってスタートまでの道のりをスタック
+                StackPath(minCell);
+                return true;
             }
-            // ゴールにたどり着いたセルから順にたどってスタートまでの道のりをスタック
-            StackPath(minCell);
         }
 
 
         /// <summary>
         /// 探索開始地点のセルをオープンリストに入れます
         /// </summary>
-        private void AddSatrtCell()
+        private CellInfo GetSatrtCell()
         {
             // 探索開始地点のセル
             CellInfo startCell = new CellInfo();
             startCell.position = start;
             startCell.cost = 0;
-            startCell.heuristicCost = Vector3Int.Distance(start, goal);
+            startCell.heuristicCost = Coord.Distance(start, goal);
             startCell.sumCost = startCell.cost + startCell.heuristicCost;
 
-            openList.Add(startCell);
-            Debug.Log(startCell);
+            return startCell;
         }
 
 
@@ -128,7 +131,7 @@ namespace TakeshiLibrary
         /// <param name="center">真ん中に設定するセル</param>
         public void OpenCell(CellInfo center)
         {
-            Vector3Int centerPos = center.position;
+            Coord centerPos = center.position;
 
             // 真ん中をクローズリストに追加
             openList.Remove(center);
@@ -145,7 +148,7 @@ namespace TakeshiLibrary
                     // 真ん中は探索しない
                     if (x == 0 && z == 0) continue;
 
-                    Vector3Int searchPos = new Vector3Int(centerPos.x + x, centerPos.y, centerPos.z + z);
+                    Coord searchPos = new Coord(centerPos.x + x, centerPos.z + z);
 
                     // マップの外なら探索しないしない
                     if (searchPos.x >= m_Map.gridField.gridWidth ||
@@ -167,7 +170,7 @@ namespace TakeshiLibrary
                     // 周りのセルに情報を入れる
                     aroundCell.position = searchPos;
                     aroundCell.cost = center.cost + 1;
-                    aroundCell.heuristicCost = Vector3Int.Distance(searchPos, goal);
+                    aroundCell.heuristicCost = Coord.Distance(searchPos, goal);
                     aroundCell.sumCost = aroundCell.cost + aroundCell.heuristicCost;
                     aroundCell.parent = center;
 

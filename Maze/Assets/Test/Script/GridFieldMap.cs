@@ -4,6 +4,7 @@ using UnityEngine;
 using TakeshiLibrary;
 using Unity.VisualScripting;
 using System.Linq;
+using System;
 
 namespace TakeshiLibrary
 {
@@ -18,7 +19,7 @@ namespace TakeshiLibrary
         public class Block
         {
             // ブロックのグリッド座標
-            public Vector3Int coord { get; }
+            public Coord coord { get; }
             // ブロックの種類
             public bool isSpace { get; set; }
 
@@ -40,7 +41,7 @@ namespace TakeshiLibrary
             /// <param name="isSpace">壁か、空間か</param>
             public Block(int x, int z, bool isSpace = true)
             {
-                coord = new Vector3Int(x, 0, z);
+                coord = new Coord(x, z);
                 this.isSpace = isSpace;
             }
 
@@ -259,14 +260,29 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="coord">プレーンの座標</param>
         /// <param name="color">色</param>
-        public void SetPlaneColor(Vector3Int coord,Color color)
+        public void SetPlaneColor(Coord coord,Color color)
         {
             blocks[coord.x, coord.z].mapPlaneObj.GetComponent<Renderer>().material.color = color;
         }
 
-        public void SetWallTexture(Vector3Int coord,Texture texrure)
+
+        public void SetWallTexture(Coord coord,Texture texrure)
         {
             blocks[coord.x, coord.z].mapWallObj.GetComponent<Renderer>().material.mainTexture = texrure;
+        }
+
+        public void SetWallTextureAll(Texture texrure)
+        {
+            Coord coord = new Coord(0,0);
+            for (int x = 0; x < gridField.gridWidth; x++)
+            {
+                for (int z = 0; z < gridField.gridDepth; z++)
+                {
+                    coord.x = x;
+                    coord.z = z;
+                    SetWallTexture(coord,texrure);
+                }
+            }
         }
 
         /// <summary>
@@ -346,7 +362,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="coord">座標</param>
         /// <returns>グリッドの上ならtrue</returns>
-        public bool CheckMap(Vector3Int coord)
+        public bool CheckMap(Coord coord)
         {
             return coord.x >= 0 &&
                     coord.z >= 0 &&
@@ -358,7 +374,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// 与えられたグリッド座標から指定の範囲でランダムな座標を取得します
         /// </summary>
-        public Vector3Int GetRandomPoint(Vector3Int coord, int areaX, int areaZ)
+        public Coord GetRandomPoint(Coord coord, int areaX, int areaZ)
         {
             // 選択範囲のブロックのリスト
             List<Block> lAreaBlock = new List<Block>();
@@ -368,14 +384,40 @@ namespace TakeshiLibrary
             {
                 for (int z = -areaZ; z < areaZ; z++)
                 {
-                    if (!CheckMap(new Vector3Int(coord.x + x, 0, coord.z + z))) continue;
+                    if (!CheckMap(new Coord(coord.x + x, coord.z + z))) continue;
                     Block b = blocks[coord.x + x, coord.z + z];
                     lAreaBlock.Add(b);
                 }
             }
             //Debug.Log(lAreaBlock.FindAll(b => b.isSpace == true).Count);
 
-            return lAreaBlock.FindAll(b => b.isSpace == true)[Random.Range(0, lAreaBlock.FindAll(b => b.isSpace).Count)].coord;
+            return lAreaBlock.FindAll(b => b.isSpace == true)[UnityEngine.Random.Range(0, lAreaBlock.FindAll(b => b.isSpace).Count)].coord;
+        }
+
+        /// <summary>
+        /// 与えられたグリッド座標から指定の範囲で指定の座標からランダムな座標を取得します
+        /// </summary>
+        public Coord GetCustomRandomPoint(Coord coord,List<Coord> exceptionCoordList, int areaX, int areaZ)
+        {
+            // 選択範囲のブロックのリスト
+            List<Block> lAreaBlock = new List<Block>();
+
+            // 検索範囲のブロックをリストに追加
+            for (int x = -areaX; x < areaX; x++)
+            {
+                for (int z = -areaZ; z < areaZ; z++)
+                {
+                    if (!CheckMap(new Coord(coord.x + x, coord.z + z))) continue;
+                    Block b = blocks[coord.x + x, coord.z + z];
+                    lAreaBlock.Add(b);
+                }
+            }
+
+                lAreaBlock.RemoveAll(b => exceptionCoordList.Contains(b.coord));
+            //lAreaBlock.RemoveAll(b => b.isSpace == false);
+
+            return lAreaBlock.FindAll(b => b.isSpace == true)
+                [UnityEngine.Random.Range(0, lAreaBlock.FindAll(b => b.isSpace).Count)].coord;
         }
 
 

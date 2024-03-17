@@ -141,7 +141,7 @@ namespace TakeshiLibrary
         /// <param name="trafo"></param>
         public void ClampMoveRange(Transform trafo)
         {
-            Vector3Int coord = _map.gridField.GetGridCoordinate(trafo.position);
+            Coord coord = _map.gridField.GetGridCoordinate(trafo.position);
 
             if (_map.blocks[coord.x,coord.z].isSpace == false)
             {
@@ -182,25 +182,25 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="rot">プレイヤーの向き</param>
         /// <returns>Vector3の向き</returns>
-        public static Vector3Int GetVector3FourDirection(Vector3 rot)
+        public static Coord GetVector3FourDirection(Vector3 rot)
         {
             eFourDirection fourDirection = GetFourDirection(rot);
 
             if (fourDirection == eFourDirection.left)
             {
-                return Vector3Int.left;
+                return Coord.left;
             }
             else if (fourDirection == eFourDirection.right)
             {
-                return Vector3Int.right;
+                return Coord.right;
             }
             else if (fourDirection == eFourDirection.bottom)
             {
-                return Vector3Int.back;
+                return Coord.back;
             }
             else
             {
-                return Vector3Int.forward;
+                return Coord.forward;
             }
         }
 
@@ -208,37 +208,37 @@ namespace TakeshiLibrary
         /// Vector3Intの全方向がランダムで入ったスタックを返します
         /// </summary>
         /// <returns></returns>
-        public static Stack<Vector3Int> RandomVector3DirectionStack()
+        public static Stack<Coord> RandomVector3DirectionStack()
         {
-            Stack<Vector3Int> dirStack = new Stack<Vector3Int>();
-            Vector3Int[] randDir =
+            Stack<Coord> dirStack = new Stack<Coord>();
+            Coord[] randDir =
                 {
-                    Vector3Int.left,
-                    Vector3Int.right,
-                    Vector3Int.forward,
-                    Vector3Int.back
+                    Coord.left,
+                    Coord.right,
+                    Coord.forward,
+                    Coord.back
                 };
             Algorithm.Shuffle(randDir);
 
-            foreach(Vector3Int dir in randDir)
+            foreach(Coord dir in randDir)
             {
                 dirStack.Push(dir);
             }
             return dirStack;
         }
 
-        public static Vector3Int GetRandomVector3FourDirection()
+        public static Coord GetRandomVector3FourDirection()
         {
             int rand = Random.RandomRange(0, 4);
 
             if (rand == 0)
-                return Vector3Int.left;
+                return Coord.left;
             else if (rand == 1)
-                return Vector3Int.right;
+                return Coord.right;
             else if (rand == 2)
-                return Vector3Int.forward;
+                return Coord.forward;
             else
-                return Vector3Int.back;
+                return Coord.back;
         }
 
 

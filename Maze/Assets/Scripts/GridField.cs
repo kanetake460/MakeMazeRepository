@@ -15,10 +15,38 @@ namespace TakeshiLibrary
     
     public struct Coord
     {
-        public int x;
-        public int z;
+        private int m_X;
+        private int m_Z;
 
-        private static readonly Coord zeroCoord;
+        public int x
+        {
+            get => m_X;set => m_X = value;
+        }
+
+        public int z
+        {
+            get => m_Z;set => m_Z = value;
+        }
+
+
+        private static readonly Coord s_Zero = new Coord(0, 0);
+
+        private static readonly Coord s_One = new Coord(1, 1);
+
+        private static readonly Coord s_Left = new Coord(-1, 0);
+
+        private static readonly Coord s_Right = new Coord(1, 0);
+
+        private static readonly Coord s_Forward = new Coord(0, 1);
+
+        private static readonly Coord s_Back = new Coord(0, -1);
+
+        public static Coord zero { get { return s_Zero; } }
+        public static Coord one { get { return s_One; } }
+        public static Coord left { get { return s_Left; } }
+        public static Coord right { get { return s_Right; } }
+        public static Coord forward { get { return s_Forward; } }
+        public static Coord back { get { return s_Back; } }
 
         public int this[int index]
         {
@@ -26,8 +54,8 @@ namespace TakeshiLibrary
             {
                 return index switch
                 {
-                    0 => x,
-                    1 => z,
+                    0 => m_X,
+                    1 => m_Z,
                     _ => throw new IndexOutOfRangeException("Invalid Coord index!"),
                 };
             }
@@ -36,10 +64,10 @@ namespace TakeshiLibrary
                 switch (index)
                 {
                     case 0:
-                        x = value;
+                        m_X = value;
                         break;
                     case 1:
-                        z = value;
+                        m_Z = value;
                         break;
                     default:
                         throw new IndexOutOfRangeException("Invalid Coord index!");
@@ -49,13 +77,70 @@ namespace TakeshiLibrary
 
         public Coord(int x,int z)
         {
-            this.x = x;
-            this.z = z;
+            m_X = x;
+            m_Z = z;
         }
 
+        public static Coord operator +(Coord a, Coord b)
+        {
+            return new Coord(a.x + b.x, a.z + b.z);
+        }
+
+        public static Coord operator -(Coord a, Coord b)
+        {
+            return new Coord(a.x - b.x, a.z - b.z);
+        }
+
+        public static Coord operator *(Coord a, Coord b)
+        {
+            return new Coord(a.x * b.x, a.z * b.z);
+        }
+
+        public static Coord operator -(Coord a)
+        {
+            return new Coord(-a.x, -a.z);
+        }
+
+        public static Coord operator *(Coord a, int b)
+        {
+            return new Coord(a.x * b, a.z * b);
+        }
+
+        public static Coord operator *(int a, Coord b)
+        {
+            return new Coord(a * b.x, a * b.z);
+        }
+
+        public static Coord operator /(Coord a, int b)
+        {
+            return new Coord(a.x / b, a.z / b);
+        }
+
+        public static bool operator ==(Coord lhs, Coord rhs)
+        {
+            return lhs.x == rhs.x && lhs.z == rhs.z;
+        }
+
+        public static bool operator !=(Coord lhs, Coord rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        public float magnitude
+        {
+            get
+            {
+                return Mathf.Sqrt(x * x + z * z);
+            }
+        }
+
+        public static float Distance(Coord a,Coord b)
+        {
+            return (a + b).magnitude;
+        }
 
     }
-    
+
     public class GridField
     {
 
@@ -274,11 +359,11 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの真ん中の localPosition を返します(読み取り専用)
         /// </summary>
-        public Vector3Int middleGrid
+        public Coord middleGrid
         {
             get
             {
-                return new Vector3Int(gridWidth / 2, y, gridDepth / 2);
+                return new Coord(gridWidth / 2, gridDepth / 2);
             }
         }
 
@@ -299,13 +384,13 @@ namespace TakeshiLibrary
         /// <summary>
         /// ランダムなグリッド座標を返します(読み取り専用)
         /// </summary>
-        public Vector3Int randomGridCoord
+        public Coord randomGridCoord
         {
             get
             {
                 int randX = UnityEngine.Random.Range(0, gridWidth);
                 int randZ = UnityEngine.Random.Range(0, gridDepth);
-                return new Vector3Int(randX, 0, randZ);
+                return new Coord(randX, randZ);
             }
         }
 
@@ -412,7 +497,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="pos">調べたいグリッドのどこのセルにいるのか調べたいTransform</param>
         /// <returns>Transformのいるセルのグリッド座標</returns>
-        public Vector3Int GetGridCoordinate(Vector3 pos)
+        public Coord GetGridCoordinate(Vector3 pos)
         {
             /*===二重ループで現在のセルを調べる===*/
             for (int x = 0; x < gridWidth; x++)
@@ -424,12 +509,12 @@ namespace TakeshiLibrary
                         pos.z <= grid[x, z].z + cellDepth / 2 &&
                         pos.z >= grid[x, z].z - cellDepth / 2)     // もしあるセルの上にいるなら
                     {
-                        return new Vector3Int(x, (int)y, z);                      // セルの Vector3を返す
+                        return new Coord(x, z);                      // セルの Vector3を返す
                     }
                 }
             }
             Debug.LogError("与えられたポジションはグリッドフィールドの上にいません。");
-            return Vector3Int.zero;
+            return Coord.zero;
         }
 
 
@@ -461,7 +546,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="gridCoord">グリッド座標</param>
         /// <returns>Vecto3ポジション</returns>
-        public Vector3 GetVector3Position(Vector3Int gridCoord)
+        public Vector3 GetVector3Position(Coord gridCoord)
         {
             return grid[gridCoord.x, gridCoord.z];
         }
@@ -472,12 +557,12 @@ namespace TakeshiLibrary
         /// <param name="gridField">調べたいグリッド</param>
         /// <param name="pos">調べたい距離の始点のVector3座標</param>
         /// <param name="difference">始点から終点までの差分</param>
-        public Vector3Int GetOtherGridCoordinate(Vector3 pos, Vector3Int difference)
+        public Coord GetOtherGridCoordinate(Vector3 pos, Coord difference)
         {
             int x = GetGridCoordinate(pos).x;
             int z = GetGridCoordinate(pos).z;
 
-            return new Vector3Int(x + difference.x, 0, z + difference.z);
+            return new Coord(x + difference.x, z + difference.z);
         }
 
 
@@ -486,7 +571,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="pos">調べたい距離の始点のVecgtor3座標</param>
         /// <param name="difference">始点から終点までの差分</param>
-        public Vector3 GetOtherGridPosition(Vector3 pos, Vector3Int difference)
+        public Vector3 GetOtherGridPosition(Vector3 pos, Coord difference)
         {
             int x = GetGridCoordinate(pos).x;
             int z = GetGridCoordinate(pos).z;
@@ -499,23 +584,23 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="fourDirection">向き</param>
         /// <returns>向いている方向の一つ前のグリッド座標</returns>
-        public Vector3Int GetPreviousCoordinate(FPS.eFourDirection fourDirection)
+        public Coord GetPreviousCoordinate(FPS.eFourDirection fourDirection)
         {
             switch (fourDirection)
             {
                 case FPS.eFourDirection.top:
-                    return Vector3Int.forward;
+                    return Coord.forward;
 
                 case FPS.eFourDirection.bottom:
-                    return Vector3Int.back;
+                    return Coord.back;
 
                 case FPS.eFourDirection.left:
-                    return Vector3Int.left;
+                    return Coord.left;
 
                 case FPS.eFourDirection.right:
-                    return Vector3Int.right;
+                    return Coord.right;
             }
-            return Vector3Int.zero;
+            return Coord.zero;
         }
 
         /// <summary>
@@ -528,7 +613,7 @@ namespace TakeshiLibrary
             {
                 for (int z = 0; z < gridDepth; z++)
                 {
-                    if (GetGridCoordinate(pos) == grid[x, z])
+                    if (GetGridCoordinate(pos) == GetGridCoordinate(grid[x, z]))
                     {
                         return true;
                     }

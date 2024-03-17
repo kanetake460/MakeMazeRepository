@@ -144,7 +144,6 @@ public class AudioManager : MonoBehaviour
 
     public static void PlayOneShot(string clipKey)
     {
-        Debug.Log(_DicSE.Count);
         _SEAudioSource.PlayOneShot(_DicSE[clipKey]);
     }
     public static void PlayOneShot(string clipKey,AudioSource audioSource)

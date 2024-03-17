@@ -11,29 +11,29 @@ public class SectionTable
     
     public class Section
     {
-        public Vector3Int[] Top { get; }
-        public Vector3Int[] Left { get; }
-        public Vector3Int[] Right { get; }
-        public Vector3Int[] Bottom { get; }
+        public Coord[] Top { get; }
+        public Coord[] Left { get; }
+        public Coord[] Right { get; }
+        public Coord[] Bottom { get; }
 
         /// <summary>
         /// 与えられたVector3Intの向きからセクションの向きを返します。
         /// </summary>
         /// <param name="dir">向き</param>
         /// <returns>引数に対応する向きのセクション</returns>
-        public Vector3Int[] GetDirectionSection(Vector3Int dir)
+        public Coord[] GetDirectionSection(Coord dir)
         {
-            if (dir == Vector3Int.forward)
+            if (dir == Coord.forward)
                 return Top;
-            else if (dir == Vector3Int.left)
+            else if (dir == Coord.left)
                 return Left;
-            else if (dir == Vector3Int.right)
+            else if (dir == Coord.right)
                 return Right;
             else
                 return Bottom;
         }
 
-        public Section(Vector3Int[] top, Vector3Int[] left, Vector3Int[] right, Vector3Int[] bottom)
+        public Section(Coord[] top, Coord[] left, Coord[] right, Coord[] bottom)
         {
             Top = top;
             Left = left;
@@ -47,240 +47,240 @@ public class SectionTable
     // 左下から設定しています
 
     // === T ======================================
-    private static readonly Vector3Int[] T_Top =
+    private static readonly Coord[] T_Top =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0, 1),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 1,0, 1)
+        new Coord( 0, 0),
+        new Coord(-1, 1),
+        new Coord( 0, 1),
+        new Coord( 1, 1)
     };
 
-    private static readonly Vector3Int[] T_Bottom =
+    private static readonly Coord[] T_Bottom =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0,-1),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int(-1,0,-1)
+        new Coord( 0, 0),
+        new Coord( 1,-1),
+        new Coord( 0,-1),
+        new Coord(-1,-1)
     };
 
-    private static readonly Vector3Int[] T_Left = 
+    private static readonly Coord[] T_Left = 
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0,-1),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int(-1,0, 1)
+        new Coord( 0, 0),
+        new Coord(-1,-1),
+        new Coord(-1, 0),
+        new Coord(-1, 1)
     };
 
-    private static readonly Vector3Int[] T_Right =
+    private static readonly Coord[] T_Right =
     {                    
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0, 1),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 1,0,-1)
+        new Coord( 0, 0),
+        new Coord( 1, 1),
+        new Coord( 1, 0),
+        new Coord( 1,-1)
     };
 
 
     // === I ======================================
-    private static readonly Vector3Int[] I_Top =
+    private static readonly Coord[] I_Top =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 0,0, 2),
-        new Vector3Int( 0,0, 3)
+        new Coord( 0, 0),
+        new Coord( 0, 1),
+        new Coord( 0, 2),
+        new Coord( 0, 3)
     };
 
-    private static readonly Vector3Int[] I_Bottom = 
+    private static readonly Coord[] I_Bottom = 
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int( 0,0,-2),
-        new Vector3Int( 0,0,-3)
+        new Coord( 0, 0),
+        new Coord( 0,-1),
+        new Coord( 0,-2),
+        new Coord( 0,-3)
     };
 
-    private static readonly Vector3Int[] I_Left = 
+    private static readonly Coord[] I_Left = 
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int(-2,0, 0),
-        new Vector3Int(-3,0, 0)
+        new Coord( 0, 0),
+        new Coord(-1, 0),
+        new Coord(-2, 0),
+        new Coord(-3, 0)
     };
 
-    private static readonly Vector3Int[] I_Right = 
+    private static readonly Coord[] I_Right = 
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 2,0, 0),
-        new Vector3Int( 3,0, 0)
+        new Coord( 0, 0),
+        new Coord( 1, 0),
+        new Coord( 2, 0),
+        new Coord( 3, 0)
     };
 
 
     // === O ======================================
-    private static readonly Vector3Int[] O_Top = 
+    private static readonly Coord[] O_Top = 
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int(-1,0, 1),
-        new Vector3Int( 0,0, 1)
+        new Coord( 0, 0),
+        new Coord(-1, 0),
+        new Coord(-1, 1),
+        new Coord( 0, 1)
     };
 
-    private static readonly Vector3Int[] O_Bottom =
+    private static readonly Coord[] O_Bottom =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 1,0,-1),
-        new Vector3Int( 0,0,-1)
+        new Coord( 0, 0),
+        new Coord( 1, 0),
+        new Coord( 1,-1),
+        new Coord( 0,-1)
     };
 
-    private static readonly Vector3Int[] O_Left = 
+    private static readonly Coord[] O_Left = 
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int(-1,0,-1),
-        new Vector3Int(-1,0, 0)
+        new Coord( 0, 0),
+        new Coord( 0,-1),
+        new Coord(-1,-1),
+        new Coord(-1, 0)
     };
 
-    private static readonly     Vector3Int[] O_Right = 
+    private static readonly Coord[] O_Right = 
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 1,0, 1),
-        new Vector3Int( 1,0, 0)
+        new Coord( 0, 0),
+        new Coord( 0, 1),
+        new Coord( 1, 1),
+        new Coord( 1, 0)
     };
 
 
     // === L ======================================
-    private static readonly Vector3Int[] L_Top =
+    private static readonly Coord[] L_Top =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 0,0, 2),
-        new Vector3Int( 1,0, 0)
+        new Coord( 0, 0),
+        new Coord( 0, 1),
+        new Coord( 0, 2),
+        new Coord( 1, 0)
     };
 
-    private static readonly Vector3Int[] L_Bottom =
+    private static readonly Coord[] L_Bottom =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int( 0,0,-2),
-        new Vector3Int(-1,0, 0)
+        new Coord( 0, 0),
+        new Coord( 0,-1),
+        new Coord( 0,-2),
+        new Coord(-1, 0)
     };
 
-    private static readonly Vector3Int[] L_Left =
+    private static readonly Coord[] L_Left =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int(-2,0, 0),
-        new Vector3Int( 0,0, 1)
+        new Coord( 0, 0),
+        new Coord(-1, 0),
+        new Coord(-2, 0),
+        new Coord( 0, 1)
     };
 
-    private static readonly Vector3Int[] L_Right =
+    private static readonly Coord[] L_Right =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 2,0, 0),
-        new Vector3Int( 0,0,-1)
+        new Coord( 0, 0),
+        new Coord( 1, 0),
+        new Coord( 2, 0),
+        new Coord( 0,-1)
     };
 
 
     // === J ======================================
-    private static readonly Vector3Int[] J_Top =
+    private static readonly Coord[] J_Top =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 0,0, 2)
+        new Coord( 0, 0),
+        new Coord(-1, 0),
+        new Coord( 0, 1),
+        new Coord( 0, 2)
     };
 
-    private static readonly Vector3Int[] J_Bottom =
+    private static readonly Coord[] J_Bottom =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int( 0,0,-2)
+        new Coord( 0, 0),
+        new Coord( 1, 0),
+        new Coord( 0,-1),
+        new Coord( 0,-2)
     };
 
-    private static readonly Vector3Int[] J_Left =
+    private static readonly Coord[] J_Left =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int(-2,0, 0)
+        new Coord( 0, 0),
+        new Coord( 0,-1),
+        new Coord(-1, 0),
+        new Coord(-2, 0)
     };
 
-    private static readonly Vector3Int[] J_Right =
+    private static readonly Coord[] J_Right =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 2,0, 0)
+        new Coord( 0, 0),
+        new Coord( 0, 1),
+        new Coord( 1, 0),
+        new Coord( 2, 0)
     };
 
 
     // === S ======================================
-    private static readonly Vector3Int[] S_Top =
+    private static readonly Coord[] S_Top =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 1,0, 1)
+        new Coord( 0,0),
+        new Coord(-1,0),
+        new Coord( 0,1),
+        new Coord( 1,1)
     };
 
-    private static readonly Vector3Int[] S_Bottom =
+    private static readonly Coord[] S_Bottom =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int(-1,0,-1)
+        new Coord( 0, 0),
+        new Coord( 1, 0),
+        new Coord( 0,-1),
+        new Coord(-1,-1)
     };
 
-    private static readonly Vector3Int[] S_Left =
+    private static readonly Coord[] S_Left =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int(-1,0, 1)
+        new Coord( 0, 0),
+        new Coord( 0,-1),
+        new Coord(-1, 0),
+        new Coord(-1, 1)
     };
 
-    private static readonly Vector3Int[] S_Right =
+    private static readonly Coord[] S_Right =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 1,0,-1)
+        new Coord( 0, 0),
+        new Coord( 0, 1),
+        new Coord( 1, 0),
+        new Coord( 1,-1)
     };
 
 
     // === Z ======================================
-    private static readonly Vector3Int[] Z_Top =
+    private static readonly Coord[] Z_Top =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0, 1),
-        new Vector3Int( 0,0, 1),
-        new Vector3Int( 1,0, 0)
+        new Coord( 0, 0),
+        new Coord(-1, 1),
+        new Coord( 0, 1),
+        new Coord( 1, 0)
     };
 
-    private static readonly Vector3Int[] Z_Bottom =
+    private static readonly Coord[] Z_Bottom =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0,-1),
-        new Vector3Int( 0,0,-1),
-        new Vector3Int(-1,0, 0)
+        new Coord( 0, 0),
+        new Coord( 1,-1),
+        new Coord( 0,-1),
+        new Coord(-1, 0)
     };
 
-    private static readonly Vector3Int[] Z_Left =
+    private static readonly Coord[] Z_Left =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int(-1,0,-1),
-        new Vector3Int(-1,0, 0),
-        new Vector3Int( 0,0, 1)
+        new Coord( 0, 0),
+        new Coord(-1,-1),
+        new Coord(-1, 0),
+        new Coord( 0, 1)
     };
 
-    private static readonly Vector3Int[] Z_Right =
+    private static readonly Coord[] Z_Right =
     {
-        new Vector3Int( 0,0, 0),
-        new Vector3Int( 1,0, 1),
-        new Vector3Int( 1,0, 0),
-        new Vector3Int( 0,0,-1)
+        new Coord( 0, 0),
+        new Coord( 1, 1),
+        new Coord( 1, 0),
+        new Coord( 0,-1)
     };
 
     public static readonly Section T = new Section(T_Top, T_Left, T_Right, T_Bottom);
