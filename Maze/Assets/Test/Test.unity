@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 447553972}
-  - component: {fileID: 447553971}
+  - component: {fileID: 447553973}
   m_Layer: 0
   m_Name: TestMap2
   m_TagString: Untagged
@@ -140,31 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &447553971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 447553970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54344076f53f7704db14ea94c2b4bddb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flagObj: {fileID: 0}
-  hamburgerObj: {fileID: 0}
-  hamburgerNum: 0
-  flagNum: 0
-  hamburgerRoomSize: 0
-  flagRoomSize: 0
-  startRoomSize: 0
-  gridWidth: 100
-  gridDepth: 100
-  cellWidth: 10
-  cellDepth: 10
-  y: 0
-  blockHeight: 15
 --- !u!4 &447553972
 Transform:
   m_ObjectHideFlags: 0
@@ -180,6 +155,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &447553973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447553970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1ea8f7b041f6ac41818be59e7acc06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridWidth: 20
+  gridDepth: 10
+  cellWidth: 10
+  cellDepth: 10
+  y: 0
 --- !u!1 &475652231
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,9 +436,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc03354a6774bbf46a289adb6e95759b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Clips_SE: []
-  Clips_BGM:
-  - {fileID: 8300000, guid: 513313d4ee7f37a4ab54cc3c6a478403, type: 3}
+  audioSourceDictionary: []
+  SE_ClipDictionary: []
+  BGM_ClipDictionary: []
   Volume_SE: 0.5
   Volume_BGM: 1
 --- !u!4 &1167550315
@@ -629,7 +621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1260217917}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 500, y: 1, z: 500}
+  m_LocalPosition: {x: -15.6, y: 1, z: -14.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -646,17 +638,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1260217917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9d9b785be46c947a6512d75b636b60, type: 3}
+  m_Script: {fileID: 11500000, guid: c57da51568dc6944489d2addb03136d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  uiManager: {fileID: 0}
-  mainCam: {fileID: 475652231}
-  map: {fileID: 447553971}
-  locoSpeed: 5
-  dashSpeed: 20
+  locoSpeed: 10
+  dashSpeed: 30
   viewSpeedX: 3
   viewSpeedY: 3
+  mainCam: {fileID: 475652231}
+  map: {fileID: 447553973}
 --- !u!1 &1638920489
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,7 +686,7 @@ MonoBehaviour:
   MT_Blue: {fileID: 2100000, guid: 546a0b6ffb58cb542881ac98d8ade1bf, type: 2}
   pathObj: {fileID: 4985950377011335953, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
   player: {fileID: 1260217917}
-  testMap: {fileID: 447553971}
+  testMap: {fileID: 447553973}
 --- !u!4 &1638920491
 Transform:
   m_ObjectHideFlags: 0

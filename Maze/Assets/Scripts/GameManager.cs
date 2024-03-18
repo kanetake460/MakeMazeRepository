@@ -97,14 +97,17 @@ public class GameManager : MonoBehaviour
         switch (tag)
         {
             case "flag":
+                AudioManager.PlayOneShot("GetFlag");
                 _flagCount++;
                 break;
 
             case "hamburger":
+                AudioManager.PlayOneShot("EatBurger");
                 hamburgerCount += hamburgerIncrease;
                 break;
 
-            case "goal":
+            case "clearFlag":
+            AudioManager.PlayOneShot("Clear");
                 clearFlag = true;
                 break;
 

@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
         {
             AudioManager.PlayBGM("MaxWell",audioSource);
             if (isWandcExit) ai.ExitLocomotion(ref isWandcExit);
-            ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed,10);
+            ai.StayLocomotionToAStar(playerObj.transform.position,chaseSpeed,60);
             isChaceExit = true;
         }
         else
@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour
             AudioManager.StopBGM(audioSource);
             //Debug.Log("wandering");
             if(isChaceExit)ai.ExitLocomotion(ref isChaceExit);
-            ai.CustomWandering(wandSpeed,map.roomBlockList,5,5);
+            ai.CustomWandering(wandSpeed,map.roomBlockList,3,10,10);
             isWandcExit = true;
         }
     }

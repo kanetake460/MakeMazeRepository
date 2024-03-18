@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System;
 
 public class TestEnemyController : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class TestEnemyController : MonoBehaviour
     [SerializeField] GameObject player;
 
     [Header("コンポーネント")]
-    [SerializeField] MapGridField testMap;
+    [SerializeField] Test1 testMap;
 
     private Transform _enemyTrafo;
 
@@ -41,8 +42,7 @@ public class TestEnemyController : MonoBehaviour
 
     GridFieldAStar aStar;
 
-   
-    private void Start()
+    private void Awake()
     {
         _enemyTrafo = transform;
 
@@ -51,14 +51,22 @@ public class TestEnemyController : MonoBehaviour
         compass = new TakeshiLibrary.Compass(_enemyTrafo);
     }
 
-    private void Awake()
+   
+    private void Start()
     {
+
     }
 
 
     void Update()
     {
-        EnemyMovement();
+        if(ai.LocomotionToAStar(chaceSpeed))
+
+        if (Input.GetMouseButton(0))
+        {
+            ai.EnterLocomotionToAStar(player.transform.position);
+        }
+        //EnemyMovement();
     }
 
     private void EnemyMovement()
@@ -78,7 +86,7 @@ public class TestEnemyController : MonoBehaviour
         {
             AudioManager.StopBGM();
             if (_isChaceExit) ai.ExitLocomotion(ref _isChaceExit);
-            ai.Wandering(wandSpeed, 10, 10);
+            ai.CustomWandering(wandSpeed,new List<Coord>(), 1, 10,10);
             _isWandExit = true;
         }
     }

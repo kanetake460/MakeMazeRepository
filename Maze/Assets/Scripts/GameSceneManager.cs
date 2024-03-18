@@ -9,7 +9,7 @@ using System.Linq;
 public class GameSceneManager : MonoBehaviour
 {
     /*オブジェクト参照*/
-    [SerializeField] TestPlayerController playerController;   // プレイヤーコントローラー
+    [SerializeField] PlayerController playerController;   // プレイヤーコントローラー
     [SerializeField] GameManager gameManager;   // ゲームマネージャー
     [SerializeField] GameObject UICanvas;       // UIキャンバス
     [SerializeField] Canvas titleCanvas;        // タイトルキャンバス
