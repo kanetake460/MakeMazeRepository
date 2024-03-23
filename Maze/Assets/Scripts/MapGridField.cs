@@ -17,6 +17,7 @@ public class MapGridField : MonoBehaviour
     [Header("ゲームオブジェクト")]
     [SerializeField] GameObject flagObj;
     [SerializeField] GameObject hamburgerObj;
+    [SerializeField] GameObject enemy;
 
     [Header("パラメーター")]
     [SerializeField, Min(0)] int hamburgerNum;
@@ -73,9 +74,10 @@ public class MapGridField : MonoBehaviour
         map.InstanceMapObjects(blockHeight);
         map.SetLayerMapObject(layerName);
 
+        Instantiate(enemy, gridField.middle, Quaternion.identity);
         RoomGenerator(map.gridField.middleGrid, 1);
         GenerateRooms(hamburgerNum, hamburgerRoomSize, hamburgerObj);
-        GenerateRooms(flagNum, flagRoomSize, flagObj);
+        GenerateRooms(flagNum, flagRoomSize, flagObj,enemy);
 
         map.SetWallTextureAll(texture);
         map.ActiveMapWallObject();
@@ -101,6 +103,30 @@ public class MapGridField : MonoBehaviour
             RoomGenerator(randCoord, roomSize);
 
             Instantiate(obj, map.gridField.grid[randCoord.x,randCoord.z],Quaternion.identity);
+
+        }
+    }
+
+    /// <summary>
+    /// マップにハンバーガ部屋と、旗部屋を生成します
+    /// </summary>
+    /// <param name="roomNum">ハンバーガー部屋のサイズ</param>
+    /// <param name="roomSize">旗部屋のサイズ</param>
+    private void GenerateRooms(int roomNum, int roomSize, GameObject obj1,GameObject obj2)
+    {
+        for (int i = 0; i < roomNum; i++)
+        {
+            Coord randCoord;
+            while (true)
+            {
+                randCoord = map.gridField.randomGridCoord;
+                if (CheckRoomGenerate(randCoord, roomSize))
+                    break;
+            }
+            RoomGenerator(randCoord, roomSize);
+
+            Instantiate(obj1, map.gridField.grid[randCoord.x, randCoord.z], Quaternion.identity);
+            Instantiate(obj2, map.gridField.grid[randCoord.x, randCoord.z], Quaternion.identity);
 
         }
     }

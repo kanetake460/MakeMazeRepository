@@ -27,6 +27,7 @@ public class TestPlayer : MonoBehaviour
     private void Start()
     {
         fps = new FPS(map.map);
+        
     }
 
 
@@ -41,6 +42,5 @@ public class TestPlayer : MonoBehaviour
         FPS.Locomotion(transform, locoSpeed, dashSpeed);
         fps.CursorLock();
         fps.ClampMoveRange(transform);
-
     }
 }

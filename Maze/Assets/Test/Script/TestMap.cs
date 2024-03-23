@@ -11,7 +11,7 @@ public class TestMap : MonoBehaviour
     [SerializeField] GameObject space;
     [SerializeField] GameObject wall;
 
-    /*グリッド設定*/
+    [Header("グリッド設定")]
     [SerializeField] int gridWidth = 20;
     [SerializeField] int gridDepth = 10;
     [SerializeField] float cellWidth = 10;

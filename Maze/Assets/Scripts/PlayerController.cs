@@ -155,12 +155,10 @@ public class PlayerController : MonoBehaviour
         if( OpenAround(branchCoords[branchIndx] + branchCoord + dir, _sectionStack2.Peek()))
         {
             _sectionStack2.Pop();
-            Debug.Log("オープン！");
             return true;
         }
         else
         {
-            Debug.Log("そこでは開けませんでした");
             map.CloseSection(branchCoord + dir,branchCoords);
             return false;
         }
@@ -282,7 +280,6 @@ public class PlayerController : MonoBehaviour
         foreach(SectionTable.Section section in sections) 
         {
             stack.Push(section);
-            Debug.Log("プッシュ");
         }
    　}
 }
