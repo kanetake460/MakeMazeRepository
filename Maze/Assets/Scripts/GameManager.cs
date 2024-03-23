@@ -8,7 +8,7 @@ using static GameSceneManager;
 public class GameManager : MonoBehaviour
 {
     [Header("コンポーネント")]
-    public MapGridField map;
+    public MapManager map;
     [SerializeField] TakeshiLibrary.CompassUI compassRight;
     [SerializeField] TakeshiLibrary.CompassUI compassLeft;
     [SerializeField] GameSceneManager sceneManager;

@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
 
     [Header("コンポーネント")]
     private GameSceneManager _sceneManager;
-    private MapGridField _map;
+    private MapManager _map;
     private AudioSource audioSource;
 
     [Header("設定")]
@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        _map = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapGridField>();
+        _map = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
         _sceneManager = GameObject.FindGameObjectWithTag("SceneManager").GetComponent<GameSceneManager>();
         _playerObj = GameObject.FindGameObjectWithTag(playerTag);
     }

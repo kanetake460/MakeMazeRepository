@@ -291,7 +291,7 @@ MonoBehaviour:
   mainCam: {fileID: 963194225}
   gameManager: {fileID: 709440178}
   uiManager: {fileID: 729730884}
-  map: {fileID: 359694585}
+  gameMap: {fileID: 359694585}
 --- !u!1001 &60826807
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -695,11 +695,15 @@ MonoBehaviour:
   flagObj: {fileID: 4985950377011335953, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
   hamburgerObj: {fileID: 8854829714292836952, guid: 4197a2c101991cd40a2434b71d53737c, type: 3}
   enemy: {fileID: 1664679715051908652, guid: bbde73d3d5391454fbf31f2c1596e734, type: 3}
+  goalObj: {fileID: 2084364834}
   hamburgerNum: 150
   flagNum: 5
   hamburgerRoomSize: 0
   flagRoomSize: 2
   startRoomSize: 3
+  startRoomCoord:
+    m_X: 15
+    m_Z: 15
   gridWidth: 100
   gridDepth: 100
   cellWidth: 10
@@ -1220,11 +1224,11 @@ MonoBehaviour:
   sceneManager: {fileID: 2020846675}
   uiManager: {fileID: 729730884}
   playerObj: {fileID: 0}
-  flagNum: 1
+  flagNum: 5
   hamburgerNum: 10
   deadNum: 30
   hamburgerIncrease: 2
-  hamburgerCount: 10
+  hamburgerCount: 5
 --- !u!1 &729730883
 GameObject:
   m_ObjectHideFlags: 0
@@ -4144,7 +4148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5116425511820934902, guid: 0b7b62693e343ab4baa9f3b48312ec73, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5116425511820934902, guid: 0b7b62693e343ab4baa9f3b48312ec73, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4868,7 +4872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4985950377011335965, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4985950377011335965, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4876,7 +4880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4985950377011335965, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4985950377011335965, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
       propertyPath: m_LocalRotation.w
