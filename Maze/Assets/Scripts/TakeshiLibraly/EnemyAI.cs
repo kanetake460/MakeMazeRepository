@@ -5,41 +5,25 @@ using UnityEngine;
 
 namespace TakeshiLibrary
 {
-    /// <summary>
-    /// エネミーに徘徊や、追跡行動をさせるクラスです。
-    /// </summary>
     public class EnemyAI
     {
-        /// <summary>コンポーネント</summary>
         private GridFieldAStar _aStar;          // AStar
         private GridFieldMap _map;              // マップ
-        private TakeshiLibrary.Compass _copass; // コンパスクラス
+        private TakeshiLibrary.Compass _copass;
         
-        /// <summary>座標</summary>
-        private Coord _pathTargetCoord;         // 道のりのターゲットの座標
+        private Coord _pathTargetCoord;    // 道のりのターゲットの座標
         private Transform _enemyTrafo;          // エネミーのトランスフォーム
         
-        /// <summary>カウンター</summary>
         private int _stayCount = 0;             // AStarLocomotionの再探索までのカウント
 
-        /// <summary>
-        /// 道のりのターゲットVector3座標
-        /// </summary>
-        public Vector3 PathTargetPos
+        public Vector3 pathTargetPos
         {
             get { return _map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z]; }
         }
 
-
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        /// <param name="enemyTrafo">エネミーのトランスフォーム</param>
-        /// <param name="map">マップ</param>
-        /// <param name="searchLimit">探索を終了するまでのリミッター</param>
-        public EnemyAI(Transform enemyTrafo,GridFieldMap map,int searchLimit)
+        public EnemyAI(Transform enemyTrafo,GridFieldMap map)
         {
-            _aStar = new GridFieldAStar(searchLimit);
+            _aStar = new GridFieldAStar();
             _map = map;
             _copass = new Compass(enemyTrafo);
             _enemyTrafo = enemyTrafo;
@@ -75,24 +59,22 @@ namespace TakeshiLibrary
         /// <summary>
         /// ある地点まで Vector3 の値まで動かします
         /// </summary>
-        /// <param name="pointCoord">ある地点のグリッド座標</param>
+        /// <param name="trafo">動かす物のトランスフォーム</param>
+        /// <param name="point">目的地</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public bool LocomotionToCoordPoint(Coord pointCoord, float speed = 1)
+        public bool LocomotionToCoordPoint(Coord coord, float speed = 1)
         {
-            // エネミーのVector3座標
             Vector3 pos = _enemyTrafo.position;
-            // ある地点のVector3座標
-            Vector3 point = _map.gridField.grid[pointCoord.x, pointCoord.z];
-            // ある地点のVector3方向
+            Vector3 point = _map.gridField.grid[coord.x, coord.z];
+
             Vector3 direction = (point - pos).normalized;
 
-            // エネミーの向きをパスターゲットの方向に向かせます
-            _copass.TurnTowardToPoint(PathTargetPos);
+
+            _copass.TurnTowardToPoint(pathTargetPos);
 
             pos += direction * speed * Time.deltaTime;
 
-            // ほぼ目標地点に来たら目標地点の座標を代入
             if(Vector3.Distance(point,pos) < 0.1f)
             {
                 pos = point;
@@ -144,7 +126,7 @@ namespace TakeshiLibrary
         /// <param name="aStarCount">再探索を行う間隔</param>
         /// <param name="moveSpeed">追いかけるスピード</param>
         /// <returns>追いついたらtrue</returns>
-        public void StayLocomotionToAStar(Vector3 goalPos,float moveSpeed, int aStarCount)
+        public void StayLocomotionToAStar(Vector3 goalPos,float moveSpeed = 1, int aStarCount = 360)
         {
             LocomotionToAStar(moveSpeed);
 
@@ -174,7 +156,6 @@ namespace TakeshiLibrary
             }
             else
             {
-
                 _pathTargetCoord = _aStar.pathStack.Pop().position;
                 return true;
             }
@@ -222,22 +203,14 @@ namespace TakeshiLibrary
             {
                 var enemyCoord = _map.gridField.GetGridCoordinate(_enemyTrafo.position);
                 var searchList = _map.GetCustomFrameAreaList(enemyCoord, frameSize, exceptionCoordList, areaX, areaZ);
-                var spaceList = searchList.FindAll(b => b.isSpace);
+                var locoGoalCoord =  searchList.FindAll(b => b.isSpace)
+                    [Random.Range(0, searchList.FindAll(b => b.isSpace).Count - 1)].coord;
 
-                if (spaceList.Count > 0)
+                if(EnterLocomotionToAStar(_map.gridField.grid[locoGoalCoord.x, locoGoalCoord.z]) == false)
                 {
-                    var locoGoalCoord = spaceList[Random.Range(0, spaceList.Count)].coord;
-
-
-                    if (EnterLocomotionToAStar(_map.gridField.grid[locoGoalCoord.x, locoGoalCoord.z]) == false)
-                    {
-                        _aStar.pathStack.Clear();
-                    }
+                    _aStar.pathStack.Clear();
                 }
-                else
-                {
-                    return;
-                }
+
             }
         }
 

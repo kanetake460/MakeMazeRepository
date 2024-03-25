@@ -143,8 +143,7 @@ namespace TakeshiLibrary
         {
             Coord coord = _map.gridField.GetGridCoordinate(trafo.position);
 
-            if (_map.blocks[coord.x,coord.z].isSpace == false ||
-                coord == null)
+            if (_map.blocks[coord.x,coord.z].isSpace == false)
             {
                 trafo.position = _latePos;
             }

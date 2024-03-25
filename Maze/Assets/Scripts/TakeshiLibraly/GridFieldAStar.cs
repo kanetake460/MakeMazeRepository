@@ -181,10 +181,10 @@ namespace TakeshiLibrary
                     aroundCell.parent = center;
 
 
-                    //Debug.Log(aroundCell.position.x + "," + aroundCell.position.z 
-                        //+ " \n合計コスト： " + aroundCell.sumCost
-                        //+ " \n想定コスト： " + aroundCell.heuristicCost
-                        //+ " \n実コスト  ： " + aroundCell.cost);
+                    Debug.Log(aroundCell.position.x + "," + aroundCell.position.z 
+                        + " \n合計コスト： " + aroundCell.sumCost
+                        + " \n想定コスト： " + aroundCell.heuristicCost
+                        + " \n実コスト  ： " + aroundCell.cost);
 
                     //Debug.Log(openList.Count);
 
@@ -192,6 +192,8 @@ namespace TakeshiLibrary
                     {
                         if (openList.Find(x => x.position == searchPos).sumCost > aroundCell.sumCost)
                         {
+                    Debug.Log("// オープンリストに存在して、合計コストがオープンしたいセルより大きい");
+                            // リストにあるものを削除し、新しい方を追加
                             var o = openList.Find(x => x.position == searchPos);
                             openList.Remove(o);
                             openList.Add(aroundCell);
@@ -203,6 +205,7 @@ namespace TakeshiLibrary
                     {
                         if (closeList.Find(x => x.position == searchPos).sumCost > aroundCell.sumCost)
                         {
+                    Debug.Log("// クローズリストに存在して、合計コストがオープンしたいセルより大きい");
                             var c = closeList.Where(y => y.position == searchPos).First();
                             closeList.Remove(c);
                             openList.Add(aroundCell);
@@ -214,6 +217,7 @@ namespace TakeshiLibrary
                     // 両方のリストにセルが一つも存在しない
                     if (openList.Contains(aroundCell) == false && closeList.Contains(aroundCell) == false)
                     {
+                        //Debug.Log(aroundCell.position.x + "," + aroundCell.position.z);
                         openList.Add(aroundCell);
                         continue;
                     }
@@ -228,6 +232,8 @@ namespace TakeshiLibrary
         /// <param name="cell">スタックするセルの先頭</param>
         private void StackPath(CellInfo cell)
         {
+            Debug.Log("オープンリスト : " + openList.Count);
+            Debug.Log("クローズリスト : " + closeList.Count);
             
             openList.Clear();
             closeList.Clear();

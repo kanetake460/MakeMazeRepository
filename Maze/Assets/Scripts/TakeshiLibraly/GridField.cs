@@ -12,13 +12,10 @@ namespace TakeshiLibrary
     /*=====グリッドフィールドを作成する関数=====*/
     // Vector3のクラスを参考に作成しました
     // C:\Users\kanet\AppData\Local\Temp\MetadataAsSource\b33e6428b1fe4c03a5b0b222eb1e9f0b\DecompilationMetadataAsSourceFileProvider\4496430b4e32462b86d5e9f4984747a4\Vector3.cs
-
-    [Serializable]
+    
     public struct Coord
     {
-        [SerializeField]
         private int m_X;
-        [SerializeField]
         private int m_Z;
 
         public int x
