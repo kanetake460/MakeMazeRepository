@@ -5,19 +5,26 @@ using TMPro;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 using System.Linq;
+using TakeshiLibrary;
+using Unity.VisualScripting;
 
 public class GameSceneManager : MonoBehaviour
 {
-    /*オブジェクト参照*/
+    [Header("オブジェクト参照")]
     [SerializeField] PlayerController playerController;   // プレイヤーコントローラー
     [SerializeField] GameManager gameManager;   // ゲームマネージャー
+
+    [Header("UI")]
     [SerializeField] GameObject UICanvas;       // UIキャンバス
     [SerializeField] Canvas titleCanvas;        // タイトルキャンバス
     [SerializeField] Canvas resultCanvas;       // リザルトキャンバス
     [SerializeField] TextMeshProUGUI resultText;// リザルトテキスト
 
+    [Header("ゲームオブジェクト")]
     [SerializeField] GameObject clearFlag;
-    [SerializeField] GameObject[] enemys;
+    [SerializeField] Transform playerTrafo;
+    private List<GameObject> _enemys = new List<GameObject>();
+    
     public enum eScenes
     {
         Title_Scene,    // タイトルシーン
@@ -30,10 +37,21 @@ public class GameSceneManager : MonoBehaviour
     public eScenes currentScene
     { get; set; }
 
+    private void Awake()
+    {
+
+    }
+
     private void Start()
     {
         // 最初はタイトルシーン
         currentScene = eScenes.Title_Scene;
+        _enemys.AddRange(GameObject.FindGameObjectsWithTag("enemy"));
+        foreach (GameObject enemy in _enemys)
+        {
+            enemy.SetActive(false);
+        }
+
     }
 
     private void Update()
@@ -54,6 +72,7 @@ public class GameSceneManager : MonoBehaviour
         {
             case eScenes.Title_Scene:       // タイトルなら
                 Cursor.lockState = CursorLockMode.None;
+                playerController.enabled = false;// プレイヤーコントローラーを動かす
                 titleCanvas.enabled = true;     // タイトルキャンバス見せる
                 break;
 
@@ -108,12 +127,18 @@ public class GameSceneManager : MonoBehaviour
     /// </summary>
     public void EscapeTime()
     {
-        clearFlag.SetActive(true);
-        for (int i = 0; i < enemys.Length; i++)
-        {
-            enemys[i].SetActive(true);
-        }
         currentScene = eScenes.Escape_Scene;
+    }
+
+    public void ActiveObject()
+    {
+        clearFlag.SetActive(true);
+        
+        foreach (GameObject enemy in _enemys)
+        {
+            enemy.SetActive(true);
+        }
+        _enemys.OrderBy(e => Vector3.Distance(e.transform.position, playerTrafo.position)).First().SetActive(false);
     }
 
     /// <summary>

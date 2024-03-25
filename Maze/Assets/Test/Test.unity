@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 447553972}
   - component: {fileID: 447553973}
   m_Layer: 0
-  m_Name: TestMap2
+  m_Name: TestMap1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,7 +153,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &447553973
 MonoBehaviour:
@@ -454,64 +454,13 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1175761244 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7d19edb603922054f9154abff20ef114, type: 3}
   m_PrefabInstance: {fileID: 571829634}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1259732286
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1259732287}
-  - component: {fileID: 1259732288}
-  m_Layer: 0
-  m_Name: TestMap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1259732287
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1259732286}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.414261, y: 13.674286, z: 17.80741}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1259732288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1259732286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd17431ca3267b4aabb6f9944d58fd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  space: {fileID: 8903238827795536142, guid: 3972cf15063b13a4e9e4ce9e3b362851, type: 3}
-  wall: {fileID: 615411715708864080, guid: c520ca19482925040866d623f0e31af7, type: 3}
-  gridWidth: 20
-  gridDepth: 10
-  cellWidth: 10
-  cellDepth: 10
-  y: 0
 --- !u!1 &1260217917
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,7 +576,7 @@ Transform:
   m_Children:
   - {fileID: 475652234}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1260217923
 MonoBehaviour:
@@ -676,16 +625,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bfc59c441a4bdf46959c20a005cb18c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaceSpeed: 15
-  wandSpeed: 5
+  chaseSpeed: 10
+  wandSpeed: 10
   searchRaySize: 10
+  searchLimit: 1000
   layerMask:
     serializedVersion: 2
     m_Bits: 8
   MT_Red: {fileID: 2100000, guid: 844d8000aff81b544b3be2684daf4116, type: 2}
   MT_Blue: {fileID: 2100000, guid: 546a0b6ffb58cb542881ac98d8ade1bf, type: 2}
   pathObj: {fileID: 4985950377011335953, guid: 805c92bc89710e84ba0dddc21e063fcb, type: 3}
-  player: {fileID: 1260217917}
   testMap: {fileID: 447553973}
 --- !u!4 &1638920491
 Transform:
@@ -702,7 +651,7 @@ Transform:
   - {fileID: 724536641}
   - {fileID: 1175761244}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1774264442
 GameObject:

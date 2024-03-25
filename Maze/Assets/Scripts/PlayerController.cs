@@ -21,18 +21,20 @@ public class PlayerController : MonoBehaviour
     [Header("コンポーネント")]
     [SerializeField] GameManager gameManager;
     [SerializeField] UIManager uiManager;
-    [SerializeField] MapGridField map;
+    [SerializeField] MapManager gameMap;
     private GameObject _triggerObj;
     private FPS fps;
 
     private void Start()
     {
-        fps = new FPS(map.map);
+        fps = new FPS(gameMap.map);
+        transform.position = gameMap.startPos;
+        Debug.Log(gameMap.startPos);
     }
 
     void Update()
     {
-        playerCoord = map.gridField.GetGridCoordinate(transform.position);
+        playerCoord = gameMap.gridField.GetGridCoordinate(transform.position);
         playerPrevious = FPS.GetVector3FourDirection(transform.rotation.eulerAngles);
 
 
@@ -81,10 +83,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-    }
-
     /// <summary>
     /// 左クリックしたときのアクション
     /// </summary>
@@ -100,13 +98,19 @@ public class PlayerController : MonoBehaviour
                 AudioManager.PlayOneShot("Open");
                 gameManager.hamburgerCount--;
                 _sectionStack1.Pop();
+                // ボーダーリストのブロックが書き換えられたら、壁に戻す
+                if(!gameMap.borderBlockList.All(b => b.isSpace))
+                {
+                    gameMap.map.SetWallSurround();
+                }
+                gameMap.map.ActiveMapWallObject();
             }
             else
             {
                 AudioManager.PlayOneShot("NotOpen");
                 uiManager.EnterDisplayGameMessage("そこでは開けません！！", Color.red, 100);
             }
-            map.map.ActiveMapWallObject();
+            
         }
     }
 
@@ -155,13 +159,11 @@ public class PlayerController : MonoBehaviour
         if( OpenAround(branchCoords[branchIndx] + branchCoord + dir, _sectionStack2.Peek()))
         {
             _sectionStack2.Pop();
-            Debug.Log("オープン！");
             return true;
         }
         else
         {
-            Debug.Log("そこでは開けませんでした");
-            map.CloseSection(branchCoord + dir,branchCoords);
+            gameMap.CloseSection(branchCoord + dir,branchCoords);
             return false;
         }
     }
@@ -243,7 +245,7 @@ public class PlayerController : MonoBehaviour
     {
         Coord[] sectionCoords = section.GetDirectionSection(dir);
         Coord prevCoord = branchCoord + dir;
-        map.OpenSection(prevCoord, sectionCoords);
+        gameMap.OpenSection(prevCoord, sectionCoords);
     }
 
 
@@ -258,7 +260,7 @@ public class PlayerController : MonoBehaviour
     {
         Coord[] sectionCoords = section.GetDirectionSection(dir);
         Coord prevCoord = branchCoord + dir;
-        return map.CheckAbleOpen(prevCoord,sectionCoords);
+        return gameMap.CheckAbleOpen(prevCoord,sectionCoords);
     }
 
    　/// <summary>
@@ -282,7 +284,6 @@ public class PlayerController : MonoBehaviour
         foreach(SectionTable.Section section in sections) 
         {
             stack.Push(section);
-            Debug.Log("プッシュ");
         }
    　}
 }

@@ -8,7 +8,7 @@ using static GameSceneManager;
 public class GameManager : MonoBehaviour
 {
     [Header("コンポーネント")]
-    public MapGridField map;
+    public MapManager map;
     [SerializeField] TakeshiLibrary.CompassUI compassRight;
     [SerializeField] TakeshiLibrary.CompassUI compassLeft;
     [SerializeField] GameSceneManager sceneManager;
@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
     private int _flagCount = 0;              // 現在の集めたフラグの数
     private float _deadCount = 30;           // ゲームオーバーカウント
 
+    private void Start()
+    {
+        Application.targetFrameRate = 60;
+    }
 
     /// <summary>
     /// ハンバーガーカウントの制限
@@ -99,6 +103,10 @@ public class GameManager : MonoBehaviour
             case "flag":
                 AudioManager.PlayOneShot("GetFlag");
                 _flagCount++;
+                if(_flagCount == flagNum)
+                {
+                    sceneManager.ActiveObject();
+                }
                 break;
 
             case "hamburger":

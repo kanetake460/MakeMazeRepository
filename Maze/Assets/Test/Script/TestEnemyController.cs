@@ -11,9 +11,10 @@ using System;
 public class TestEnemyController : MonoBehaviour
 {
     [Header("パラメーター")]
-    [SerializeField] float chaceSpeed;
+    [SerializeField] float chaseSpeed;
     [SerializeField] float wandSpeed;
     [SerializeField] float searchRaySize;
+    [SerializeField] int searchLimit;
 
     [Header("設定")]
     [SerializeField] LayerMask layerMask;
@@ -22,7 +23,7 @@ public class TestEnemyController : MonoBehaviour
 
     [Header("オブジェクト参照")]
     [SerializeField] GameObject pathObj;
-    [SerializeField] GameObject player;
+    private GameObject player;
 
     [Header("コンポーネント")]
     [SerializeField] Test1 testMap;
@@ -45,48 +46,49 @@ public class TestEnemyController : MonoBehaviour
     private void Awake()
     {
         _enemyTrafo = transform;
-
-        ai = new EnemyAI(_enemyTrafo.transform, testMap.map);
-        fps = new FPS(testMap.map);
-        compass = new TakeshiLibrary.Compass(_enemyTrafo);
     }
 
-   
+
     private void Start()
     {
-
+        //testMap = GameObject.FindGameObjectWithTag("TestMap").GetComponent<MapGridField>();
+        ai = new EnemyAI(_enemyTrafo.transform, testMap.map, searchLimit);
+        fps = new FPS(testMap.map);
+        compass = new TakeshiLibrary.Compass(_enemyTrafo);
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
 
     void Update()
     {
-        if(ai.LocomotionToAStar(chaceSpeed))
+        //if(ai.LocomotionToAStar(chaceSpeed))
 
         if (Input.GetMouseButton(0))
         {
             ai.EnterLocomotionToAStar(player.transform.position);
         }
+        ai.StayLocomotionToAStar(player.transform.position, chaseSpeed, 60);
         //EnemyMovement();
     }
 
     private void EnemyMovement()
     {
-        if (ai.SearchPlayer(layerMask,player.tag,searchRaySize)) _isChase = true;
+        if (ai.SearchPlayer(layerMask, player.tag, searchRaySize)) _isChase = true;
 
-        if (Vector3.Distance(_enemyTrafo.position,player.transform.position) > 50 ) _isChase = false;
+        if (Vector3.Distance(_enemyTrafo.position, player.transform.position) > 50) _isChase = false;
 
         if (_isChase)
         {
-            AudioManager.PlayBGM("MaxWell");
+            //AudioManager.PlayBGM("MaxWell");
             if (_isWandExit) ai.ExitLocomotion(ref _isWandExit);
-            ai.StayLocomotionToAStar(player.transform.position, chaceSpeed,60);
+            ai.StayLocomotionToAStar(player.transform.position, chaseSpeed, 60);
             _isChaceExit = true;
         }
         else
         {
-            AudioManager.StopBGM();
+            //AudioManager.StopBGM();
             if (_isChaceExit) ai.ExitLocomotion(ref _isChaceExit);
-            ai.CustomWandering(wandSpeed,new List<Coord>(), 1, 10,10);
+            ai.CustomWandering(wandSpeed, new List<Coord>(), 1, 10, 10);
             _isWandExit = true;
         }
     }
