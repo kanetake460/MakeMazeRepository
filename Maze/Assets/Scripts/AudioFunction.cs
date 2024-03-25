@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+/// <summary>
+/// ボタンやアニメーションなどで音を鳴らす関数をまとめたクラスです。
+/// </summary>
 public class AudioFunction : MonoBehaviour
 {
     Animator animator;

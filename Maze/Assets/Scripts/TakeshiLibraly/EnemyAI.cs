@@ -5,22 +5,38 @@ using UnityEngine;
 
 namespace TakeshiLibrary
 {
+    /// <summary>
+    /// エネミーに徘徊や、追跡行動をさせるクラスです。
+    /// </summary>
     public class EnemyAI
     {
+        /// <summary>コンポーネント</summary>
         private GridFieldAStar _aStar;          // AStar
         private GridFieldMap _map;              // マップ
-        private TakeshiLibrary.Compass _copass;
+        private TakeshiLibrary.Compass _copass; // コンパスクラス
         
-        private Coord _pathTargetCoord;    // 道のりのターゲットの座標
+        /// <summary>座標</summary>
+        private Coord _pathTargetCoord;         // 道のりのターゲットの座標
         private Transform _enemyTrafo;          // エネミーのトランスフォーム
         
+        /// <summary>カウンター</summary>
         private int _stayCount = 0;             // AStarLocomotionの再探索までのカウント
 
-        public Vector3 pathTargetPos
+        /// <summary>
+        /// 道のりのターゲットVector3座標
+        /// </summary>
+        public Vector3 PathTargetPos
         {
             get { return _map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z]; }
         }
 
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="enemyTrafo">エネミーのトランスフォーム</param>
+        /// <param name="map">マップ</param>
+        /// <param name="searchLimit">探索を終了するまでのリミッター</param>
         public EnemyAI(Transform enemyTrafo,GridFieldMap map,int searchLimit)
         {
             _aStar = new GridFieldAStar(searchLimit);
@@ -59,21 +75,24 @@ namespace TakeshiLibrary
         /// <summary>
         /// ある地点まで Vector3 の値まで動かします
         /// </summary>
-        /// <param name="trafo">動かす物のトランスフォーム</param>
-        /// <param name="point">目的地</param>
+        /// <param name="pointCoord">ある地点のグリッド座標</param>
         /// <param name="speed">動かすスピード</param>
         /// <returns>ポイントに到達したらtrueを返します</returns>
-        public bool LocomotionToCoordPoint(Coord coord, float speed = 1)
+        public bool LocomotionToCoordPoint(Coord pointCoord, float speed = 1)
         {
+            // エネミーのVector3座標
             Vector3 pos = _enemyTrafo.position;
-            Vector3 point = _map.gridField.grid[coord.x, coord.z];
-
+            // ある地点のVector3座標
+            Vector3 point = _map.gridField.grid[pointCoord.x, pointCoord.z];
+            // ある地点のVector3方向
             Vector3 direction = (point - pos).normalized;
 
-            _copass.TurnTowardToPoint(pathTargetPos);
+            // エネミーの向きをパスターゲットの方向に向かせます
+            _copass.TurnTowardToPoint(PathTargetPos);
 
             pos += direction * speed * Time.deltaTime;
 
+            // ほぼ目標地点に来たら目標地点の座標を代入
             if(Vector3.Distance(point,pos) < 0.1f)
             {
                 pos = point;

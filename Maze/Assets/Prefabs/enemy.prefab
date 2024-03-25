@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1664679715051908654}
+  - component: {fileID: 1664679715051908655}
   - component: {fileID: 1664679715051908650}
-  - component: {fileID: 16594584715931335}
   m_Layer: 0
   m_Name: enemy
   m_TagString: enemy
@@ -34,6 +34,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1664679715051908655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664679715051908652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9d5aefe1c0a4b74f8866d2408793611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wandSpeed: 10
+  chaseSpeed: 30
+  escapeDist: 10
+  freezeDist: 300
+  aStarCount: 60
+  searchLimit: 1000
+  _distance: 0
+  searchLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  playerTag: Player
 --- !u!65 &1664679715051908650
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47,29 +70,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5, y: 3, z: 3}
   m_Center: {x: 0, y: 1.5, z: 0}
---- !u!114 &16594584715931335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664679715051908652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bfc59c441a4bdf46959c20a005cb18c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chaceSpeed: 10
-  wandSpeed: 30
-  searchRaySize: 5
-  searchLimit: 1000
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  MT_Red: {fileID: 0}
-  MT_Blue: {fileID: 0}
-  pathObj: {fileID: 0}
-  testMap: {fileID: 0}
 --- !u!1001 &1664679716907193146
 PrefabInstance:
   m_ObjectHideFlags: 0
