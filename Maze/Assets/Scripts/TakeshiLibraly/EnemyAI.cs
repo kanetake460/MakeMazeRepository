@@ -21,9 +21,9 @@ namespace TakeshiLibrary
             get { return _map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z]; }
         }
 
-        public EnemyAI(Transform enemyTrafo,GridFieldMap map)
+        public EnemyAI(Transform enemyTrafo,GridFieldMap map,int searchLimit)
         {
-            _aStar = new GridFieldAStar();
+            _aStar = new GridFieldAStar(searchLimit);
             _map = map;
             _copass = new Compass(enemyTrafo);
             _enemyTrafo = enemyTrafo;

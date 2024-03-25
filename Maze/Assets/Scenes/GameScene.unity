@@ -702,8 +702,8 @@ MonoBehaviour:
   flagRoomSize: 2
   startRoomSize: 3
   startRoomCoord:
-    m_X: 15
-    m_Z: 15
+    m_X: 10
+    m_Z: 10
   gridWidth: 100
   gridDepth: 100
   cellWidth: 10
