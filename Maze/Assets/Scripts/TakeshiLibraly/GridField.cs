@@ -169,7 +169,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドのセルの数を返します(読み取り専用)
         /// </summary>
-        public int totalCell
+        public int TotalCell
         {
             get
             {
@@ -180,7 +180,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの幅と奥行の最も長い方を返します。
         /// </summary>
-        public int gridMaxLength
+        public int GridMaxLength
         {
             get
             {
@@ -191,7 +191,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの幅と奥行の最も短い方を返します。
         /// </summary>
-        public int gridMinLength
+        public int GridMinLength
         {
             get
             {
@@ -202,7 +202,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// セルの幅と奥行の最も長い方を返します。
         /// </summary>
-        public float cellMaxLength
+        public float CellMaxLength
         {
             get
             {
@@ -214,7 +214,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// セルの幅と奥行の最も長い方を返します。
         /// </summary>
-        public float cellMinLength
+        public float CellMinLength
         {
             get
             {
@@ -228,7 +228,7 @@ namespace TakeshiLibrary
         /// <summary>
         ///グリッドの左下のセルの座標を返します。(読み取り専用)
         /// </summary>
-        public Vector3 bottomLeftCell
+        public Vector3 BottomLeftCell
         {
             get
             {
@@ -239,7 +239,7 @@ namespace TakeshiLibrary
         /// <summary>
         ///グリッドの右下のセルの座標を返します。(読み取り専用)
         /// </summary>
-        public Vector3 bottomRightCell
+        public Vector3 BottomRightCell
         {
             get
             {
@@ -250,7 +250,7 @@ namespace TakeshiLibrary
         /// <summary>
         ///グリッドの左上のセルの座標を返します。(読み取り専用)
         /// </summary>
-        public Vector3 topLeftCell
+        public Vector3 TopLeftCell
         {
             get
             {
@@ -261,7 +261,7 @@ namespace TakeshiLibrary
         /// <summary>
         ///グリッドの右上のセルの座標を返します。(読み取り専用)
         /// </summary>
-        public Vector3 topRightCell
+        public Vector3 TopRightCell
         {
             get
             {
@@ -275,7 +275,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの左下の位置座標を返します(読み取り専用)
         /// </summary>
-        public Vector3 bottomLeft
+        public Vector3 BottomLeft
         {
             get
             {
@@ -286,7 +286,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの右下の位置座標を返します(読み取り専用)
         /// </summary>
-        public Vector3 bottomRight
+        public Vector3 BottomRight
         {
             get
             {
@@ -297,7 +297,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの左上の位置座標を返します(読み取り専用)
         /// </summary>
-        public Vector3 topLeft
+        public Vector3 TopLeft
         {
             get
             {
@@ -308,7 +308,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの右上の位置座標を返します(読み取り専用)
         /// </summary>
-        public Vector3 topRight
+        public Vector3 TopRight
         {
             get
             {
@@ -322,7 +322,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの真ん中の localPosition を返します(読み取り専用)
         /// </summary>
-        public Vector3 middle
+        public Vector3 Middle
         {
             get
             {
@@ -359,7 +359,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッドの真ん中の localPosition を返します(読み取り専用)
         /// </summary>
-        public Coord middleGrid
+        public Coord MiddleGrid
         {
             get
             {
@@ -371,7 +371,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッド座標のランダムな位置を返します(読み取り専用)
         /// </summary>
-        public Vector3 randomGridPos
+        public Vector3 RandomGridPos
         {
             get
             {
@@ -384,7 +384,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// ランダムなグリッド座標を返します(読み取り専用)
         /// </summary>
-        public Coord randomGridCoord
+        public Coord RandomGridCoord
         {
             get
             {
@@ -478,17 +478,17 @@ namespace TakeshiLibrary
 
             // 端のグリッド線表示
             // 最初の列
-            Debug.DrawLine(bottomLeft, topLeft, Color.green);
+            Debug.DrawLine(BottomLeft, TopLeft, Color.green);
 
             // 最後の列
-            Debug.DrawLine(bottomRight, topRight, Color.green);
+            Debug.DrawLine(BottomRight, TopRight, Color.green);
 
 
             // 最初の行
-            Debug.DrawLine(bottomLeft, bottomRight, Color.green);
+            Debug.DrawLine(BottomLeft, BottomRight, Color.green);
 
             // 最後の行
-            Debug.DrawLine(topLeft, topRight, Color.green);
+            Debug.DrawLine(TopLeft, TopRight, Color.green);
         }
 
 
@@ -521,8 +521,6 @@ namespace TakeshiLibrary
         /// <summary>
         /// 引数に与えた Transform がどこの position なのかを調べます
         /// </summary>
-        /// <param name="gridField">調べたいグリッド</param>
-        /// <returns></returns>
         /// <param name="pos">調べたいグリッドのどこのセルにいるのか調べたいTransform</param>
         /// <returns>Transformのいるセルのposition</returns>
         public Vector3 GetGridPosition(Vector3 pos)
@@ -554,7 +552,6 @@ namespace TakeshiLibrary
         /// <summary>
         /// 与えたpositionから任意の距離のほかのpositionのグリッド座標を調べます
         /// </summary>
-        /// <param name="gridField">調べたいグリッド</param>
         /// <param name="pos">調べたい距離の始点のVector3座標</param>
         /// <param name="difference">始点から終点までの差分</param>
         public Coord GetOtherGridCoordinate(Vector3 pos, Coord difference)
@@ -625,14 +622,14 @@ namespace TakeshiLibrary
         /// <summary>
         /// 与えたグリッド座標がグリッドの上にいるかどうか調べます
         /// </summary>
-        /// <param name="pos">調べたいポジション</pragma>
-        public bool CheckOnGridCoord(Vector3Int Coord)
+        /// <param name="coord">調べたいポジション</pragma>
+        public bool CheckOnGridCoord(Vector3Int coord)
         {
             for (int x = 0; x < gridWidth; x++)
             {
                 for (int z = 0; z < gridDepth; z++)
                 {
-                    if (Coord == new Vector3Int(x,y,z))
+                    if (coord == new Vector3Int(x,y,z))
                     {
                         return true;
                     }
@@ -663,17 +660,17 @@ namespace TakeshiLibrary
 
             // 端のグリッド線表示
             // 最初の列
-            Gizmos.DrawLine(bottomLeft, topLeft);
+            Gizmos.DrawLine(BottomLeft, TopLeft);
 
             // 最後の列
-            Gizmos.DrawLine(bottomRight, topRight);
+            Gizmos.DrawLine(BottomRight, TopRight);
 
 
             // 最初の行
-            Gizmos.DrawLine(bottomLeft, bottomRight);
+            Gizmos.DrawLine(BottomLeft, BottomRight);
 
             // 最後の行
-            Gizmos.DrawLine(topLeft, topRight);
+            Gizmos.DrawLine(TopLeft, TopRight);
 
         }
     }

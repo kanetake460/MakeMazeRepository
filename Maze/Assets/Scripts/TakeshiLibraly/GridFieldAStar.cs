@@ -135,7 +135,7 @@ namespace TakeshiLibrary
         /// 真ん中の周りのセルをオープンにします
         /// </summary>
         /// <param name="center">真ん中に設定するセル</param>
-        public void OpenCell(CellInfo center)
+        private void OpenCell(CellInfo center)
         {
             Coord centerPos = center.position;
 

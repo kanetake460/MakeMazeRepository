@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// オブジェクトを取得する関数
     /// </summary>
-    /// <param name="obj"></param>
+    /// <param name="obj">取得するオブジェクト</param>
     public void CheckInObj(GameObject obj)
     {
         if (obj == null)

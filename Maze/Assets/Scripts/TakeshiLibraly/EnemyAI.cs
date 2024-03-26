@@ -7,16 +7,22 @@ namespace TakeshiLibrary
 {
     public class EnemyAI
     {
+        /*コンポーネント*/
         private GridFieldAStar _aStar;          // AStar
         private GridFieldMap _map;              // マップ
-        private TakeshiLibrary.Compass _copass;
+        private TakeshiLibrary.Compass _copass; // コンパス
         
-        private Coord _pathTargetCoord;    // 道のりのターゲットの座標
+        /*座標*/
+        private Coord _pathTargetCoord;         // 道のりのターゲットの座標
         private Transform _enemyTrafo;          // エネミーのトランスフォーム
         
+        /*パラメーター*/
         private int _stayCount = 0;             // AStarLocomotionの再探索までのカウント
 
-        public Vector3 pathTargetPos
+        /// <summary>
+        /// 道のりターゲットのVector3座標
+        /// </summary>
+        public Vector3 PathTargetPos
         {
             get { return _map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z]; }
         }
@@ -71,7 +77,7 @@ namespace TakeshiLibrary
             Vector3 direction = (point - pos).normalized;
 
 
-            _copass.TurnTowardToPoint(pathTargetPos);
+            _copass.TurnTowardToPoint(PathTargetPos);
 
             pos += direction * speed * Time.deltaTime;
 
@@ -222,16 +228,20 @@ namespace TakeshiLibrary
         /// <param name="playerTag">プレイヤーのタグ</param>
         /// <param name="raySize">レイキャストの大きさ（）セルの横幅から引く値</param>
         /// <returns>みつかったかどうかtrue：発見</returns>
-        public bool SearchPlayer(LayerMask searchLayer,string playerTag, float raySize = 10)
+        public bool SearchPlayer(LayerMask searchLayer,string playerTag, float raySize = 5)
         {
             RaycastHit hit;
-
+            // 向き
             Vector3 dir = _enemyTrafo.forward;
+            // ボックスレイの大きさ
             Vector3 size = Vector3.one * raySize / 2;
+            // レイの発射地点
             Vector3 point = _enemyTrafo.position;
             
-            point -= dir * _map.gridField.cellMaxLength;
-            float rayDist = _map.gridField.gridMaxLength * _map.gridField.cellMaxLength;
+            // 1セル分減らす
+            point -= dir * _map.gridField.CellMaxLength;
+            // フィールドのWidhtとDepthで長い方をレイの最大距離に設定
+            float rayDist = _map.gridField.GridMaxLength * _map.gridField.CellMaxLength;
             if (Physics.BoxCast(point, size, dir, out hit, Quaternion.identity, rayDist, searchLayer))
             {
                 if (hit.collider.CompareTag(playerTag))

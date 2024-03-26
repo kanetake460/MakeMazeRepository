@@ -28,8 +28,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         fps = new FPS(gameMap.map);
-        transform.position = gameMap.startPos;
-        Debug.Log(gameMap.startPos);
+        transform.position = gameMap.StartPos;
+        Debug.Log(gameMap.StartPos);
     }
 
     void Update()

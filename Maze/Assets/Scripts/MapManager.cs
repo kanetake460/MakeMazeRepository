@@ -8,27 +8,26 @@ using UnityEngine;
 // エレメント：セクションを形作る一つ一つのオブジェクト
 // シード：セクションの中で最も右下にあるエレメント
 // ブランチ：シード以外のエレメント
-
-
 //====================================================================================================
 
 public class MapManager : MonoBehaviour
 {
     [Header("ゲームオブジェクト")]
-    [SerializeField] GameObject flagObj;
-    [SerializeField] GameObject hamburgerObj;
-    [SerializeField] GameObject enemy;
-    [SerializeField] GameObject goalObj;
+    [SerializeField] GameObject flagObj;        // 集める旗のプレハブ
+    [SerializeField] GameObject hamburgerObj;   // ハンバーガーのプレハブ
+    [SerializeField] GameObject enemy;          // エネミーのプレハブ
+    [SerializeField] GameObject goalObj;        // ゴールのオブジェクト
 
     [Header("パラメーター")]
-    [SerializeField, Min(0)] int hamburgerNum;
-    [SerializeField, Min(0)] int flagNum;
-
+    [SerializeField, Min(0)] int hamburgerNum;  // 生成するハンバーガー部屋の数
     [SerializeField, Min(0)] int hamburgerRoomSize;
+    [Space]
+    [SerializeField, Min(0)] int flagNum;       // 生成する旗部屋の数
     [SerializeField, Min(0)] int flagRoomSize;
+    [Space]
     [SerializeField, Min(0)] int startRoomSize;
     [SerializeField] Coord startRoomCoord;
-    public Vector3 startPos => gridField.grid[startRoomCoord.x, startRoomCoord.z];
+    public Vector3 StartPos => gridField.grid[startRoomCoord.x, startRoomCoord.z];
 
 
     [Header("マップ設定")]
@@ -47,8 +46,10 @@ public class MapManager : MonoBehaviour
     public GridFieldMap map;
 
     /*マップ情報*/
+    // マップの縁にあるすべてのブロックのリスト
     public List<GridFieldMap.Block> borderBlockList = new List<GridFieldMap.Block>();
-    public List<Coord> roomBlockList { get; } = new List<Coord>();
+    // 部屋として生成された座標のリスト
+    public List<Coord> RoomCoordkList { get; } = new List<Coord>();
 
     private void Awake()
     {
@@ -70,23 +71,31 @@ public class MapManager : MonoBehaviour
     /// <summary>
     /// マップを初期化します
     /// </summary>
-    /// <param name="startSeed">スタート地点</param>
     public void InitMap()
     {
-
+        // すべてのブロックを壁にする
         map.SetWallAll();
+        // マップオブジェクトを設定
         map.InstanceMapObjects(blockHeight);
+        // マップオブジェクトのレイヤーを設定
         map.SetLayerMapObject(layerName);
+        // すべての壁のテクスチャを設定
+        map.SetWallTextureAll(texture);
+        // ボーダーリストをセット
         SetBorderList();
 
-
-        Instantiate(enemy, gridField.middle, Quaternion.identity);
+        // スタート地点のエネミーをインスタンス
+        Instantiate(enemy, StartPos, Quaternion.identity);
+        // スタート部屋生成
         RoomGenerator(startRoomCoord, 1);
-        goalObj.transform.position = startPos;
+        // ゴールオブジェクトをスタートポジションに設定
+        goalObj.transform.position = StartPos;
+
+        // ハンバーガー部屋、旗部屋を生成
         GenerateRooms(hamburgerNum, hamburgerRoomSize, hamburgerObj);
         GenerateRooms(flagNum, flagRoomSize, flagObj, enemy);
 
-        map.SetWallTextureAll(texture);
+        // 壁に設定されてるブロックをすべてアクティブ
         map.ActiveMapWallObject();
     }
 
@@ -116,21 +125,31 @@ public class MapManager : MonoBehaviour
 
 
     /// <summary>
-    /// マップにハンバーガ部屋と、旗部屋を生成します
+    /// マップにハンバーガ部屋と、旗部屋をランダムな座標から生成します
     /// </summary>
     /// <param name="roomNum">ハンバーガー部屋のサイズ</param>
     /// <param name="roomSize">旗部屋のサイズ</param>
+    /// <param name="obj">生成するオブジェクト</param>
     private void GenerateRooms(int roomNum, int roomSize, GameObject obj)
     {
         for (int i = 0; i < roomNum; i++)
         {
             Coord randCoord;
+
+            int count = 0;
+            // 部屋が生成できるランダムな地点を代入
             while (true)
             {
-                randCoord = map.gridField.randomGridCoord;
+                count++;
+                if (count == 1000)
+                {
+                    Debug.LogError("ハンバーガー部屋が生成できませんでした。");
+                }
+                randCoord = map.gridField.RandomGridCoord;
                 if (CheckRoomGenerate(randCoord, roomSize))
                     break;
             }
+            // ランダムな地点で部屋生成
             RoomGenerator(randCoord, roomSize);
 
             Instantiate(obj, map.gridField.grid[randCoord.x, randCoord.z], Quaternion.identity);
@@ -139,21 +158,32 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// マップにハンバーガ部屋と、旗部屋を生成します
+    /// マップにハンバーガ部屋と、旗部屋をランダムな座標から生成します
     /// </summary>
     /// <param name="roomNum">ハンバーガー部屋のサイズ</param>
     /// <param name="roomSize">旗部屋のサイズ</param>
+    /// <param name="obj1">オブジェクト1</param>
+    /// <paramref name="obj2">オブジェクト2</param>
     private void GenerateRooms(int roomNum, int roomSize, GameObject obj1, GameObject obj2)
     {
         for (int i = 0; i < roomNum; i++)
         {
             Coord randCoord;
+
+            int count = 0;
+            // 部屋が生成できるランダムな地点を代入
             while (true)
             {
-                randCoord = map.gridField.randomGridCoord;
+                count++;
+                if(count == 1000)
+                {
+                    Debug.LogError("旗部屋が生成できませんでした。");
+                }
+                randCoord = map.gridField.RandomGridCoord;
                 if (CheckRoomGenerate(randCoord, roomSize))
                     break;
             }
+            // ランダムな地点で部屋生成
             RoomGenerator(randCoord, roomSize);
 
             Instantiate(obj1, map.gridField.grid[randCoord.x, randCoord.z], Quaternion.identity);
@@ -178,7 +208,7 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 与えたセクションの形にシードの位置をあたえた座標からオープンしていきます
+    /// 与えたセクションの形にシードの位置をあたえた座標からクローズしていきます
     /// </summary>
     /// <param name="seedCoord">開くセクションのシードの位置</param>
     /// <param name="sectionCoord">開きたいセクションの種類</param>
@@ -195,6 +225,7 @@ public class MapManager : MonoBehaviour
     /// <summary>
     /// 与えたセクションが置けるかどうか確認します
     /// </summary>
+    /// <param name="seedCoord">確認するセクションのシード座標</param>
     /// <param name="sectionCoord">セクション</param>
     /// <returns>置けるかどうか true：置ける</returns>
     public bool CheckAbleOpen(Coord seedCoord, Coord[] sectionCoord)
@@ -263,7 +294,7 @@ public class MapManager : MonoBehaviour
             for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
             {
                 // ルームリストに追加
-                roomBlockList.Add(new Coord(x, z));
+                RoomCoordkList.Add(new Coord(x, z));
                 map.SetWalls(x, z, false, false, false, false, true);
                 map.SetPlaneColor(new Coord(x, z), Color.blue);
 

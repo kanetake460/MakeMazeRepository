@@ -37,11 +37,9 @@ namespace TakeshiLibrary
         /// <param name="q">制限したいquoternion</param>
         /// <param name="minX">下の角度制限</param>
         /// <param name="maxX">上の角度制限</param>
-        /// <returns></returns>
+        /// <returns>角度</returns>
         public static Quaternion ClampRotation(Quaternion q, float minX, float maxX)
         {
-            //q = x,y,z,w (x,y,zはベクトル（量と向き）：wはスカラー（座標とは無関係の量）)
-
             q.x /= q.w;
             q.y /= q.w;
             q.z /= q.w;
@@ -67,24 +65,18 @@ namespace TakeshiLibrary
             float yRot = Input.GetAxis("Mouse Y") * Xsensityvity;       // マウスの座標代入
             camera.transform.localRotation *= Quaternion.Euler(-yRot, 0, 0);     // 角度代入
 
-            //Updateの中で作成した関数を呼ぶ
             camera.transform.localRotation = ClampRotation(camera.transform.localRotation, minX, maxX);           // 角度制限
-
-            //return cameraRot;
         }
 
 
         /// <summary>
         /// プレイヤーの視点移動関数(左右視点移動)
         /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
+        /// <param name="player">プレイヤーオブジェクト</param>
         public static void PlayerViewport(GameObject player, float Ysensityvity = 3f)
         {
             float xRot = Input.GetAxis("Mouse X") * Ysensityvity;               // マウスの座標代入
             player.transform.localRotation *= Quaternion.Euler(0, xRot, 0);     // 角度代入
-
-            //return characterRot;
         }
 
 
@@ -95,15 +87,10 @@ namespace TakeshiLibrary
         /// <param name="speed">移動スピード</param>
         public static void Locomotion(Transform player, float speed = 10f,float dashSpeed = 15,KeyCode dashuKey = KeyCode.LeftShift)
         {
-            float x = 0;
-            float z = 0;
-
             if (Input.GetKey(dashuKey)) speed = dashSpeed;
 
-            x = Input.GetAxisRaw("Horizontal") * speed;     // 移動入力
-            z = Input.GetAxisRaw("Vertical") * speed;       // 移動入力
-
-            //transform.position += new Vector3(x,0,z);
+            float x = Input.GetAxisRaw("Horizontal") * speed;     // 移動入力
+            float z = Input.GetAxisRaw("Vertical") * speed;       // 移動入力
 
             player.position += player.forward * z * Time.deltaTime + player.right * x * Time.deltaTime;  // 移動
 
@@ -138,7 +125,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// 与えたトランスフォームが壁ブロックに入らないようにします
         /// </summary>
-        /// <param name="trafo"></param>
+        /// <param name="trafo">プレイヤートランスフォーム</param>
         public void ClampMoveRange(Transform trafo)
         {
             Coord coord = _map.gridField.GetGridCoordinate(trafo.position);
@@ -207,7 +194,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// Vector3Intの全方向がランダムで入ったスタックを返します
         /// </summary>
-        /// <returns></returns>
+        /// <returns>全方向がランダムで入ったスタック</returns>
         public static Stack<Coord> RandomVector3DirectionStack()
         {
             Stack<Coord> dirStack = new Stack<Coord>();
@@ -229,7 +216,7 @@ namespace TakeshiLibrary
 
         public static Coord GetRandomVector3FourDirection()
         {
-            int rand = Random.RandomRange(0, 4);
+            int rand = Random.Range(0, 4);
 
             if (rand == 0)
                 return Coord.left;
