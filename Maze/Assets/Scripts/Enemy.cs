@@ -13,10 +13,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] float freezeDist;  // フリーズする距離
     [SerializeField] int aStarCount;    // Astarの探索後、次の探索に変わるフレーム数
     [SerializeField] int searchLimit;   // Astarの探索を行う回数
-    // プレイヤーとの距離
-    [SerializeField,ReadOnly] float _distance;
-    // 徘徊の範囲設定
-    private const int frameSize = 3, areaX = 5, areaZ = 5;
+    
+    [SerializeField,ReadOnly] float _distance;  // プレイヤーとの距離
+    private const int frameSize = 3, areaX = 5, areaZ = 5;  // 徘徊の範囲設定
 
     [Header("コンポーネント")]
     private GameSceneManager _sceneManager;
@@ -67,7 +66,7 @@ public class Enemy : MonoBehaviour
             // 一度前回の行動をやめる
             if (_isWandExit) _ai.ExitLocomotion(ref _isWandExit);
             // プレイヤーを追いかける
-            _ai.StayLocomotionToAStar(_playerObj.transform.position,chaseSpeed,10);
+            _ai.StayLocomotionToAStar(_playerObj.transform.position,chaseSpeed,aStarCount);
             
             _isChaceExit = true;
         }
@@ -113,7 +112,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         // エスケープシーンなら
-        if (_sceneManager.currentScene == GameSceneManager.eScenes.Escape_Scene)
+        if (_sceneManager.CurrentScene == GameSceneManager.eScenes.Escape_Scene)
         {
             // もし、プレイヤーがレイキャストに当たったら追いかける
             if (_ai.SearchPlayer(searchLayer, playerTag)) _isChase = true;

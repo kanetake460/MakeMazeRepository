@@ -44,14 +44,15 @@ public class AudioManager : MonoBehaviour
 
     [Header("âπó ")]
     [SerializeField,Range(0f, 1f)]
-    float Volume_SE = 0.5f;
+    float volume_SE = 0.5f;
     [SerializeField, Range(0f, 1f)]
-    float Volume_BGM = 0.5f;
+    float volume_BGM = 0.5f;
 
     static AudioClip _selectedSE;
     static AudioClip _selectedBGM;
 
     static int _seCount;
+    static bool _isBGM;
 
     static AudioSource _BGMAudioSource;
     static AudioSource _SEAudioSource;
@@ -97,10 +98,8 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        SetVolumeSE(Volume_SE);
-        SetVolumeBGM(Volume_SE);
-
-        PlaySEContinue();
+        SetVolumeSE(volume_SE);
+        SetVolumeBGM(volume_BGM);
 
     }
 
@@ -110,7 +109,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="volume">âπó Åi0Å`1Åj</param>
     public static void SetVolumeSE(float volume)
     {
-        _BGMAudioSource.volume = volume;
+        _SEAudioSource.volume = volume;
     }
 
     /// <summary>
@@ -119,7 +118,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="volume">âπó Åi0Å`1Åj</param>
     public static void SetVolumeBGM(float volume)
     {
-        _SEAudioSource.volume = volume;
+        _BGMAudioSource.volume = volume;
     }
 
     /// <summary>
@@ -135,28 +134,60 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public static void PlaySEStart(string clipKey,int count = 1)
+    public static void PlaySEStart(string clipKey,int count = 1,float volume = 0.5f)
     {
+        SetVolumeSE(volume);
         _seCount = count;
         _selectedSE = _DicSE[clipKey];
     }
 
 
-    public static void PlayOneShot(string clipKey)
+    public static void PlayOneShot(string clipKey, float volume = 0.5f)
     {
+        SetVolumeSE(volume);
         _SEAudioSource.PlayOneShot(_DicSE[clipKey]);
     }
-    public static void PlayOneShot(string clipKey,AudioSource audioSource)
+    public static void PlayOneShot(string clipKey,AudioSource audioSource, float volume = 0.5f)
     {
+        SetVolumeSE(volume);
         audioSource.PlayOneShot(_DicSE[clipKey]);
     }
 
 
-    public static void PlayBGM(string clipKey)
+    private void PlayBGMContinue()
+    {
+        if(_isBGM)
+        {
+            _isBGM = false;
+            PlayBGM(_selectedBGM);
+        }
+    }
+
+
+    public static void PlayBGMStart(string clipKey)
+    {
+        _selectedBGM = _DicBGM[clipKey];
+    }
+
+    public static void PlayBGMExit(string clipKey)
+    {
+        _isBGM = true;
+    }
+
+    public static void PlayBGM(string clipKey, float volume = 0.5f)
     {
         if(_BGMAudioSource.isPlaying == false)
         {
             _BGMAudioSource.clip = _DicBGM[clipKey];
+            _BGMAudioSource.Play();
+        }
+    }
+
+    public static void PlayBGM(AudioClip clip)
+    {
+        if(_BGMAudioSource.isPlaying == false)
+        {
+            _BGMAudioSource.clip = clip;
             _BGMAudioSource.Play();
         }
     }

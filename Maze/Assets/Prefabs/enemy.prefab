@@ -48,9 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wandSpeed: 10
   chaseSpeed: 30
-  escapeDist: 10
   freezeDist: 300
-  aStarCount: 60
+  aStarCount: 10
   searchLimit: 1000
   _distance: 0
   searchLayer:

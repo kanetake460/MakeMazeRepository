@@ -241,6 +241,10 @@ public class MapManager : MonoBehaviour
 
             if (map.blocks[element.x, element.z].isSpace)
             {
+                if(RoomCoordkList.Contains(element))
+                {
+                    continue;
+                }
                 return false;
             }
         }

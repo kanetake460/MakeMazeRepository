@@ -646,8 +646,12 @@ MonoBehaviour:
   BGM_ClipDictionary:
   - key: MaxWell
     value: {fileID: 8300000, guid: 513313d4ee7f37a4ab54cc3c6a478403, type: 3}
-  Volume_SE: 0.477
-  Volume_BGM: 1
+  - key: MakeBGM
+    value: {fileID: 8300000, guid: ac627b60aeeaf374f9ca4847d3f765a0, type: 3}
+  - key: TitleBGM
+    value: {fileID: 8300000, guid: c3da9e15876cf144f9e5a8332639076a, type: 3}
+  volume_SE: 0.5
+  volume_BGM: 0.502
 --- !u!4 &320665327
 Transform:
   m_ObjectHideFlags: 0
@@ -697,8 +701,8 @@ MonoBehaviour:
   enemy: {fileID: 1664679715051908652, guid: bbde73d3d5391454fbf31f2c1596e734, type: 3}
   goalObj: {fileID: 2084364834}
   hamburgerNum: 150
-  flagNum: 5
   hamburgerRoomSize: 0
+  flagNum: 5
   flagRoomSize: 2
   startRoomSize: 3
   startRoomCoord:
@@ -4956,6 +4960,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93788c99db1e06546891c5f2d0132948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  titleVolume: 0
+  makeVolume: 0
   playerController: {fileID: 29439753}
   gameManager: {fileID: 709440178}
   UICanvas: {fileID: 1862548381}

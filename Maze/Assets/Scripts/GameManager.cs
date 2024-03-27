@@ -82,8 +82,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ChangeCompass()
     {
-        compassLeft.targetTag = "enemy";
-        compassRight.targetTag = "clearFlag";
+        compassLeft.targetTag = "clearFlag";
+        compassRight.targetTag = "enemy";
     }
 
 

@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 AudioManager.PlayOneShot("NotOpen");
-                uiManager.EnterDisplayGameMessage("そこでは開けません！！", Color.red, 100);
+                uiManager.EnterDisplayGameMessage("そこでは開けません！！", Color.red, 10);
             }
             
         }

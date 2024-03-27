@@ -10,6 +10,10 @@ using Unity.VisualScripting;
 
 public class GameSceneManager : MonoBehaviour
 {
+    [Header("パラメーター")]
+    [SerializeField] float titleVolume;
+    [SerializeField] float makeVolume;
+
     [Header("オブジェクト参照")]
     [SerializeField] PlayerController playerController;   // プレイヤーコントローラー
     [SerializeField] GameManager gameManager;   // ゲームマネージャー
@@ -33,9 +37,21 @@ public class GameSceneManager : MonoBehaviour
         Result_Scene,   // リザルトシーン
     }
 
+    private eScenes _scenes;
+
     // 現在のシーン
-    public eScenes currentScene
-    { get; set; }
+    public eScenes CurrentScene
+    {
+        get
+        {
+            return _scenes;
+        }
+        set
+        {
+            _scenes = value;
+            AudioManager.StopBGM();
+        }
+    }
 
     private void Awake()
     {
@@ -45,7 +61,7 @@ public class GameSceneManager : MonoBehaviour
     private void Start()
     {
         // 最初はタイトルシーン
-        currentScene = eScenes.Title_Scene;
+        CurrentScene = eScenes.Title_Scene;
         _enemys.AddRange(GameObject.FindGameObjectsWithTag("enemy"));
         foreach (GameObject enemy in _enemys)
         {
@@ -68,18 +84,23 @@ public class GameSceneManager : MonoBehaviour
         resultCanvas.enabled = false;   // リザルトキャンバス見せない
 
         // 現在のシーンが
-        switch (currentScene)
+        switch (CurrentScene)
         {
             case eScenes.Title_Scene:       // タイトルなら
                 Cursor.lockState = CursorLockMode.None;
                 playerController.enabled = false;// プレイヤーコントローラーを動かす
                 titleCanvas.enabled = true;     // タイトルキャンバス見せる
+                AudioManager.PlayBGM("TitleBGM");
+                AudioManager.SetVolumeBGM(titleVolume);
                 break;
 
             case eScenes.Make_Scene:        // ゲームシーンなら
                 Cursor.lockState = CursorLockMode.Locked;
                 playerController.enabled = true;// プレイヤーコントローラーを動かす
                 UICanvas.SetActive(true);       // UI表示
+                AudioManager.PlayBGM("MakeBGM",makeVolume);
+                AudioManager.SetVolumeBGM(makeVolume);
+
                 break;
 
             case eScenes.Escape_Scene:
@@ -100,7 +121,7 @@ public class GameSceneManager : MonoBehaviour
     /// </summary>
     public void StartButton()
     {
-        currentScene = eScenes.Make_Scene;
+        CurrentScene = eScenes.Make_Scene;
 
     }
 
@@ -117,7 +138,7 @@ public class GameSceneManager : MonoBehaviour
     /// </summary>
     public void GameClear()
     {
-        currentScene = eScenes.Result_Scene;
+        CurrentScene = eScenes.Result_Scene;
         resultText.text = "GameClear";
     }
 
@@ -127,7 +148,7 @@ public class GameSceneManager : MonoBehaviour
     /// </summary>
     public void EscapeTime()
     {
-        currentScene = eScenes.Escape_Scene;
+        CurrentScene = eScenes.Escape_Scene;
     }
 
     public void ActiveObject()
@@ -146,7 +167,8 @@ public class GameSceneManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
-        currentScene = eScenes.Result_Scene;
+        CurrentScene = eScenes.Result_Scene;
+        AudioManager.PlaySEStart("GameOver",1);
         resultText.text = "GameOver";
     }
 }
