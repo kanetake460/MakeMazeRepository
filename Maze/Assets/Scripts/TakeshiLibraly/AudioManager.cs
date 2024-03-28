@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// オーディオソースのディクショナリ
@@ -101,6 +98,7 @@ public class AudioManager : MonoBehaviour
         SetVolumeSE(volume_SE);
         SetVolumeBGM(volume_BGM);
 
+        PlaySEContinue();
     }
 
     /// <summary>
@@ -197,7 +195,6 @@ public class AudioManager : MonoBehaviour
         {
             audioSource.clip = _DicBGM[clipKey];
             audioSource.Play();
-            Debug.Log(audioSource.isPlaying);
         }
     }
 

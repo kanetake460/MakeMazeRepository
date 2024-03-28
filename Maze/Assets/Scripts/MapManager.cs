@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TakeshiLibrary;
 using UnityEngine;
@@ -20,13 +19,17 @@ public class MapManager : MonoBehaviour
 
     [Header("パラメーター")]
     [SerializeField, Min(0)] int hamburgerNum;  // 生成するハンバーガー部屋の数
-    [SerializeField, Min(0)] int hamburgerRoomSize;
+    [SerializeField, Min(0)] int burgerRoomSize;// ハンバーガー部屋の大きさ
     [Space]
     [SerializeField, Min(0)] int flagNum;       // 生成する旗部屋の数
-    [SerializeField, Min(0)] int flagRoomSize;
+    [SerializeField, Min(0)] int flagRoomSize;  // 旗部屋の大きさ
     [Space]
-    [SerializeField, Min(0)] int startRoomSize;
-    [SerializeField] Coord startRoomCoord;
+    [SerializeField, Min(0)] int startRoomSize; // スタート部屋の大きさ
+    [SerializeField] Coord startRoomCoord;      // スタート部屋の場所
+
+    /// <summary>
+    /// スタートポジション
+    /// </summary>
     public Vector3 StartPos => gridField.grid[startRoomCoord.x, startRoomCoord.z];
 
 
@@ -48,6 +51,7 @@ public class MapManager : MonoBehaviour
     /*マップ情報*/
     // マップの縁にあるすべてのブロックのリスト
     public List<GridFieldMap.Block> borderBlockList = new List<GridFieldMap.Block>();
+
     // 部屋として生成された座標のリスト
     public List<Coord> RoomCoordkList { get; } = new List<Coord>();
 
@@ -73,37 +77,30 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void InitMap()
     {
-        // すべてのブロックを壁にする
-        map.SetWallAll();
-        // マップオブジェクトを設定
-        map.InstanceMapObjects(blockHeight);
-        // マップオブジェクトのレイヤーを設定
-        map.SetLayerMapObject(layerName);
-        // すべての壁のテクスチャを設定
-        map.SetWallTextureAll(texture);
-        // ボーダーリストをセット
-        SetBorderList();
+        // マップの設定
+        map.CreateWallsAll();                   // すべてのブロックを壁にする
+        map.InstanceMapObjects(blockHeight);    // マップオブジェクトを設定
+        map.SetLayerMapObject(layerName);       // マップオブジェクトのレイヤーを設定
+        map.ChangeWallTextureAll(texture);      // すべての壁のテクスチャを設定
+        AddBorderList();                        // ボーダーリストをセット
 
-        // スタート地点のエネミーをインスタンス
-        Instantiate(enemy, StartPos, Quaternion.identity);
-        // スタート部屋生成
-        RoomGenerator(startRoomCoord, 1);
-        // ゴールオブジェクトをスタートポジションに設定
-        goalObj.transform.position = StartPos;
+        // スタート地点設定
+        Instantiate(enemy, StartPos, Quaternion.identity);  // スタート地点のエネミーをインスタンス
+        RoomGenerator(startRoomCoord, 1);                   // スタート部屋生成
+        goalObj.transform.position = StartPos;              // ゴールオブジェクトをスタートポジションに設定
 
         // ハンバーガー部屋、旗部屋を生成
-        GenerateRooms(hamburgerNum, hamburgerRoomSize, hamburgerObj);
+        GenerateRooms(hamburgerNum, burgerRoomSize, hamburgerObj);
         GenerateRooms(flagNum, flagRoomSize, flagObj, enemy);
 
-        // 壁に設定されてるブロックをすべてアクティブ
-        map.ActiveMapWallObject();
+        map.ActiveMapWallObject();      // 壁に設定されてるブロックをすべてアクティブ
     }
 
 
     /// <summary>
     /// マップの周りのセルをボーダーリストに登録します
     /// </summary>
-    private void SetBorderList()
+    private void AddBorderList()
     {
         Coord coord = new Coord();
         for (int x = 0; x < gridField.gridWidth; x++)
@@ -157,6 +154,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// マップにハンバーガ部屋と、旗部屋をランダムな座標から生成します
     /// </summary>
@@ -203,7 +201,7 @@ public class MapManager : MonoBehaviour
         foreach (Coord coord in sectionCoord)
         {
             Coord element = seedCoord + coord;
-            map.SetWalls(element.x, element.z, false, false, false, false, true);
+            map.SetWallsDirection(element.x, element.z, false, false, false, false, true);
         }
     }
 
@@ -217,7 +215,7 @@ public class MapManager : MonoBehaviour
         foreach (Coord coord in sectionCoord)
         {
             Coord element = seedCoord + coord;
-            map.SetWalls(element.x, element.z, true, true, true, true, false);
+            map.SetWallsDirection(element.x, element.z, true, true, true, true, false);
         }
     }
 
@@ -235,7 +233,6 @@ public class MapManager : MonoBehaviour
             Coord element = seedCoord + coord;
             if(!map.CheckMap(element))
             {
-                Debug.Log("マップ外です");
                 return false;
             }
 
@@ -265,15 +262,15 @@ public class MapManager : MonoBehaviour
             for (int z = generateCoord.z - roomSize; z <= generateCoord.z + roomSize; z++)
             {
                 Coord confCoord = new Coord(x, z);
+                // マップ上にないならfalse
                 if (!map.CheckMap(confCoord)||
                     borderBlockList.Contains(map.blocks[x,z]))
                 {
-                    Debug.Log("生成できませんでした");
                     return false;
                 }
+                // すでに部屋が生成されているならfalse
                 if (map.blocks[x, z].isSpace)
                 {
-                    Debug.Log("生成できませんでした");
                     return false;
                 }
             }
@@ -299,8 +296,8 @@ public class MapManager : MonoBehaviour
             {
                 // ルームリストに追加
                 RoomCoordkList.Add(new Coord(x, z));
-                map.SetWalls(x, z, false, false, false, false, true);
-                map.SetPlaneColor(new Coord(x, z), Color.blue);
+                map.SetWallsDirection(x, z, false, false, false, false, true);
+                map.ChangePlaneColor(new Coord(x, z), Color.blue);
 
             }
         }

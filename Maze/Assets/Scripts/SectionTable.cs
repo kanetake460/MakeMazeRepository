@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TakeshiLibrary;
 using UnityEngine;
-using static TakeshiLibrary.FPS;
 
 public class SectionTable
 {
@@ -295,7 +291,7 @@ public class SectionTable
     /// <summary>
     /// ランダムにセクションを返します
     /// </summary>
-    public static Section randSection 
+    public static Section RandSection 
     {
         get
         {
@@ -336,18 +332,5 @@ public class SectionTable
         J_Section = 4,
         S_Section = 5,
         Z_Section = 6
-    }
-
-    public eMapSections[] mapSection = new eMapSections[7];    // セクション1
-
-    void Start()
-    {
-
-        // mapSection の初期化、シャッフル
-            for (int j = 0; j < sections.Length; j++)
-            {
-            mapSection[j] = (eMapSections)Enum.ToObject(typeof(eMapSections), j);
-            }
-        Algorithm.Shuffle(mapSection);
     }
 }

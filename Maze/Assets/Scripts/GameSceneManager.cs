@@ -1,12 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine;
-using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 using System.Linq;
-using TakeshiLibrary;
-using Unity.VisualScripting;
 
 public class GameSceneManager : MonoBehaviour
 {
@@ -20,8 +16,8 @@ public class GameSceneManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] GameObject UICanvas;       // UIキャンバス
-    [SerializeField] Canvas titleCanvas;        // タイトルキャンバス
-    [SerializeField] Canvas resultCanvas;       // リザルトキャンバス
+    [SerializeField] GameObject titleCanvas;        // タイトルキャンバス
+    [SerializeField] GameObject resultCanvas;       // リザルトキャンバス
     [SerializeField] TextMeshProUGUI resultText;// リザルトテキスト
 
     [Header("ゲームオブジェクト")]
@@ -62,12 +58,12 @@ public class GameSceneManager : MonoBehaviour
     {
         // 最初はタイトルシーン
         CurrentScene = eScenes.Title_Scene;
+        // すべてのエネミーを非アクティブにする
         _enemys.AddRange(GameObject.FindGameObjectsWithTag("enemy"));
         foreach (GameObject enemy in _enemys)
         {
             enemy.SetActive(false);
         }
-
     }
 
     private void Update()
@@ -80,8 +76,8 @@ public class GameSceneManager : MonoBehaviour
     /// </summary>
     private void SceneManagement()
     {
-        titleCanvas.enabled = false;    // タイトルキャンバス見せない
-        resultCanvas.enabled = false;   // リザルトキャンバス見せない
+        titleCanvas.SetActive(false);    // タイトルキャンバス見せない
+        resultCanvas.SetActive(false);   // リザルトキャンバス見せない
 
         // 現在のシーンが
         switch (CurrentScene)
@@ -89,7 +85,7 @@ public class GameSceneManager : MonoBehaviour
             case eScenes.Title_Scene:       // タイトルなら
                 Cursor.lockState = CursorLockMode.None;
                 playerController.enabled = false;// プレイヤーコントローラーを動かす
-                titleCanvas.enabled = true;     // タイトルキャンバス見せる
+                titleCanvas.SetActive(true);     // タイトルキャンバス見せる
                 AudioManager.PlayBGM("TitleBGM");
                 AudioManager.SetVolumeBGM(titleVolume);
                 break;
@@ -110,7 +106,7 @@ public class GameSceneManager : MonoBehaviour
             case eScenes.Result_Scene:      // リザルトなら
                 Cursor.lockState = CursorLockMode.None;
                 playerController.enabled = false;
-                resultCanvas.enabled = true;    // リザルトキャンバス見せる
+                resultCanvas.SetActive(true);    // リザルトキャンバス見せる
                 UICanvas.SetActive(false);      // UI非表示
                 break;
         }

@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using TakeshiLibrary;
-using UnityEngine.UI;
-using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -17,7 +12,26 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
     [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト
     [SerializeField] TextMeshProUGUI messageText;   // ゲーム表示するメッセージのテキスト
+    [SerializeField] GameObject ManualCanvas;
     public static int _messageCount = 0;
+
+
+    /// <summary>
+    /// マニュアルを表示します
+    /// </summary>
+    public void ShowManual()
+    {
+        ManualCanvas.SetActive(true);
+    }
+
+
+    /// <summary>
+    /// マニュアルを閉じます
+    /// </summary>
+    public void CloseManual()
+    {
+        ManualCanvas.SetActive(false);
+    }
 
     /// <summary>
     /// フラグのカウントのテキストを表示します
@@ -95,5 +109,10 @@ public class UIManager : MonoBehaviour
         flagAnim.SetFloat("CompassRotation",flagCompass.distance);
         hamburgerAnim.SetFloat("CompassRotation",hamburgerCompass.distance);
         DisplayGameMessage();
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(ManualCanvas.activeSelf)CloseManual();
+            else ShowManual(); 
+        }
     }
 }

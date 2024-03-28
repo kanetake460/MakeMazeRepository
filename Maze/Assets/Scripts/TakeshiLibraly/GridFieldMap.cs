@@ -1,10 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TakeshiLibrary;
-using Unity.VisualScripting;
-using System.Linq;
-using System;
 
 namespace TakeshiLibrary
 {
@@ -28,9 +23,8 @@ namespace TakeshiLibrary
             public bool rightWall { get; set; } = false;
             public bool backWall { get; set; } = false;
             public bool leftWall { get; set; } = false;
-            public GameObject mapWallObj { get; set; }
-
-            public GameObject mapPlaneObj { get; set; }
+            public GameObject mapWallObj { get; set; }      // 壁オブジェクト
+            public GameObject mapPlaneObj { get; set; }     // 床オブジェクト
 
 
             /// <summary>
@@ -48,10 +42,9 @@ namespace TakeshiLibrary
             /// <summary>
             /// 与えたVector3座標の向きが壁なのかどうか調べます
             /// </summary>
-            /// <param name="x">奥( -1 or 0 )</param>
-            /// <param name="z">横( -1 or 0 )</param>
+            /// <param>Vector3の向き</param>
             /// <returns>壁かどうなのか</returns>
-            public bool GetWallDirection(Vector3 dir)
+            public bool CheckWallDirection(Vector3 dir)
             {
                 if (dir == Vector3.right) return rightWall;
                 else if (dir == Vector3.left) return leftWall;
@@ -69,26 +62,24 @@ namespace TakeshiLibrary
             public bool CheckWall(int x, int z)
             {
                 Vector3 checkDir = new Vector3(x, 0, z);
-                //Debug.Log(checkDir);
-                return GetWallDirection(checkDir);
+                return CheckWallDirection(checkDir);
             }
         }
 
+
         // ブロックの二次元配列
         public Block[,] blocks { get; } = new Block[100, 100];
-
+        // グリッドフィールド
         public GridField gridField { get; }
-
 
         /// <summary>
         /// マップを作成するコンストラクタです
         /// </summary>
-        /// <param name="gridWidth">グリッドの横幅</param>
-        /// <param name="gridDepth">グリッドの奥行</param>
-        /// <param name="t">ブロックのタイプ</param>
+        /// <param name="gridField">グリッドフィールド</param>
         public GridFieldMap(GridField gridField)
         {
             this.gridField = gridField;
+            // グリッドフィールドのセルの座標に合わせてブロック作成
             for (int x = 0; x < gridField.gridWidth; x++)
             {
                 for (int z = 0; z < gridField.gridDepth; z++)
@@ -104,7 +95,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="x">xグリッド座標</param>
         /// <param name="z">zグリッド座標</param>
-        public void SetWallBlock(int x, int z)
+        public void CreateWallBlock(int x, int z)
         {
             blocks[x, z].isSpace = false;
         }
@@ -112,9 +103,8 @@ namespace TakeshiLibrary
         /// <summary>
         /// 指定したブロックを壁ブロックに設定します
         /// </summary>
-        /// <param name="x">xグリッド座標</param>
-        /// <param name="z">zグリッド座標</param>
-        public void SetWallBlock(Block block)
+        /// <param name="block">壁にしたいブロック</param>
+        public void CreateWallBlock(Block block)
         {
             block.isSpace = false;
         }
@@ -126,7 +116,7 @@ namespace TakeshiLibrary
         /// <param name="x">xグリッド座標</param>
         /// <param name="z">zグリッド座標</param>
         /// <param name="dir">壁を入れる向き</param>
-        public void SetWall(int x, int z, Vector3 dir)
+        public void CreateWallDirection(int x, int z, Vector3 dir)
         {
             if (dir == Vector3.forward) blocks[x, z].fowardWall = true;
             else if (dir == Vector3.right) blocks[x, z].rightWall = true;
@@ -139,7 +129,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="block">設定したいブロック</param>
         /// <param name="dir">壁を入れる向き</param>
-        public void SetWall(Block block, Vector3 dir)
+        public void CreateWallDirection(Block block, Vector3 dir)
         {
             if (dir == Vector3.forward) block.fowardWall = true;
             else if (dir == Vector3.right) block.rightWall = true;
@@ -157,7 +147,7 @@ namespace TakeshiLibrary
         /// <param name="right">右壁</param>
         /// <param name="back">後壁</param>
         /// <param name="left">左壁</param>
-        public void SetWalls(int x, int z, bool foward = true, bool right = true, bool back = true, bool left = true,bool isSpace = false)
+        public void SetWallsDirection(int x, int z, bool foward = true, bool right = true, bool back = true, bool left = true,bool isSpace = false)
         {
             blocks[x, z].fowardWall = foward;
             blocks[x, z].rightWall = right;
@@ -175,7 +165,7 @@ namespace TakeshiLibrary
         /// <param name="right">右壁</param>
         /// <param name="back">後壁</param>
         /// <param name="left">左壁</param>
-        public void SetWalls(Block block, bool foward = true, bool right = true, bool back = true, bool left = true, bool isSpace = false)
+        public void SetWallsDirection(Block block, bool foward = true, bool right = true, bool back = true, bool left = true, bool isSpace = false)
         {
             block.fowardWall = foward;
             block.rightWall = right;
@@ -216,22 +206,23 @@ namespace TakeshiLibrary
         /// <summary>
         /// マップのオブジェクトを生成します
         /// </summary>
-        /// <param name="space">spaceのオブジェクト</param>
-        /// <param name="wall">wallのオブジェクト</param>
-        /// <param name="gf">gridField</param>
+        /// <param>壁の高さ</param>
         public void InstanceMapObjects(float scaleY = 10)
         {
             for (int x = 0; x < gridField.gridWidth; x++)
             {
                 for (int z = 0; z < gridField.gridDepth; z++)
                 {
+                    // 床作成
                     GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                    plane.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
+                    plane.name = new string("Plane" + x + "," + z);
                     blocks[x, z].mapPlaneObj = plane;
+                    plane.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
 
+                    // 壁作成
                     GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     blocks[x, z].mapWallObj = cube;
-                    blocks[x, z].mapWallObj.name = new string(x + "," + z);
+                    blocks[x, z].mapWallObj.name = new string("Wall" + x + "," + z);
                     cube.transform.SetPositionAndRotation(gridField.grid[blocks[x, z].coord.x, blocks[x, z].coord.z], Quaternion.identity);
                     cube.transform.localScale = new Vector3(gridField.cellWidth, scaleY, gridField.cellDepth);
                 }
@@ -260,22 +251,39 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="coord">プレーンの座標</param>
         /// <param name="color">色</param>
-        public void SetPlaneColor(Coord coord,Color color)
+        public void ChangePlaneColor(Coord coord,Color color)
         {
             blocks[coord.x, coord.z].mapPlaneObj.GetComponent<Renderer>().material.color = color;
         }
 
-        public void SetWallColor(Coord coord,Color color)
+
+        /// <summary>
+        /// 壁オブジェクトの色を変えます
+        /// </summary>
+        /// <param name="coord">壁の座標</param>
+        /// <param name="color">色</param>
+        public void ChangeWallColor(Coord coord,Color color)
         {
             blocks[coord.x, coord.z].mapWallObj.GetComponent<Renderer>().material.color = color;
         }
 
-        public void SetWallTexture(Coord coord,Texture texrure)
+
+        /// <summary>
+        /// 壁オブジェクトのテクスチャを変更します
+        /// </summary>
+        /// <param name="coord">壁の座標</param>
+        /// <param name="texrure">テクスチャ</param>
+        public void ChangeWallTexture(Coord coord,Texture texrure)
         {
             blocks[coord.x, coord.z].mapWallObj.GetComponent<Renderer>().material.mainTexture = texrure;
         }
 
-        public void SetWallTextureAll(Texture texrure)
+
+        /// <summary>
+        /// すべての壁オブジェクトのテクスチャを変更します
+        /// </summary>
+        /// <param name="texrure">テクスチャ</param>
+        public void ChangeWallTextureAll(Texture texrure)
         {
             Coord coord = new Coord(0,0);
             for (int x = 0; x < gridField.gridWidth; x++)
@@ -284,10 +292,11 @@ namespace TakeshiLibrary
                 {
                     coord.x = x;
                     coord.z = z;
-                    SetWallTexture(coord,texrure);
+                    ChangeWallTexture(coord,texrure);
                 }
             }
         }
+
 
         /// <summary>
         /// マップの壁オブジェクトのアクティブを管理します
@@ -303,18 +312,19 @@ namespace TakeshiLibrary
             }
         }
 
+
         /// <summary>
         /// マップのすべてのブロックを壁に設定します
         /// </summary>
-        public void SetWallAll()
+        public void CreateWallsAll()
         {
             // 壁を設定
             for (int x = 0; x < gridField.gridWidth; x++)
             {
                 for (int z = 0; z < gridField.gridDepth; z++)
                 {
-                        SetWalls(x, z);
-                        SetWallBlock(x, z);
+                        SetWallsDirection(x, z);
+                        CreateWallBlock(x, z);
                 }
             }
         }
@@ -323,7 +333,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// グリッド状に壁を生成します
         /// </summary>
-        public void SetWallGrid()
+        public void CreateWallsGrid()
         {
             // 壁を設定
             for (int x = 0; x < gridField.gridWidth; x++)
@@ -332,8 +342,8 @@ namespace TakeshiLibrary
                 {
                     if (x % 2 == 1 && z % 2 == 1)
                     {
-                        SetWalls(x, z);
-                        SetWallBlock(x, z);
+                        SetWallsDirection(x, z);
+                        CreateWallBlock(x, z);
                     }
                 }
             }
@@ -342,7 +352,7 @@ namespace TakeshiLibrary
         /// <summary>
         /// マップを囲むように壁を設定します
         /// </summary>
-        public void SetWallSurround()
+        public void CreateWallsSurround()
         {
             for (int x = 0; x < gridField.gridWidth; x++)
             {
@@ -353,8 +363,8 @@ namespace TakeshiLibrary
                         x == gridField.gridWidth - 1 ||
                         z == gridField.gridDepth - 1)
                     {
-                        SetWalls(x, z);
-                        SetWallBlock(x, z);
+                        SetWallsDirection(x, z);
+                        CreateWallBlock(x, z);
                     }
                 }
             }
@@ -378,7 +388,10 @@ namespace TakeshiLibrary
         /// <summary>
         /// 指定した座標から指定の範囲のすべてのブロックを返します
         /// </summary>
-        public List<Block> GetAreaList(Coord coord, int areaX, int areaZ)
+        /// <param name="coord">中心座標</param>
+        /// <param name="areaX">Xの長さ</param>
+        /// <param name="areaZ">Zの長さ</param>
+        public List<Block> AreaBlockList(Coord coord, int areaX, int areaZ)
         {
             // 選択範囲のブロックのリスト
             List<Block> lAreaBlock = new List<Block>();
@@ -400,21 +413,32 @@ namespace TakeshiLibrary
         /// <summary>
         /// 指定した座標から指定の範囲の"指定した座標以外の"すべてのブロックを返します
         /// </summary>
-        public List<Block> GetCustomAreaList(Coord coord,List<Coord> exceptionCoordList, int areaX, int areaZ)
+        /// <param name="coord">中心座標</param>
+        /// <param name="exceptionCoordList">除外する座標のリスト</param>
+        /// <param name="areaX"></param>
+        /// <param name="areaZ"></param>
+        public List<Block> CustomAreaBlockList(Coord coord,List<Coord> exceptionCoordList, int areaX, int areaZ)
         {
             // 選択範囲のブロックのリスト
-            List<Block> lAreaBlock = GetAreaList(coord, areaX, areaZ);
+            List<Block> lAreaBlock = AreaBlockList(coord, areaX, areaZ);
 
             lAreaBlock.RemoveAll(b => exceptionCoordList.Contains(b.coord));
 
             return lAreaBlock;
         }
 
-
-        public List<Block> GetFrameAreaList(Coord coord,int frameSize, int areaX, int areaZ)
+        /// <summary>
+        /// 指定した座標から指定の範囲のブロックの"フレーム状にある"ブロックを返します
+        /// </summary>
+        /// <param name="coord">中心座標</param>
+        /// <param name="frameSize">フレームのサイズ</param>
+        /// <param name="areaX">Xの長さ</param>
+        /// <param name="areaZ">Zの長さ</param>
+        /// <returns></returns>
+        public List<Block> FrameAreaBlockList(Coord coord,int frameSize, int areaX, int areaZ)
         {
             // 選択範囲のブロックのリスト
-            List<Block> lAreaBlock = GetAreaList(coord,areaX,areaZ);
+            List<Block> lAreaBlock = AreaBlockList(coord,areaX,areaZ);
 
             // エリアから、frameSizeの値分内側のエリアのブロックを削除
             for (int x = -areaX + frameSize; x < areaX - frameSize; x++)
@@ -430,10 +454,19 @@ namespace TakeshiLibrary
             return lAreaBlock;
         }
 
-        public List<Block> GetCustomFrameAreaList(Coord coord, int frameSize, List<Coord> exceptionCoordList, int areaX, int areaZ)
+
+        /// <summary>
+        /// 指定した座標から指定の範囲のブロックの"フレーム状にある"ブロックを返します
+        /// </summary>
+        /// <param name="coord">中心座標</param>
+        /// <param name="frameSize">フレームのサイズ</param>
+        /// <param name="exceptionCoordList">除外する座標のリスト</param>
+        /// <param name="areaX">Xの長さ</param>
+        /// <param name="areaZ">Zの長さ</param>
+        public List<Block> CustomFrameAreaBlockList(Coord coord, int frameSize, List<Coord> exceptionCoordList, int areaX, int areaZ)
         {
             // 選択範囲のブロックのリスト
-            List<Block> lAreaBlock = GetFrameAreaList(coord,frameSize, areaX, areaZ);
+            List<Block> lAreaBlock = FrameAreaBlockList(coord,frameSize, areaX, areaZ);
 
             lAreaBlock.RemoveAll(b => exceptionCoordList.Contains(b.coord));
 
@@ -446,20 +479,19 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="start">探索の最初の位置</param>
         /// <param name="goal">探索のゴール地点</param>
-        /// <param name="gridField">グリッドフィールド</param>
-        /// <param name="pathObj">経路に配置するオブジェクト</param>
-        public void SetAStar(Vector3 start, Vector3 goal, GridFieldAStar aStar)
+        /// <param name="aStar">AStar</param>
+        public void AStar(Vector3 start, Vector3 goal, GridFieldAStar aStar)
         {
             if (aStar == null)
             {
                 aStar = new GridFieldAStar();
             }
 
-            aStar.AStarPath(this, gridField.GetGridCoordinate(start), gridField.GetGridCoordinate(goal));
+            aStar.AStarPath(this, gridField.GridCoordinate(start), gridField.GridCoordinate(goal));
 
-            foreach(GridFieldAStar.CellInfo p in aStar.pathStack)
+            foreach(Coord p in aStar.pathStack)
             {
-                Debug.DrawLine(gridField.grid[p.position.x, p.position.z], gridField.grid[p.position.x, p.position.z] + Vector3.up, Color.red, 10f);
+                Debug.DrawLine(gridField.grid[p.x, p.z], gridField.grid[p.x, p.z] + Vector3.up, Color.red, 10f);
 
             }
         }

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -128,7 +126,7 @@ namespace TakeshiLibrary
         /// <param name="trafo">プレイヤートランスフォーム</param>
         public void ClampMoveRange(Transform trafo)
         {
-            Coord coord = _map.gridField.GetGridCoordinate(trafo.position);
+            Coord coord = _map.gridField.GridCoordinate(trafo.position);
 
             if (_map.blocks[coord.x,coord.z].isSpace == false)
             {

@@ -63,11 +63,8 @@ public class TestEnemyController : MonoBehaviour
     {
         //if(ai.LocomotionToAStar(chaceSpeed))
 
-        if (Input.GetMouseButton(0))
-        {
-            ai.EnterLocomotionToAStar(player.transform.position);
-        }
-        ai.StayLocomotionToAStar(player.transform.position, chaseSpeed, 60);
+        ai.CustomWandering(wandSpeed, new List<Coord>(), 1, 10, 10);
+
         //EnemyMovement();
     }
 

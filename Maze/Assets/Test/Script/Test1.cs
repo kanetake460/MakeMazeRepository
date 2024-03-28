@@ -25,8 +25,8 @@ public class Test1 : MonoBehaviour
 
     void Start()
     {
-        map.SetWallGrid();
-        map.SetWallSurround();
+        map.CreateWallsGrid();
+        map.CreateWallsSurround();
         map.InstanceMapObjects();
         map.ActiveMapWallObject();
         

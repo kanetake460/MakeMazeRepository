@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TakeshiLibrary;
 using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -51,6 +48,21 @@ public class Enemy : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        // エスケープシーンなら
+        if (_sceneManager.CurrentScene == GameSceneManager.eScenes.Escape_Scene)
+        {
+            // もし、プレイヤーがレイキャストに当たったら追いかける
+            if (_ai.SearchPlayer(searchLayer, playerTag)) _isChase = true;
+            HidePlayer();
+            CheckAbleMovement();
+
+            if (_isFreeze == false) 
+                EnemyMovement();
+        }
+    }
+
 
     /// <summary>
     /// エネミーの行動
@@ -60,26 +72,20 @@ public class Enemy : MonoBehaviour
         // 追いかけ
         if (_isChase)
         {
-            // BGMを流す
-            AudioManager.PlayBGM("MaxWell",_audioSource);
-
-            // 一度前回の行動をやめる
-            if (_isWandExit) _ai.ExitLocomotion(ref _isWandExit);
-            // プレイヤーを追いかける
-            _ai.StayLocomotionToAStar(_playerObj.transform.position,chaseSpeed,aStarCount);
+            AudioManager.PlayBGM("MaxWell",_audioSource);           // BGMを流す
+            
+            if (_isWandExit) _ai.ExitLocomotion(ref _isWandExit);   // 一度前回の行動をやめる
+            _ai.StayLocomotionToAStar(_playerObj.transform.position,chaseSpeed,aStarCount); // プレイヤーを追いかける
             
             _isChaceExit = true;
         }
         // 徘徊
         else
         {
-            // BGMを流さない
-            AudioManager.StopBGM(_audioSource);
+            AudioManager.StopBGM(_audioSource);                     // BGMを流さない
 
-            // 一度前回の行動をやめる
-            if(_isChaceExit)_ai.ExitLocomotion(ref _isChaceExit);
-            // 徘徊させる
-            _ai.CustomWandering(wandSpeed,_map.RoomCoordkList,frameSize,areaX,areaZ);
+            if(_isChaceExit)_ai.ExitLocomotion(ref _isChaceExit);   // 一度前回の行動をやめる
+            _ai.CustomWandering(wandSpeed,_map.RoomCoordkList,frameSize,areaX,areaZ);// 徘徊させる
             
             _isWandExit = true;
         }
@@ -90,9 +96,11 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void HidePlayer()
     {
-        Coord playerCoord = _map.gridField.GetGridCoordinate(_playerObj.transform.position);
+        Coord playerCoord = _map.gridField.GridCoordinate(_playerObj.transform.position);
+        // プレイヤーの座標が部屋座標リストにあるなら
         if (_map.RoomCoordkList.Contains(playerCoord))
         {
+            // 追いかけ終了、判定を消す
             _isChase = false;
             GetComponent<BoxCollider>().enabled = false;
         }
@@ -109,18 +117,5 @@ public class Enemy : MonoBehaviour
     }
 
 
-    private void Update()
-    {
-        // エスケープシーンなら
-        if (_sceneManager.CurrentScene == GameSceneManager.eScenes.Escape_Scene)
-        {
-            // もし、プレイヤーがレイキャストに当たったら追いかける
-            if (_ai.SearchPlayer(searchLayer, playerTag)) _isChase = true;
-            HidePlayer();
-            CheckAbleMovement();
 
-            if (_isFreeze == false) 
-                EnemyMovement();
-        }
-    }
 }

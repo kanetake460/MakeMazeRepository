@@ -1,11 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
-using static UnityEngine.GraphicsBuffer;
 
 namespace TakeshiLibrary
 {
@@ -497,7 +491,7 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="pos">調べたいグリッドのどこのセルにいるのか調べたいTransform</param>
         /// <returns>Transformのいるセルのグリッド座標</returns>
-        public Coord GetGridCoordinate(Vector3 pos)
+        public Coord GridCoordinate(Vector3 pos)
         {
             /*===二重ループで現在のセルを調べる===*/
             for (int x = 0; x < gridWidth; x++)
@@ -523,9 +517,9 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="pos">調べたいグリッドのどこのセルにいるのか調べたいTransform</param>
         /// <returns>Transformのいるセルのposition</returns>
-        public Vector3 GetGridPosition(Vector3 pos)
+        public Vector3 GridPosition(Vector3 pos)
         {
-            return grid[GetGridCoordinate(pos).x, GetGridCoordinate(pos).z];
+            return grid[GridCoordinate(pos).x, GridCoordinate(pos).z];
         }
 
 
@@ -535,29 +529,19 @@ namespace TakeshiLibrary
         /// <param name="pos">変換したいポジション</param>
         public void ConvertVector3ToGridCoord(ref Vector3 pos)
         {
-            pos = GetGridPosition(pos);
+            pos = GridPosition(pos);
         }
 
-
-        /// <summary>
-        /// 引数に与えた グリッド座標 から Vector3ポジション を返します
-        /// </summary>
-        /// <param name="gridCoord">グリッド座標</param>
-        /// <returns>Vecto3ポジション</returns>
-        public Vector3 GetVector3Position(Coord gridCoord)
-        {
-            return grid[gridCoord.x, gridCoord.z];
-        }
 
         /// <summary>
         /// 与えたpositionから任意の距離のほかのpositionのグリッド座標を調べます
         /// </summary>
         /// <param name="pos">調べたい距離の始点のVector3座標</param>
         /// <param name="difference">始点から終点までの差分</param>
-        public Coord GetOtherGridCoordinate(Vector3 pos, Coord difference)
+        public Coord OherGridCoordinate(Vector3 pos, Coord difference)
         {
-            int x = GetGridCoordinate(pos).x;
-            int z = GetGridCoordinate(pos).z;
+            int x = GridCoordinate(pos).x;
+            int z = GridCoordinate(pos).z;
 
             return new Coord(x + difference.x, z + difference.z);
         }
@@ -568,10 +552,10 @@ namespace TakeshiLibrary
         /// </summary>
         /// <param name="pos">調べたい距離の始点のVecgtor3座標</param>
         /// <param name="difference">始点から終点までの差分</param>
-        public Vector3 GetOtherGridPosition(Vector3 pos, Coord difference)
+        public Vector3 OtherGridPosition(Vector3 pos, Coord difference)
         {
-            int x = GetGridCoordinate(pos).x;
-            int z = GetGridCoordinate(pos).z;
+            int x = GridCoordinate(pos).x;
+            int z = GridCoordinate(pos).z;
 
             return grid[x + difference.x, z + difference.z];
         }
@@ -610,7 +594,7 @@ namespace TakeshiLibrary
             {
                 for (int z = 0; z < gridDepth; z++)
                 {
-                    if (GetGridCoordinate(pos) == GetGridCoordinate(grid[x, z]))
+                    if (GridCoordinate(pos) == GridCoordinate(grid[x, z]))
                     {
                         return true;
                     }

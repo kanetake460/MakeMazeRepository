@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TakeshiLibrary;
@@ -29,12 +28,11 @@ public class PlayerController : MonoBehaviour
     {
         fps = new FPS(gameMap.map);
         transform.position = gameMap.StartPos;
-        Debug.Log(gameMap.StartPos);
     }
 
     void Update()
     {
-        playerCoord = gameMap.gridField.GetGridCoordinate(transform.position);
+        playerCoord = gameMap.gridField.GridCoordinate(transform.position);
         playerPrevious = FPS.GetVector3FourDirection(transform.rotation.eulerAngles);
 
 
@@ -42,7 +40,6 @@ public class PlayerController : MonoBehaviour
         FPS.CameraViewport(mainCam, viewSpeedX);
         FPS.PlayerViewport(gameObject, viewSpeedY);
         FPS.Locomotion(transform, locoSpeed,dashSpeed);
-        fps.CursorLock();
         fps.ClampMoveRange(transform);
 
         PlayerAction0();
@@ -75,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case "enemy":
-                AudioManager.PlayOneShot("GameOver");
+                AudioManager.PlaySEStart("GameOver");
                 gameManager.clearFlag = false;
                 break;
 
@@ -101,7 +98,7 @@ public class PlayerController : MonoBehaviour
                 // ボーダーリストのブロックが書き換えられたら、壁に戻す
                 if(!gameMap.borderBlockList.All(b => b.isSpace))
                 {
-                    gameMap.map.SetWallSurround();
+                    gameMap.map.CreateWallsSurround();
                 }
                 gameMap.map.ActiveMapWallObject();
             }
@@ -145,7 +142,6 @@ public class PlayerController : MonoBehaviour
         // 一つ目がオープンできるかチェック
         if (!CheckSectionPrevious(branchCoord, dir, section)) 
         {
-            Debug.Log("そこでは開けませんでした");
             return false;
         }
         // 一つ目オープン
@@ -219,7 +215,7 @@ public class PlayerController : MonoBehaviour
             // オープンできるか確認
             if(CheckSectionPrevious(branchCoord,confDir,section ))
             {
-                SectionTable.Section rand = SectionTable.randSection;
+                SectionTable.Section rand = SectionTable.RandSection;
                 OpenSectionPrevious(branchCoord,confDir,section);
                 OpenAroundContinue(branchCoord + section.GetDirectionSection(confDir)[3], rand);
                 return true;

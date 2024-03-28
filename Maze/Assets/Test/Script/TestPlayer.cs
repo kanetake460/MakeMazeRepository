@@ -33,7 +33,7 @@ public class TestPlayer : MonoBehaviour
 
     void Update()
     {
-        playerCoord = map.gridField.GetGridCoordinate(transform.position);
+        playerCoord = map.gridField.GridCoordinate(transform.position);
 
 
         // FPSéãì_ê›íË

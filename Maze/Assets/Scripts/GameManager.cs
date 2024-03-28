@@ -1,21 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TakeshiLibrary;
-using Unity.VisualScripting;
-using static GameSceneManager;
 
 public class GameManager : MonoBehaviour
 {
     [Header("コンポーネント")]
-    public MapManager map;
     [SerializeField] TakeshiLibrary.CompassUI compassRight;
     [SerializeField] TakeshiLibrary.CompassUI compassLeft;
     [SerializeField] GameSceneManager sceneManager;
     [SerializeField] UIManager uiManager;
-
-    /*ゲームオブジェクト*/
-    [SerializeField]GameObject playerObj;
 
     [Header("パラメーター")]
     [SerializeField] int flagNum;       // メイズ完成に必要なフラグの数
