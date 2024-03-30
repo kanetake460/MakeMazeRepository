@@ -23,23 +23,37 @@ esc:マウスカーソル表示、ゲームの説明表示
 この作品の制作には、下記のソフトウェア及び素材を使用させていただきました。
 
 ○ソフトウェア
+
 ・Unity
+
 ・Visual Studio 2022
+
 ・ClipChanp
+
 ・YouTube
 
 ○BGM・効果音素材
+
 ・効果音ラボ
+
   https://soundeffect-lab.info/
+  
 ・MyInstants
+
   https://www.myinstants.com/ja/instant/maxwell-cat-theme-song-97589/
   
 ○3Dモデル
+
 ・Monster Mash
+
   https://monstermash.zone/
+  
 ・食べ物の小道具
+
   https://assetstore.unity.com/packages/3d/food-props-163295
+  
 ・maxwell the cat
+
   https://booth.pm/ja/items/5214652
   
 
