@@ -837,7 +837,7 @@ MonoBehaviour:
   goalObj: {fileID: 2084364834}
   hamburgerNum: 150
   burgerRoomSize: 0
-  flagNum: 1
+  flagNum: 5
   flagRoomSize: 2
   startRoomSize: 3
   startRoomCoord:
@@ -1361,7 +1361,7 @@ MonoBehaviour:
   compassLeft: {fileID: 1321522082}
   sceneManager: {fileID: 2020846675}
   uiManager: {fileID: 729730884}
-  flagNum: 1
+  flagNum: 5
   hamburgerNum: 10
   deadNum: 30
   hamburgerIncrease: 2
