@@ -12,7 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
     [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト
     [SerializeField] TextMeshProUGUI messageText;   // ゲーム表示するメッセージのテキスト
-    [SerializeField] GameObject ManualCanvas;
+    [SerializeField] GameObject manualCanvas;
+    [SerializeField] PlayerController playerController;
     public static int _messageCount = 0;
 
 
@@ -21,7 +22,9 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void ShowManual()
     {
-        ManualCanvas.SetActive(true);
+        manualCanvas.SetActive(true);
+        playerController.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
     }
 
 
@@ -30,7 +33,9 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void CloseManual()
     {
-        ManualCanvas.SetActive(false);
+        manualCanvas.SetActive(false);
+        playerController.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>
@@ -109,9 +114,9 @@ public class UIManager : MonoBehaviour
         flagAnim.SetFloat("CompassRotation",flagCompass.distance);
         hamburgerAnim.SetFloat("CompassRotation",hamburgerCompass.distance);
         DisplayGameMessage();
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            if(ManualCanvas.activeSelf)CloseManual();
+            if(manualCanvas.activeSelf)CloseManual();
             else ShowManual(); 
         }
     }

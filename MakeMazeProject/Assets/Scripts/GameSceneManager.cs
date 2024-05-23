@@ -83,7 +83,6 @@ public class GameSceneManager : MonoBehaviour
         switch (CurrentScene)
         {
             case eScenes.Title_Scene:       // タイトルなら
-                Cursor.lockState = CursorLockMode.None;
                 playerController.enabled = false;// プレイヤーコントローラーを動かす
                 titleCanvas.SetActive(true);     // タイトルキャンバス見せる
                 AudioManager.PlayBGM("TitleBGM");
@@ -91,8 +90,6 @@ public class GameSceneManager : MonoBehaviour
                 break;
 
             case eScenes.Make_Scene:        // ゲームシーンなら
-                Cursor.lockState = CursorLockMode.Locked;
-                playerController.enabled = true;// プレイヤーコントローラーを動かす
                 UICanvas.SetActive(true);       // UI表示
                 AudioManager.PlayBGM("MakeBGM",makeVolume);
                 AudioManager.SetVolumeBGM(makeVolume);
@@ -100,7 +97,6 @@ public class GameSceneManager : MonoBehaviour
                 break;
 
             case eScenes.Escape_Scene:
-                Cursor.lockState = CursorLockMode.Locked;
                 break;
 
             case eScenes.Result_Scene:      // リザルトなら
@@ -118,7 +114,8 @@ public class GameSceneManager : MonoBehaviour
     public void StartButton()
     {
         CurrentScene = eScenes.Make_Scene;
-
+        playerController.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>

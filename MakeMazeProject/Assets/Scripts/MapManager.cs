@@ -30,7 +30,7 @@ public class MapManager : MonoBehaviour
     /// <summary>
     /// スタートポジション
     /// </summary>
-    public Vector3 StartPos => gridField.grid[startRoomCoord.x, startRoomCoord.z];
+    public Vector3 StartPos => gridField.grid[startRoomCoord.x, startRoomCoord.z] + Vector3.up * 3;
 
 
     [Header("マップ設定")]

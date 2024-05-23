@@ -92,6 +92,21 @@ namespace TakeshiLibrary
 
             player.position += player.forward * z * Time.deltaTime + player.right * x * Time.deltaTime;  // ˆÚ“®
 
+            //float x = 0, z = 0;     // ˆÚ“®“ü—Í
+            //if (Input.GetKey(KeyCode.UpArrow))
+            //    z = 1;
+            //if (Input.GetKey(KeyCode.DownArrow))
+            //    z = -1;
+            //if (Input.GetKey(KeyCode.RightArrow))
+            //    x = 1;
+            //if (Input.GetKey(KeyCode.LeftArrow))
+            //    x = -1;
+
+            //x *= speed;
+            //z *= speed;
+
+            //player.position += player.forward * z * Time.deltaTime + player.right * x * Time.deltaTime;  // ˆÚ“®
+
         }
 
 
