@@ -284,8 +284,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef9d9b785be46c947a6512d75b636b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  locoSpeed: 30
-  dashSpeed: 30
+  locoSpeed: 20
+  dashSpeed: 20
   viewSpeedX: 3
   viewSpeedY: 3
   mainCam: {fileID: 963194225}
@@ -972,14 +972,14 @@ MonoBehaviour:
   goalObj: {fileID: 2084364834}
   hamburgerNum: 150
   burgerRoomSize: 0
-  flagNum: 3
+  flagNum: 5
   flagRoomSize: 2
   startRoomSize: 3
   startRoomCoord:
     m_X: 10
     m_Z: 10
-  gridWidth: 70
-  gridDepth: 70
+  gridWidth: 75
+  gridDepth: 75
   cellWidth: 10
   cellDepth: 10
   y: 0
@@ -1527,7 +1527,10 @@ MonoBehaviour:
 
     and
 
-    get lost'
+    get lost
+
+
+    Normal'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1536,8 +1539,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278255360
+  m_fontColor: {r: 0, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1995,7 +1998,7 @@ MonoBehaviour:
   compassLeft: {fileID: 1321522082}
   sceneManager: {fileID: 2020846675}
   uiManager: {fileID: 729730884}
-  flagNum: 3
+  flagNum: 5
   hamburgerNum: 10
   deadNum: 30
   hamburgerIncrease: 2
