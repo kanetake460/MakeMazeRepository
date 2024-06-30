@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -7,7 +8,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] Animator flagAnim;             // フラグセンサーのアニメーション
     [SerializeField] Animator hamburgerAnim;        // ハンバーガーセンサーのアニメーション
     [SerializeField] TakeshiLibrary.CompassUI flagCompass;           // フラグのコンパス
+    [SerializeField] Image flagImageLeft;
+    [SerializeField] Image shionImage;
+
     [SerializeField] TakeshiLibrary.CompassUI hamburgerCompass;      // ハンバーガーのコンパス
+    [SerializeField] Image burgerImage;
+    [SerializeField] Image flagImageRight;
+
     [SerializeField] GameObject[] HamburgerUI;      // ハンバーガーのUI配列
     [SerializeField] TextMeshProUGUI deadCountText; // ゲームオーバーカウントのテキスト
     [SerializeField] TextMeshProUGUI flagCountText; // フラグカウントのテキスト
@@ -16,6 +23,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] PlayerController playerController;
     public static int _messageCount = 0;
 
+    public void ChangeImage()
+    {
+        shionImage.enabled = true;
+        flagImageRight.enabled = true;
+
+        flagImageLeft.enabled = false;
+        burgerImage.enabled = false;
+    }
 
     /// <summary>
     /// マニュアルを表示します
@@ -114,7 +129,7 @@ public class UIManager : MonoBehaviour
         flagAnim.SetFloat("CompassRotation",flagCompass.distance);
         hamburgerAnim.SetFloat("CompassRotation",hamburgerCompass.distance);
         DisplayGameMessage();
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
             if(manualCanvas.activeSelf)CloseManual();
             else ShowManual(); 

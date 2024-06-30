@@ -156,11 +156,13 @@ namespace TakeshiLibrary
             // パスを作って、エネミーのいる場所を最初の場所にする
             if (!_aStar.AStarPath(_map, enemyCoord, locoGoalCoord))
             {
+
                 Debug.Log("見失いました。");
                 return false;
             }
             else
             {
+                Debug.DrawLine(_map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z], _map.gridField.grid[_pathTargetCoord.x, _pathTargetCoord.z] + Vector3.up, Color.red, 3f);
                 _pathTargetCoord = _aStar.pathStack.Pop();
                 return true;
             }

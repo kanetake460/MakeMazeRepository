@@ -136,7 +136,7 @@ namespace TakeshiLibrary
 
                     Coord searchPos = new Coord(centerPos.x + x, centerPos.z + z);
 
-                    // マップの外なら探索しないしない
+                    // マップの外なら探索しない
                     if (searchPos.x >= _map.gridField.gridWidth ||
                         searchPos.z >= _map.gridField.gridDepth ||
                         searchPos.x < 0 || searchPos.z < 0) continue;
@@ -178,7 +178,7 @@ namespace TakeshiLibrary
                     {
                         if (_closeList.Find(x => x.coord == searchPos).sumCost > aroundCell.sumCost)
                         {
-                            // リストにあるものを削除し、新しい方を追加
+                            // リストにあるものを削除し、新しい方をオープンリストに追加
                             var c = _closeList.Where(y => y.coord == searchPos).First();
                             _closeList.Remove(c);
                             _openList.Add(aroundCell);

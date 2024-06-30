@@ -29,7 +29,7 @@ public class Test1 : MonoBehaviour
         map.CreateWallsSurround();
         map.InstanceMapObjects();
         map.ActiveMapWallObject();
-        
+
 
     }
 

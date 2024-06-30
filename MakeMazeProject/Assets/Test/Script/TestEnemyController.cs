@@ -63,9 +63,9 @@ public class TestEnemyController : MonoBehaviour
     {
         //if(ai.LocomotionToAStar(chaceSpeed))
 
-        ai.CustomWandering(wandSpeed, new List<Coord>(), 1, 10, 10);
+        //ai.CustomWandering(wandSpeed, new List<Coord>(), 1, 10, 10);
 
-        //EnemyMovement();
+        EnemyMovement();
     }
 
     private void EnemyMovement()
@@ -76,14 +76,17 @@ public class TestEnemyController : MonoBehaviour
 
         if (_isChase)
         {
-            //AudioManager.PlayBGM("MaxWell");
+            AudioManager.PlayBGM("MaxWell");
+            GetComponentInChildren<Renderer>().material.color = UnityEngine.Color.red;
             if (_isWandExit) ai.ExitLocomotion(ref _isWandExit);
             ai.StayLocomotionToAStar(player.transform.position, chaseSpeed, 60);
             _isChaceExit = true;
         }
         else
         {
-            //AudioManager.StopBGM();
+            AudioManager.StopBGM();
+            GetComponentInChildren<Renderer>().material.color = UnityEngine.Color.white;
+
             if (_isChaceExit) ai.ExitLocomotion(ref _isChaceExit);
             ai.CustomWandering(wandSpeed, new List<Coord>(), 1, 10, 10);
             _isWandExit = true;

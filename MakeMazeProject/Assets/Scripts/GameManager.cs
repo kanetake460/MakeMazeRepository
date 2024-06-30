@@ -62,8 +62,8 @@ public class GameManager : MonoBehaviour
     {
         if (_flagCount >= flagNum)
         {
-            sceneManager.EscapeTime();
             ChangeCompass();
+            sceneManager.EscapeTime();
         }
 
     }
@@ -73,8 +73,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ChangeCompass()
     {
-        compassLeft.targetTag = "clearFlag";
-        compassRight.targetTag = "enemy";
+        if (sceneManager.CurrentScene == GameSceneManager.eScenes.Escape_Scene) return;
+        Debug.Log("ターゲット変更");
+        compassRight.SetTargetsWithTag("clearFlag");
+        compassLeft.SetTargetsWithTag("enemy");
+        uiManager.ChangeImage();
     }
 
 

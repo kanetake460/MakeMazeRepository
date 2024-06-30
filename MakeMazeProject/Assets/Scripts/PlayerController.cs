@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
         // FPSéãì_ê›íË
         FPS.CameraViewport(mainCam, viewSpeedX);
         FPS.PlayerViewport(gameObject, viewSpeedY);
-        FPS.Locomotion(transform, locoSpeed,dashSpeed,KeyCode.RightControl);
+        FPS.Locomotion(transform, locoSpeed,dashSpeed,KeyCode.LeftShift);
         fps.ClampMoveRange(transform);
 
         PlayerAction0();
